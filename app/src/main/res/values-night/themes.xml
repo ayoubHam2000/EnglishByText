@@ -1,0 +1,88 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.EnglishByText" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+<!--    region default-->
+    <style name="colorWhiteBackgroundTint" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="android:backgroundTint">#FFFFFF</item>
+    </style>
+<!-- endregion -->
+
+<!-- region general -->
+    <style name="colorBackground1" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="android:backgroundTint">#272424</item>
+    </style>
+
+    <style name="textColor1" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+<!--    endregion-->
+
+<!--    region Collection Fragment -->
+
+    <style name="practiceBackgroundColor">
+        <item name="android:textColor">#FF03DAC5</item>
+        <item name="android:backgroundTint">#FFFFFF</item>
+    </style>
+    //FF018786
+
+    <style name="collection_backgroundTint_Tile">
+        <item name="android:backgroundTint">#FF018786</item>
+    </style>
+
+<!--    endregion -->
+
+<!--    region actionBar-->
+    <style name="MainActivity_Action_Bar">
+        <item name="android:backgroundTint">@color/black</item>
+    </style>
+<!--    endregion -->
+
+<!--    region slideBar-->
+    <style name="slide_item_images">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:backgroundTint">#FFFFFF</item>
+    </style>
+
+    <style name="slide_item">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_marginTop">30dp</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="slide_item_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_marginStart">15dp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
+
+    <style name="slide_item_number">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">end</item>
+        <item name="android:gravity">right</item>
+        <item name="android:layout_marginEnd">20dp</item>
+    </style>
+
+<!--    endregion-->
+
+</resources>

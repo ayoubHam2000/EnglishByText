@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:layout_marginHorizontal="7dp"
+    android:id="@+id/mainLayout"
+    android:background="@color/white"
+    android:backgroundTint="@color/wordListItem"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="107dp"
+        android:id="@+id/father"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/wordNbr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100"
+            android:textColor="@color/black"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="3dp"
+            android:textSize="11sp"
+            />
+
+        <ImageView
+            android:id="@+id/favoriteBtn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/ic_favorite"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            />
+
+        <TextView
+            android:id="@+id/wordName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/playfair_display"
+            android:text="Manually add children. Use the same xml as you use now and add in code you can add or delete children"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            >
+
+            <ImageView
+                android:id="@+id/hasAudios"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/ic_audio_speaker_on"
+                android:backgroundTint="@color/gray2"
+                android:layout_marginEnd="7dp"
+                />
+
+            <ImageView
+                android:id="@+id/hasImage"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/ic_image_24"
+                android:backgroundTint="@color/gray2"
+                android:layout_marginEnd="7dp"
+                />
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent2"
+            android:id="@+id/cardView"
+            />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/gray"
+        android:layout_below="@+id/father"
+        />
+
+    <ImageView
+        android:id="@+id/selectedItem"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@color/tranBlack50"
+        android:visibility="invisible"
+        />
+
+
+
+</RelativeLayout>
+

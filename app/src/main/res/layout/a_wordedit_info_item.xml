@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <TextView
+        android:id="@+id/itemInfo"
+        android:text="bla bla afoejf fneof efwe efjwef jf ewf e ff wef weifwe fw efiwef we fw ef iwef iwefwefij wefi we f wiefiw efwejf wjef w"
+        style="@style/EditWord_def_exp_item"
+        android:background="@color/wordEdit_item_back"
+        android:paddingVertical="10dp"
+        app:drawableTint="@color/abs_white" />
+
+
+
+</RelativeLayout>

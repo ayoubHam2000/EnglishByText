@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <include
+        layout="@layout/d_header_3"/>
+
+    <RelativeLayout
+        android:id="@+id/layoutView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_below="@+id/header"
+        android:gravity="center_vertical"
+        android:visibility="visible"
+        >
+
+        <LinearLayout
+            android:id="@+id/recordLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/header"
+            android:visibility="visible"
+            >
+
+            <TextView
+                android:id="@+id/recordState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/not_recording"
+                android:textColor="@color/red"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                />
+
+            <Chronometer
+                android:id="@+id/recordTimer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="center"
+                android:layout_weight="1"
+                />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layoutView"
+        android:layout_marginVertical="30dp"
+        >
+
+
+        <ImageView
+            android:id="@+id/recordOrNotView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_record"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:backgroundTint="@color/gray2"
+            />
+
+        <ImageView
+            android:id="@+id/resetView"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/ic_reset"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="50dp"
+            android:backgroundTint="@color/black"
+            android:visibility="invisible"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigator"
+    app:startDestination="@id/f_Collection">
+
+    <fragment
+        android:id="@+id/f_Collection"
+        android:name="com.example.englishbytext.Fragments.F_Collection"
+        android:label="f_collection"
+        tools:layout="@layout/f_collection" >
+        <action
+            android:id="@+id/action_f_Collection_to_f_Text"
+            app:destination="@id/f_Text"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_f_Collection_to_f_WordsList"
+            app:destination="@id/f_WordsList"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/f_Text"
+        android:name="com.example.englishbytext.Fragments.F_Text"
+        android:label="f_text"
+        tools:layout="@layout/f_text" >
+        <action
+            android:id="@+id/action_f_Text_to_f_EditText"
+            app:destination="@id/f_EditText"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            />
+        <action
+            android:id="@+id/action_f_Text_to_f_TextDisplay"
+            app:destination="@id/f_TextDisplay"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/slide_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/f_EditText"
+        android:name="com.example.englishbytext.Fragments.F_EditText"
+        android:label="f_edit_text"
+        tools:layout="@layout/f_edit_text" />
+    <fragment
+        android:id="@+id/f_TextDisplay"
+        android:name="com.example.englishbytext.Fragments.F_TextDisplay"
+        android:label="f_text_display"
+        tools:layout="@layout/f_text_display" >
+        <action
+            android:id="@+id/action_f_TextDisplay_to_f_WordEdit"
+            app:destination="@id/f_WordEdit" />
+    </fragment>
+    <fragment
+        android:id="@+id/f_Settings"
+        android:name="com.example.englishbytext.Fragments.F_Settings"
+        android:label="f__settings"
+        tools:layout="@layout/f__settings" />
+    <fragment
+        android:id="@+id/f_WordEdit"
+        android:name="com.example.englishbytext.Fragments.F_WordEdit"
+        android:label="F_WordEdit" >
+        <argument android:name="WORD_NAME"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_f_WordEdit_self"
+            app:destination="@id/f_WordEdit" />
+    </fragment>
+    <fragment
+        android:id="@+id/f_WordsList"
+        android:name="com.example.englishbytext.Fragments.F_WordsList"
+        android:label="f_words_list"
+        tools:layout="@layout/f_words_list" >
+        <action
+            android:id="@+id/action_f_WordsList_to_f_WordEdit"
+            app:destination="@id/f_WordEdit" />
+    </fragment>
+    <fragment
+        android:id="@+id/f_Tags"
+        android:name="com.example.englishbytext.Fragments.F_Tags"
+        android:label="f_tags"
+        tools:layout="@layout/f_tags" />
+    <fragment
+        android:id="@+id/f_Folders"
+        android:name="com.example.englishbytext.Fragments.F_Folders"
+        android:label="f_folders"
+        tools:layout="@layout/f_folders" />
+</navigation>

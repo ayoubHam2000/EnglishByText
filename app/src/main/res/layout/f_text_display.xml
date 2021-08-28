@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.F_TextDisplay">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <ScrollView
+            android:id="@+id/textScroller"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/textDisBGColor"
+            >
+
+            <LinearLayout
+                android:id="@+id/layoutColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+
+                >
+
+                <TextView
+                    android:id="@+id/titleView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:paddingHorizontal="20dp"
+                    android:gravity="center"
+                    android:text="Title"
+                    android:textStyle="bold"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="25dp"
+                    android:textSize="24sp"
+                    android:textColor="@color/black"
+                    />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="top"
+                    android:letterSpacing="0.15"
+                    android:lineSpacingExtra="13dp"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="15dp"
+                    android:text="CREATE TABLE IF sdfdsf NOT EXISTS texts (text VARCHAR, orderIndex INT, collectionName VARCHAR NOT NULL, setName VARCHAR NOT NULL, FOREIGN KEY"
+                    android:textColor="@color/textDisplayColor"
+                    android:textIsSelectable="true"
+                    android:textSize="16sp"
+                    />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars = "none"
+            android:background="@color/abs_black"
+            >
+
+            <LinearLayout
+                android:id="@+id/selectionAction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:paddingVertical="10dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="ADD"
+                    android:paddingHorizontal="15dp"
+                    android:textColor="@color/abs_white"
+                    android:gravity="center"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="COPY"
+                    android:paddingHorizontal="15dp"
+                    android:textColor="@color/abs_white"
+                    android:gravity="center"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="DELETE"
+                    android:paddingHorizontal="15dp"
+                    android:textColor="@color/abs_white"
+                    android:gravity="center"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="SELECT ALL"
+                    android:paddingHorizontal="15dp"
+                    android:textColor="@color/abs_white"
+                    android:gravity="center"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="FIND WORDS"
+                    android:paddingHorizontal="15dp"
+                    android:textColor="@color/abs_white"
+                    android:gravity="center"
+                    />
+
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+
+    </RelativeLayout>
+
+
+
+
+</FrameLayout>

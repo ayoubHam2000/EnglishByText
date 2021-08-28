@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="?actionBarSize"
+    >
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        >
+
+        <ImageView
+            android:id="@+id/navigationButton"
+            style="@style/MainActivity_Action_Bar"
+            android:layout_width="25dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="13dp"
+            android:background="@drawable/ic_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <EditText
+            android:id="@+id/wordListSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:autofillHints="Hello"
+            android:hint="@string/search"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+            app:layout_constraintStart_toEndOf="@+id/navigationButton"
+            app:layout_constraintTop_toTopOf="parent"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLines="1"
+            />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="8dp"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            >
+
+
+            <ImageView
+                android:id="@+id/deleteWords"
+                style="@style/MainActivity_Action_Bar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/ic_delete_24"
+                android:layout_marginStart="10dp"
+                android:visibility="gone"
+                />
+
+            <ImageView
+                android:id="@+id/makeFavorite"
+                style="@style/MainActivity_Action_Bar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/ic_favorite_active"
+                android:backgroundTint="@color/red"
+                android:layout_marginHorizontal="20dp"
+                android:visibility="gone"
+                />
+
+            <LinearLayout
+                android:id="@+id/filterMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="5dp"
+                android:visibility="visible"
+                >
+
+                <LinearLayout
+                    android:layout_width="24dp"
+                    android:layout_height="10dp"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:id="@+id/favoriteActiveLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="F"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="3sp"
+                        android:textColor="@color/black"
+                        android:visibility="visible"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        />
+
+                    <TextView
+                        android:id="@+id/regexActiveLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="R"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="3sp"
+                        android:textColor="@color/black"
+                        android:visibility="visible"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        />
+
+                </LinearLayout>
+
+                <ImageView
+
+                    style="@style/MainActivity_Action_Bar"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/ic_filter"
+                    />
+
+            </LinearLayout>
+
+
+
+            <ImageView
+                android:id="@+id/addWordList"
+                style="@style/MainActivity_Action_Bar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/ic__add"
+                android:layout_marginStart="10dp"
+                android:visibility="visible"
+                />
+
+
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+</LinearLayout>

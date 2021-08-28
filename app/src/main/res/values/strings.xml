@@ -1,0 +1,86 @@
+<resources>
+    <string name="app_name">EnglishByText</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="practice">PRACTICE</string>
+    <string name="write_something_here">Write Something Here</string>
+    <string name="categories">Categories</string>
+    <string name="collections">Collections</string>
+    <string name="set_name">Set Name</string>
+
+    <string name="all_words">Words</string>
+    <string name="tags_words">Tags</string>
+    <string name="remembered_words">Remembered Words</string>
+    <string name="deleted_words">Deleted Words</string>
+    <string name="words_images">Images</string>
+    <string name="words_audios">Audios</string>
+    <string name="permission_is_not_granted">Permission is Not granted</string>
+
+    <string name="edit_name">Edit Name</string>
+    <string name="change_color">Change Color</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="importt">Import</string>
+    <string name="importDirectly">Import Directly</string>
+    <string name="export">Export</string>
+    <string name="hide">Hide</string>
+    <string name="add_word">Add Word</string>
+    <string name="collection_name">Collection Name</string>
+    <string name="text_title">Text Title</string>
+    <string name="addWord">Word Name</string>
+
+
+    <!--    region toast-->
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="done_successfully">Operation Done Successfully</string>
+    <string name="is_copied"> is copied</string>
+    <string name="is_deleted"> is deleted</string>
+    <string name="no_selected_item">No Selected Items!!</string>
+    <string name="empty_collection">Empty Collection</string>
+    <string name="Max_character_is">Max character is </string>
+    <string name="this_name_is_taken">This name is Taken</string>
+    <string name="storage_permission_granted">Storage permission granted</string>
+    <string name="storage_permission_denied">Storage permission denied</string>
+    <string name="items_merged_into"> Items Merged Into </string>
+    <string name="moved_into"> Moved Into </string>
+    <string name="somme_collections_names_are_exist_in">Somme collections Names Are Exist In </string>
+    <string name="items_are_deleted">Items are Deleted</string>
+    <string name="it_must_be_more_than_one_checked_items">It must be more than one checked items</string>
+    <string name="it_has_to_be_a_1_selected_item">It has to be a 1 selected item</string>
+    <string name="there_is_no_list_to_move_to">There Is No List To Move To!!</string>
+    <string name="there_is_no_list_to_copy_to">There Is No List To Copy To!!</string>
+    <string name="error_CWords_and_words_not_match">Error CWords and Words Not Match</string>
+    <string name="list_is_empty">List is Empty</string>
+    <string name="please_select_set_destination">Please Select Set Destination</string>
+    <string name="changes_done_successfully">Changes Done Successfully</string>
+    <string name="microphone_permission_granted">Microphone permission granted</string>
+    <string name="microphone_permission_denied">Microphone permission denied</string>
+    <string name="Working">Working …</string>
+    <string name="elements_found">Elements Found</string>
+    <string name="invalid_regex">Invalid Regex</string>
+    <string name="text_color">Text Color</string>
+    <string name="background_color">Background Color</string>
+    <string name="word_name">Word Name</string>
+    <string name="examples">Examples</string>
+    <string name="definitions">Definitions</string>
+    <string name="audios">AUDIOS</string>
+    <string name="images">IMAGES</string>
+    <string name="add_example">Add Example</string>
+    <string name="add_definition">Add Definition</string>
+    <string name="add">Add</string>
+    <string name="not_recording">Not Recording</string>
+    <string name="recording">Recording</string>
+    <string name="PauseRecording">Paused</string>
+    <string name="search">Search</string>
+    <string name="related">Related</string>
+    <string name="title_activity_test">TestActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+    <string name="folders">Folders</string>
+
+    <!--    endregion-->
+
+</resources>

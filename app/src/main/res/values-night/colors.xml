@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FFFFFF</color>
+    <color name="white">#000000</color>
+    <color name="green1">#FF018786</color>
+    <color name="colorPrimary">#FF018786</color>
+    <color name="gray2">#FFFFFF</color>
+    <color name="practiceColor">#FF03DAC5</color>
+    <color name="wordEdit_item_back">#2E2F32</color>
+    <color name="wordListItem">#392F75BF</color>
+    <color name="relatedWord">#4CAF50</color>
+    <color name="spanWords">#00FF48</color>
+
+    <color name="abs_white">#FFFFFF</color>
+    <color name="abs_black">#000000</color>
+
+
+    <color name="inputBackground">#233348</color>
+    <color name="textDisplayColor">#DADADA</color>
+    <color name="textDisBGColor">#222222</color>
+
+</resources>

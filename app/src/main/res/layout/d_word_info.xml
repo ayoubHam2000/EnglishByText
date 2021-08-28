@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/tranBlackAA"
+        android:paddingTop="15dp"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            >
+
+            <TextView
+                android:id="@+id/wordNameTitle"
+                android:text="House gd fgf dfg ffdghfg hfghfg fg hfghfg"
+                style="@style/wordInfoTitle"
+                android:layout_gravity="center"
+                android:textSize="27sp"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true"
+                android:maxWidth="250dp"
+                />
+
+            <ImageView
+                android:id="@+id/editWord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic__edit"
+                android:layout_centerVertical="true"
+                android:layout_marginHorizontal="20dp"
+                android:backgroundTint="@color/white"
+                android:layout_alignParentEnd="true"
+                />
+
+        </RelativeLayout>
+
+
+
+        <TextView
+            android:id="@+id/definitionsTitle"
+            android:text="Definitions"
+            style="@style/wordInfoTitle"
+            />
+
+        <TextView
+            android:id="@+id/definitions"
+            android:text="1.there is some foud\n2.it means that you can do it"
+            style="@style/wordInfoInfo"
+            />
+
+        <TextView
+            android:id="@+id/examplesTitle"
+            android:text="Examples"
+            style="@style/wordInfoTitle"
+            />
+
+        <TextView
+            android:id="@+id/examples"
+            android:text="1.there is some foud\n2.it means that you can do it"
+            style="@style/wordInfoInfo"
+            />
+
+    </LinearLayout>
+
+</ScrollView>

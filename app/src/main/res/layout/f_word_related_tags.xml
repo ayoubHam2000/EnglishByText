@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/relatedTitle"
+        style="@style/EditWord_input_title"
+        android:text="@string/related"
+        android:textColor="@color/black"
+        />
+
+    <ImageView
+        android:id="@+id/addRelated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic__add"
+        android:backgroundTint="@color/black"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="16dp"
+        android:visibility="visible"
+        android:contentDescription="@string/related" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/relatedRV"
+        android:layout_below="@+id/relatedTitle"
+        style="@style/EditWord_RV"
+        />
+
+    <TextView
+        android:id="@+id/TagsTitle"
+        style="@style/EditWord_input_title"
+        android:text="@string/tags_words"
+        android:layout_below="@+id/relatedRV"
+        android:textColor="@color/black"
+        />
+
+    <ImageView
+        android:id="@+id/addTags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic__add"
+        android:backgroundTint="@color/black"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/relatedRV"
+        android:visibility="visible"
+        android:contentDescription="@string/tags_words" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/TagsRV"
+        android:layout_below="@+id/TagsTitle"
+        style="@style/EditWord_RV"
+        />
+
+</RelativeLayout>
