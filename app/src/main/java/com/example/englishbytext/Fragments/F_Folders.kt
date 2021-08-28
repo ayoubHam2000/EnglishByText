@@ -1,8 +1,11 @@
 package com.example.englishbytext.Fragments
 
+import android.graphics.*
+import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.englishbytext.Adapters.A_Folders
@@ -45,7 +48,7 @@ class F_Folders : MyFragment() {
         return OpenAllFoldersFrag
     }
 
-    override fun initVar(view : View){
+    override fun initVar(view: View){
         recyclerView = view.findViewById(R.id.rv_Folders)
         btnAddFolder = activity?.findViewById(R.id.addFolder)!!
         btnDeleteFolder = activity?.findViewById(R.id.deleteFolder)!!
@@ -71,7 +74,7 @@ class F_Folders : MyFragment() {
         dialog = D_editItem(gContext){
             val path = FoldersManagement.getPath()
 
-            if(DataBaseServices.isFolderExist(path, it)){
+            if(DataBaseServices.isFolderExist("$path/$it")){
                 Lib.showMessage(gContext, "Name Already Exist")
             }else if(!DataBaseServices.isFolderNameValid(it)){
                 Lib.showMessage(gContext, "Name is Not Valid")
@@ -93,33 +96,77 @@ class F_Folders : MyFragment() {
 
     private fun deleteFoldersClick(){
         val list = folderAdapter.getSelected()
-        println("-->$list")
         DataBaseServices.deleteFolders(list)
+        folderAdapter.changeList()
+        deaSelectTag()
     }
 
     private fun initRecyclerView(){
         val layoutManager = LinearLayoutManager(gContext)
 
-        folderAdapter = A_Folders(gContext){action, folderName->
+        folderAdapter = A_Folders(gContext){ action, folderName->
             recyclerViewAction(action, folderName)
         }
 
         folderAdapter.changeList()
         recyclerView.adapter = folderAdapter
         recyclerView.layoutManager = layoutManager
+
+        val itemTouchHelper = ItemTouchHelper(getItemTouchDeleter())
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
-    private fun recyclerViewAction(action : Int, folderName : String){
+    private fun recyclerViewAction(action: Int, folderName: String){
         when(action){
-            OpenItem->{
+            OpenItem -> {
                 openItem(folderName)
             }
-            OnSelectMode->{
+            OnSelectMode -> {
                 selectModeActionBarView()
             }
-            OpenFolderContent->{
+            OpenFolderContent -> {
                 openFolderContentClick(folderName)
             }
+        }
+    }
+
+    private fun getItemTouchDeleter() : ItemTouchHelper.SimpleCallback{
+        return object :
+                ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                openFolderContentClick(folderAdapter.list[viewHolder.absoluteAdapterPosition])
+            }
+
+            override fun onChildDraw(c: Canvas,
+                                     recyclerView: RecyclerView,
+                                     viewHolder: RecyclerView.ViewHolder,
+                                     dX: Float,
+                                     dY: Float,
+                                     actionState: Int,
+                                     isCurrentlyActive: Boolean) {
+                try {
+
+                    if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                        viewHolder.itemView.translationX = dX / 3
+                    } else {
+                        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+
+
+
         }
     }
 
@@ -140,7 +187,11 @@ class F_Folders : MyFragment() {
     }
 
     private fun openFolderContentClick(folderName: String){
+        val bundle = Bundle()
 
+        bundle.putString(FgType, "Folders")
+        bundle.putString(PassedData, FoldersManagement.getPath() + "/" + folderName)
+        navController.navigate(R.id.f_WordsList, bundle)
     }
 
     //region back press

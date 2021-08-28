@@ -136,11 +136,13 @@ const val DT_wordTags = "$T_wordTags ($A_word VARCHAR NOT NULL, $A_tag VARCHAR N
 
 //region table folder
 
-const val DT_folders = "$T_folders ($A_path VARCHAR NOT NULL, $A_Name VARCHAR NOT NULL," +
-        " PRIMARY KEY($A_path, $A_Name));"
+const val DT_folders = "$T_folders ($A_path VARCHAR NOT NULL," +
+        " PRIMARY KEY($A_path));"
+
 const val DT_words_folder = "$T_words_Folder ($A_word VARCHAR NOT NULL, $A_path VARCHAR NOT NULL," +
         " PRIMARY KEY($A_word, $A_path)," +
-        " FOREIGN KEY($A_word) REFERENCES $T_words ($A_word) ON DELETE CASCADE ON UPDATE CASCADE);"
+        " FOREIGN KEY($A_word) REFERENCES $T_words ($A_word) ON DELETE CASCADE ON UPDATE CASCADE," +
+        " FOREIGN KEY($A_path) REFERENCES $T_folders ($A_path) ON DELETE CASCADE ON UPDATE CASCADE);"
 
 //endregion
 

@@ -61,6 +61,7 @@ class A_Folders(val context : Context, val event : (Int, String) -> Unit) : Recy
             }
 
             //functions
+
             setSelectedView(position)
         }
 
@@ -81,11 +82,11 @@ class A_Folders(val context : Context, val event : (Int, String) -> Unit) : Recy
             if(selectedHashMap[position] == null || selectedHashMap[position] == false){
                 selectedView.visibility = View.INVISIBLE
             }else{
-                selectedView.visibility = View.VISIBLE
                 selectedView.setBackgroundResource(R.color.folder_selectItem)
+                if(selectedView.parent == null) parentLayout.addView(selectedView)
+                selectedView.visibility = View.VISIBLE
                 val width = parentLayout.width
                 val height = parentLayout.height
-                if(selectedView.parent == null) parentLayout.addView(selectedView)
                 selectedView.layoutParams = RelativeLayout.LayoutParams(width, height)
             }
         }

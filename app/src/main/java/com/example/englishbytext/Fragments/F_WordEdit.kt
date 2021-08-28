@@ -270,7 +270,7 @@ class F_WordEdit : Fragment() {
 
     private fun getItemTouchDeleter(type: Int) : ItemTouchHelper.SimpleCallback{
         return object :
-            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.ANIMATION_TYPE_DRAG) {
             override fun onMove(
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder,
@@ -282,14 +282,14 @@ class F_WordEdit : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 when(type){
                     OpenDefinition -> {
-                        val id = definitionAdapter.list[viewHolder.adapterPosition].id
-                        println("Remove Definition N ${viewHolder.adapterPosition} | id -> $id")
+                        val id = definitionAdapter.list[viewHolder.absoluteAdapterPosition].id
+                        println("Remove Definition N ${viewHolder.absoluteAdapterPosition} | id -> $id")
                         removeDefinition(id)
                         definitionAdapter.changeList()
                     }
                     OpenExample -> {
-                        val id = exampleAdapter.list[viewHolder.adapterPosition].id
-                        println("Remove Example N ${viewHolder.adapterPosition} | id -> $id")
+                        val id = exampleAdapter.list[viewHolder.absoluteAdapterPosition].id
+                        println("Remove Example N ${viewHolder.absoluteAdapterPosition} | id -> $id")
                         removeExample(id)
                         exampleAdapter.changeList()
                     }
@@ -563,7 +563,9 @@ class F_WordEdit : Fragment() {
 
     private fun openTagItem(tag: String){
         val bundle = Bundle()
-        bundle.putString(SELECTED_TAG, tag)
+
+        bundle.putString(FgType, "Tags")
+        bundle.putString(PassedData, tag)
         navController.navigate(R.id.f_WordsList, bundle)
     }
 

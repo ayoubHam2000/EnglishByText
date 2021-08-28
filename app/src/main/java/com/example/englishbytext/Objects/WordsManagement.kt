@@ -11,9 +11,14 @@ object WordsManagement {
         var tableType = -1
     }
 
-    fun updateWordList(tag : String){
+    fun updateWordList(fgType : String, passedData : String){
         wordList.clear()
-        wordList.addAll(DataBaseServices.getWords(tag))
+        when(fgType){
+            "Main" -> wordList.addAll(DataBaseServices.getWords(""))
+            "Tags" -> wordList.addAll(DataBaseServices.getWords(passedData))
+            "Folders" -> wordList.addAll(DataBaseServices.getListOfWordsFromFolder(passedData))
+        }
+
     }
 
 

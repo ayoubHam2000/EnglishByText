@@ -542,19 +542,33 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
         }
     }
 
-    private fun navigateToWordList(tag: String = ""){
+    private fun navigateToWordList(){
+        val id = R.id.f_WordsList
+
+
+        val bundle = Bundle()
+        bundle.putString(FgType, "Main")
+        bundle.putString(PassedData, "")
+
+        navController.navigate(id, bundle)
+
+    }
+
+    /*private fun navigateToWordList(tag: String = ""){
         val fragment = getFragment()
         val actualId = navController.currentBackStackEntry?.destination?.id
-        val actualTag = if(fragment is F_WordsList) fragment.selectedTag else ""
+        val actualTag = if(fragment is F_WordsList) fragment.passedData else ""
+        //val fgType = if(fragment is F_WordsList) fragment.fgType else ""
         val id = R.id.f_WordsList
 
         val isOtherTag = (actualTag != tag && actualId == id)
         if(actualId != id || isOtherTag){
             val bundle = Bundle()
             bundle.putString(SELECTED_TAG, tag)
+            //bundle.putString(FgType, fgType)
             navController.navigate(id, bundle)
         }
-    }
+    }*/
 
     override fun onPause() {
         when(val fragment = getFragment()){

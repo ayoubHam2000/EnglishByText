@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="80dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginVertical="10dp"
     android:id="@+id/parentLayout"
     android:gravity="center"
+    android:layout_marginHorizontal="20dp"
     android:foreground="?android:attr/selectableItemBackground"
-    android:background="#97D5CCA4"
-    >
+    android:background="@color/folder_item_background">
 
     <RelativeLayout
         android:id="@+id/container"
@@ -26,10 +26,9 @@
             android:layout_marginEnd="40dp"
             android:fontFamily="sans-serif-condensed"
             android:layout_alignStart="@+id/item_color"
-            android:text="Harry Potter And Philisopher Stone And Mali Cali"
+            tools:text="Harry Potter And Philisopher Stone And Mali Cali"
             android:textColor="@color/black"
             android:textSize="17sp"
-            android:textAllCaps="true"
             android:layout_centerVertical="true"
             />
 

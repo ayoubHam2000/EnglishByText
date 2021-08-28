@@ -2,6 +2,8 @@ package com.example.englishbytext.Utilites
 //$s,$e|
 //Names
 const val AllSet = "AllSets"
+const val PassedData = "PassedData"
+const val FgType = "FgType"
 
 //settings
 const val MaxSetName = 30

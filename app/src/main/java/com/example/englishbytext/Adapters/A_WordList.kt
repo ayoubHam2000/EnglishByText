@@ -18,7 +18,7 @@ import com.example.englishbytext.Utilites.OpenItem
 import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
 
-class A_WordList(val context : Context, val tag : String, val event : (Int, String) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class A_WordList(val context : Context, val fgType : String, val passedData : String, val event : (Int, String) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //region init
     private val layout = R.layout.a_wordlist_item
@@ -30,7 +30,7 @@ class A_WordList(val context : Context, val tag : String, val event : (Int, Stri
     private var hasAudiosMap = HashMap<String, Boolean>()
 
     fun changeList(){
-        WordsManagement.updateWordList(tag)
+        WordsManagement.updateWordList(fgType, passedData)
         filterSearch()
         notifyDataSetChanged()
         getHasMedia()

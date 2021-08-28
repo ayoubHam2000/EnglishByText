@@ -10,7 +10,12 @@ object FoldersManagement {
 
     fun updateFolderList(){
         list.clear()
-        list.addAll(DataBaseServices.getListOfFolders(getPath()))
+        println("-->${getPath()}")
+        val l = DataBaseServices.getListOfFolders(getPath())
+        for(item in l){
+            list.add(getFolderBaseName(item))
+        }
+
     }
 
     fun openFolder(name : String){
@@ -26,6 +31,15 @@ object FoldersManagement {
             return "."
         }
         return "./" + path.joinToString("/")
+    }
+
+    fun getFolderBaseName(path : String) : String{
+        return path.split("/").last()
+    }
+
+    fun getFolderFather(path: String) : String{
+        val l = path.split("/")
+        return l.subList(0, l.count() - 1).joinToString("/")
     }
 
 }

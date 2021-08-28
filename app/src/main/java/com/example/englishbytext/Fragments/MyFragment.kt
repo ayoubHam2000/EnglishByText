@@ -16,7 +16,7 @@ abstract class MyFragment : Fragment() {
 
     protected var listener : NotifyActivity? = null
     protected lateinit var gContext : Context
-    private lateinit var navController : NavController
+    protected lateinit var navController : NavController
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

@@ -778,10 +778,9 @@ object DataBaseServices {
 
     //region insert
 
-    fun isFolderExist(path: String, name : String) : Boolean{
+    fun isFolderExist(path: String) : Boolean{
         val p = path.toBase64()
-        val n = name.toBase64()
-        return tableCountByQuery("Select * From $T_folders Where $A_path = '$p' And $A_Name = '$n'")!=0
+        return tableCountByQuery("Select * From $T_folders Where $A_path = '$p'")!=0
     }
 
     fun isFolderNameValid(name : String) : Boolean{
@@ -794,19 +793,18 @@ object DataBaseServices {
     fun isWordExistInFolder(path: String, name : String) : Boolean{
         val p = path.toBase64()
         val n = name.toBase64()
-        return tableCountByQuery("Select * From $T_words_Folder Where $path = '$p' And $A_word = '$n'")!=0
+        return tableCountByQuery("Select * From $T_words_Folder Where $A_path = '$p' And $A_word = '$n'")!=0
     }
 
     fun insertFolder(path : String, name : String){
         //warning : path can't be empty
-        val p = path.toBase64()
-        val n = name.toBase64()
+        val p = ("$path/$name").toBase64()
 
-        val q = "Insert into $T_folders($A_path, $A_Name) values('$p', '$n')"
+        val q = "Insert into $T_folders values('$p')"
         dataBase.execSQL(q)
     }
 
-    fun insertWord(path : String, name : String){
+    fun insertWordInFolder(path : String, name : String){
         //warning : path can't be empty
         val p = path.toBase64()
         val n = name.toBase64()
@@ -821,52 +819,51 @@ object DataBaseServices {
     //region get
 
     fun getListOfFolders(path : String) : ArrayList<String>{
-        val p = path.toBase64()
+        val result = ArrayList<String>()
 
-        val q = "Select $A_Name From $T_folders Where $A_path = '$p'"
-        return getListString(q)
+        val q = "Select * From $T_folders"
+        val allPaths = getListString(q)
+
+        println("7-->$path")
+        for(item in allPaths){
+            println("7-->$item")
+            if(item.indexOf(path)==0 && item != path){
+                if(item.split("/").count() == path.split("/").count() + 1){
+                    result.add(item)
+                }
+            }
+        }
+        return result
     }
 
-    fun getListOfWords(path : String) : ArrayList<String>{
+    fun getListOfWordsFromFolder(path : String) : ArrayList<Word>{
         val p = path.toBase64()
+        val res = ArrayList<Word>()
 
-        val q = "Select $A_word From $T_words_Folder Where $A_path = '$p'"
-        return getListString(q)
+
+        val q = "SELECT * FROM $T_words WHERE $A_word IN (Select $A_word From $T_words_Folder Where $A_path = '$p')"
+        val cursor = dataBase.rawQuery(q, null)
+        if(cursor.moveToFirst()){
+            do{
+                val name = cursor.getString(0).fromBase64ToString()
+                val isFavorite = cursor.getInt(1) == 1
+                res.add(Word(name, isFavorite))
+            }while (cursor.moveToNext())
+        }
+        cursor.close()
+        return res
     }
 
     //endregion
 
     //region update
 
-    fun updateFolderName(path: String, name : String, newName : String){
-        val updatedPathHashMap = HashMap<String, String>()
+    fun updateFolderName(path: String, newName : String){
         val p = path.toBase64()
-        val n = name.toBase64()
-        val nn = newName.toBase64()
+        val newPath = path.replace("(?!.*/).*".toRegex(), newName).toBase64()
 
-        val qAllFolders = "Select $A_path From $T_folders"
-
-        //get path for update
-        iterationCursor(qAllFolders){
-            val formatPath = it.getString(0).fromBase64ToString()
-            if(formatPath.contains("^$path".toRegex())){
-                val newPath = formatPath.replace("^$path/$name", "$path/$newName")
-                updatedPathHashMap[formatPath.toBase64()] = newPath.toBase64()
-            }
-        }
-
-        transaction {
-            for(item in updatedPathHashMap.keys){
-                val newItem = updatedPathHashMap[item]
-                if(newItem != null){
-                    val q = "update $T_folders set $A_path = $newItem where $A_path = '$item'"
-                    dataBase.execSQL(q)
-                }
-            }
-            val q = "update $T_folders set $A_Name = '$nn where $A_path = '$p' And $A_Name = '$n'"
-            dataBase.execSQL(q)
-        }
-
+        val q = "update $T_folders set $A_path = '$newPath' where $A_path = '$p'"
+        dataBase.execSQL(q)
     }
 
     //endregion
@@ -874,36 +871,30 @@ object DataBaseServices {
     //region delete
 
     fun deleteFolders(list : ArrayList<String>){
-        val allItem = ArrayList<String>()
+        val deleteList = ArrayList<String>()
 
-        iterationCursor("Select $A_path From $T_folders"){
-            val path = it.getString(0).fromBase64ToString()
+        val allFolders = "Select * from $T_folders"
+        val l = getListString(allFolders)
 
-            for(itemToDelete in list){
-                println("--->$path ($itemToDelete)")
-                if(path.contains("^$itemToDelete")){
-                    allItem.add(path.toBase64())
+        for(item in l){
+            for(deleteItem in list){
+                if(item.indexOf(deleteItem) == 0){
+                    deleteList.add(item)
                 }
             }
         }
 
         transaction {
-            for(item in allItem){
-                println("-->delete ${item.fromBase64ToString()}")
-                val q = "delete from $T_folders where $A_path = '$item'"
-                //dataBase.execSQL(q)
-            }
-            for(item in list){
-                val thePath = item.split("/")
-                val root = thePath.subList(0, thePath.count() - 1).joinToString("/")
-                val folder = thePath[thePath.count() - 1]
-                println("-->delete root = $root name = $folder")
-                val q = "delete from $T_folders where $A_path = '$item' and $A_Name = '$folder'"
+            for(item in deleteList){
+                val p = item.toBase64()
+                val q = "delete from $T_folders where $A_path = '$p'"
+                dataBase.execSQL(q)
             }
         }
+
     }
 
-    fun deleteWordsFolder(path : String, list : ArrayList<String>){
+    fun deleteWordsFromFolder(path : String, list : ArrayList<String>){
         val p = path.toBase64()
 
         transaction {
@@ -1082,7 +1073,7 @@ object DataBaseServices {
         val masterPath = context.getExternalFilesDir("/")!!.absolutePath
         val path = "$masterPath/$FILES_FOLDER"
         val tables = arrayOf(T_Sets, T_collections, T_texts, T_words, T_definitions, T_examples, T_images, T_audios,
-                T_wordsText, T_relatedWord, T_tags, T_wordTags, T_infoVar)
+                T_wordsText, T_relatedWord, T_tags, T_wordTags, T_infoVar, T_folders, T_words_Folder)
 
         File(path).mkdir()
         for(item in tables)
@@ -1121,7 +1112,7 @@ object DataBaseServices {
             val path = "$masterPath/$FILES_FOLDER"
             val stream = FileInputStream(context.contentResolver.openFileDescriptor(uri, "r")!!.fileDescriptor)
             val tables = arrayOf(T_Sets, T_collections, T_texts, T_words, T_definitions, T_examples, T_images, T_audios,
-            T_wordsText, T_relatedWord, T_tags, T_wordTags, T_infoVar)
+            T_wordsText, T_relatedWord, T_tags, T_wordTags, T_infoVar, T_folders, T_words_Folder)
 
 
             ZipManager.unzip(stream, File(masterPath))

@@ -5,14 +5,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.*
-import androidx.core.view.children
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +22,6 @@ import com.example.englishbytext.Interfaces.NotifyActivity
 import com.example.englishbytext.Objects.DataBaseServices
 import com.example.englishbytext.Objects.Lib
 import com.example.englishbytext.Objects.Setting
-import com.example.englishbytext.Objects.WordsManagement
 import com.example.englishbytext.R
 import com.example.englishbytext.Utilites.*
 import java.lang.Exception
@@ -39,9 +36,13 @@ class F_WordsList : Fragment() {
     private lateinit var wordListAdapter : A_WordList
     private val layout = R.layout.f_words_list
     lateinit var popupMenu : PopupMenu
+    lateinit var dialogEditItem : D_editItem
+
     private var continueSearch = true
     private var oldSearch = ""
-    var selectedTag = ""
+    //used by previous fragment (tags, folders)
+    var fgType = ""
+    var passedData = ""
 
     //view
     private lateinit var navController : NavController
@@ -96,55 +97,131 @@ class F_WordsList : Fragment() {
         makeFavorite.setOnClickListener { makeItFavorite() }
     }
 
+    //region addWord
     private fun addWordList(){
         Lib.printLog("addWordItem")
-        var dialogEditItem : D_editItem? = null
+
+
         dialogEditItem = D_editItem(gContext){
-            if(DataBaseServices.isWordNotExist(it)){
-                DataBaseServices.insertWord(it)
-                if(selectedTag.isNotEmpty()){
-                    DataBaseServices.insertWordTag(it, selectedTag)
-                }
-                wordListAdapter.changeList()
-                dialogEditItem?.dismiss()
-            }else{
-                dialogEditItem?.inputName?.error = "This word is already exist"
+            when(fgType){
+                "Main" -> addWordInListWord(it)
+                "Tags" -> addWordInTag(it)
+                "Folders" -> addWordInFolder(it)
             }
         }
         dialogEditItem.textHint = gContext.getString(R.string.addWord)
         dialogEditItem.buildAndDisplay()
     }
 
+    private fun addWordInListWord(name : String){
+        if(DataBaseServices.isWordNotExist(name)){
+            DataBaseServices.insertWord(name)
+            wordListAdapter.changeList()
+            dialogEditItem.dismiss()
+        }else{
+            dialogEditItem.inputName.error = "This word is already exist"
+        }
+    }
+
+    private fun addWordInTag(name : String){
+        if(passedData.isNotEmpty()){
+            if(DataBaseServices.isWordNotExist(name)){
+                DataBaseServices.insertWord(name)
+            }
+            if(DataBaseServices.isWordTagNotExist(name, passedData)){
+                DataBaseServices.insertWordTag(name, passedData)
+                wordListAdapter.changeList()
+                dialogEditItem.dismiss()
+            }else{
+                dialogEditItem.inputName.error = "This word is already exist"
+            }
+        }
+    }
+    private fun addWordInFolder(name : String){
+        if(passedData.isNotEmpty()){
+            if(DataBaseServices.isWordNotExist(name)){
+                DataBaseServices.insertWord(name)
+            }
+            if(!DataBaseServices.isWordExistInFolder(passedData, name)){
+                DataBaseServices.insertWordInFolder(passedData, name)
+                wordListAdapter.changeList()
+                dialogEditItem.dismiss()
+            }else{
+                dialogEditItem.inputName.error = "This word is already exist"
+            }
+        }
+    }
+
+
+
+    //endregion
+
+    //region delete
     private fun deleteWords(){
         println("--Delete Words")
         val mainPath = gContext.getExternalFilesDir("/")!!.absolutePath
-        if(selectedTag.isNotEmpty()){
-            val ask = D_ask(gContext, "Delete From ?"){
+        when(fgType){
+            "Main" -> deleteFromMainList()
+            "Tags" -> deleteFromTag()
+            "Folders" -> deleteFromFolder()
+        }
+    }
+
+    private fun deleteFromMainList(){
+        val mainPath = gContext.getExternalFilesDir("/")!!.absolutePath
+
+        val ask = D_ask(gContext, "ARE YOU SURE ?"){
+            if(it){
                 val list = wordListAdapter.getSelected()
-                if(it){
-                    DataBaseServices.deleteWordsFromTag(selectedTag, list)
-                }else{
-                    DataBaseServices.deleteWords(mainPath, list)
-                }
+                DataBaseServices.deleteWords(mainPath, list)
                 deaSelectMode()
                 wordListAdapter.changeList()
             }
-            ask.approveText = "From Tag"
-            ask.denyText = "Permanently"
-            ask.buildAndDisplay()
-        }else{
-            val ask = D_ask(gContext, "ARE YOU SURE ?"){
-                if(it){
-                    val list = wordListAdapter.getSelected()
-                    DataBaseServices.deleteWords(mainPath, list)
-                    deaSelectMode()
-                    wordListAdapter.changeList()
-                }
-            }
-            ask.buildAndDisplay()
         }
-
+        ask.buildAndDisplay()
     }
+
+    private fun deleteFromTag(){
+        if(passedData.isEmpty()) return
+
+        val mainPath = gContext.getExternalFilesDir("/")!!.absolutePath
+
+        val ask = D_ask(gContext, "Delete From ?"){
+            val list = wordListAdapter.getSelected()
+            if(it){
+                DataBaseServices.deleteWordsFromTag(passedData, list)
+            }else{
+                DataBaseServices.deleteWords(mainPath, list)
+            }
+            deaSelectMode()
+            wordListAdapter.changeList()
+        }
+        ask.approveText = "From Tag"
+        ask.denyText = "Permanently"
+        ask.buildAndDisplay()
+    }
+
+    private fun deleteFromFolder(){
+        if(passedData.isEmpty()) return
+
+        val mainPath = gContext.getExternalFilesDir("/")!!.absolutePath
+
+        val ask = D_ask(gContext, "Delete From ?"){
+            val list = wordListAdapter.getSelected()
+            if(it){
+                DataBaseServices.deleteWordsFromFolder(passedData, list)
+            }else{
+                DataBaseServices.deleteWords(mainPath, list)
+            }
+            deaSelectMode()
+            wordListAdapter.changeList()
+        }
+        ask.approveText = "From Folder"
+        ask.denyText = "Permanently"
+        ask.buildAndDisplay()
+    }
+
+    //endregion
 
     private fun makeItFavorite(){
         println("--Favorite Words")
@@ -251,7 +328,7 @@ class F_WordsList : Fragment() {
 
     private fun initWordListRV(){
         val layoutManager = LinearLayoutManager(gContext)
-        wordListAdapter = A_WordList(gContext, selectedTag){event, wordName ->
+        wordListAdapter = A_WordList(gContext, fgType, passedData){ event, wordName ->
             recyclerViewEvent(event, wordName)
         }
         wordListAdapter.changeList()
@@ -318,7 +395,11 @@ class F_WordsList : Fragment() {
         super.onCreate(savedInstanceState)
         val bundle = arguments
         if(bundle != null){
-            selectedTag = bundle.getString("SELECTED_TAG")!!
+            fgType = bundle.getString(FgType)!!
+            passedData = bundle.getString(PassedData)!!
+
+            println("7--->$fgType")
+            println("7--->$passedData")
         }
     }
 

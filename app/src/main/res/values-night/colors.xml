@@ -19,4 +19,6 @@
     <color name="textDisplayColor">#DADADA</color>
     <color name="textDisBGColor">#222222</color>
 
+    <color name="folder_item_background">#B34F43</color>
+
 </resources>

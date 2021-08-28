@@ -31,7 +31,9 @@
     <color name="wordEdit_item_audio_pause">#AC6800</color>
     <color name="wordEdit_item_audio_back">#FFFFFF</color>
     <color name="wordEdit_selectItem">#371D65F8</color>
+
     <color name="folder_selectItem">#321AFF00</color>
+    <color name="folder_item_background">#FAC0B2</color>
     <!--    endregion-->
 
     <color name="deletedColor">#F64747</color>

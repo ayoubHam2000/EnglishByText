@@ -107,7 +107,9 @@ class F_Tags : Fragment() {
 
     private fun openTag(tag : String){
         val bundle = Bundle()
-        bundle.putString(SELECTED_TAG, tag)
+
+        bundle.putString(FgType, "Tags")
+        bundle.putString(PassedData, tag)
         navController.navigate(R.id.f_WordsList, bundle)
     }
 
