@@ -165,9 +165,18 @@ class F_Tags : MyFragment() {
 
     //region functions
 
-    fun deaSelectTag() : Boolean{
+    private fun deaSelectTag() : Boolean{
         deactivateSelectModeView()
         return tagAdapter.deaSelect()
+    }
+
+    //endregion
+
+    //region override
+
+    override fun onBackPress() : Boolean{
+        if (deaSelectTag()) return true
+        return false
     }
 
     //endregion

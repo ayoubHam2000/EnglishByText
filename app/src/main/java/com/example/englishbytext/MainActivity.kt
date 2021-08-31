@@ -389,32 +389,7 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
     //region Notify Activity
 
     override fun onBackPressed() {
-        when(val fragment = getFragment()){
-            is F_Text -> {
-                if (fragment.deaSelectMode()) return
-            }
-            is F_EditText -> {
-                if (fragment.askSaveChanges()) return
-            }
-            is F_WordEdit -> {
-                if (fragment.deaSelectImageMode()) return
-                if (fragment.deaSelectAudioMode()) return
-                if (fragment.deaSelectRelated()) return
-                if (fragment.deaSelectTag()) return
-                fragment.deaAudioMedia()
-            }
-            is F_WordsList -> {
-                if(fragment.onBackPress()) return
-                if (fragment.deaSelectMode()) return
-            }
-            is F_Tags -> {
-                if (fragment.deaSelectTag()) return
-            }
-            is F_Folders ->{
-                if(fragment.folderPop()) return
-                if(fragment.deaSelectFolder()) return
-            }
-        }
+        if((getFragment() as MyFragment).onBackPress()) return
         super.onBackPressed()
     }
 
@@ -451,7 +426,7 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
     }
 
     private fun saveChanges(){
-        when(val fragment = getFragment()){
+        when(getFragment()){
             is F_EditText -> {
                 onBackPressed()
             }

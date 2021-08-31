@@ -108,7 +108,7 @@ class F_EditText : MyFragment() {
         Lib.showMessage(gContext, "Save Successful")
     }
 
-    fun askSaveChanges() : Boolean{
+    private fun askSaveChanges() : Boolean{
         if(saveDone || !isThereIsSomeChanges())
             return false
         val ask = D_ask(gContext, "SAVE CHANGES ?"){
@@ -149,6 +149,14 @@ class F_EditText : MyFragment() {
                 res.add(WordPosItem(s, e, str))
         }
         return res
+    }
+
+    //endregion
+
+    //region override
+
+    override fun onBackPress(): Boolean {
+        return askSaveChanges()
     }
 
     //endregion

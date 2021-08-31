@@ -21,13 +21,12 @@ import com.example.englishbytext.A_word
 import com.example.englishbytext.Classes.Custom.MySelectMenu
 import com.example.englishbytext.Classes.schemas.WordPosItem
 import com.example.englishbytext.Interfaces.NotifyActivity
-import com.example.englishbytext.Objects.DataBaseServices
-import com.example.englishbytext.Objects.Lib
-import com.example.englishbytext.Objects.Setting
-import com.example.englishbytext.Objects.TextManagement
+import com.example.englishbytext.Objects.*
 import com.example.englishbytext.R
 import com.example.englishbytext.T_words
+import com.example.englishbytext.Utilites.FgType
 import com.example.englishbytext.Utilites.OpenTextDisplayFrag
+import com.example.englishbytext.Utilites.PassedData
 
 
 class F_TextDisplay : MyFragment() {
@@ -40,6 +39,7 @@ class F_TextDisplay : MyFragment() {
     private lateinit var textView : TextView
     private lateinit var textScroller : ScrollView
     private lateinit var selectionAction : LinearLayout
+    private lateinit var menuView : ImageView
 
     //====================================
     //++++++++++++++++++++++  Init
@@ -57,9 +57,11 @@ class F_TextDisplay : MyFragment() {
         textView = view.findViewById(R.id.textView)
         textScroller = view.findViewById(R.id.textScroller)
         selectionAction = view.findViewById(R.id.selectionAction)
+        menuView = view.findViewById(R.id.menuView)
     }
 
     override fun initFun() {
+        initMenu()
         setLayout()
     }
 
@@ -88,6 +90,28 @@ class F_TextDisplay : MyFragment() {
 
     }
 
+    //region Menu
+
+    private fun initMenu(){
+        val menu =  Lib.initPopupMenu(gContext, menuView, R.menu.m_displayed_text)
+
+        menu.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.listOfWords -> openListOfWords()
+            }
+            true
+        }
+    }
+
+    private fun openListOfWords(){
+        val bundle = Bundle()
+
+        bundle.putString(FgType, "Text")
+        bundle.putString(PassedData, TextManagement.getText()?.title)
+        navController.navigate(R.id.f_WordsList, bundle)
+    }
+
+    //endregion
 
     //endregion
 
@@ -114,8 +138,8 @@ class F_TextDisplay : MyFragment() {
 
     private fun initSelectionBar(){
         val add = selectionAction.getChildAt(0) as TextView
-        val delete = selectionAction.getChildAt(1) as TextView
-        val copy = selectionAction.getChildAt(2) as TextView
+        val copy = selectionAction.getChildAt(1) as TextView
+        val delete = selectionAction.getChildAt(2) as TextView
         val selectAll = selectionAction.getChildAt(3) as TextView
         val findWords = selectionAction.getChildAt(4) as TextView
 
@@ -161,6 +185,7 @@ class F_TextDisplay : MyFragment() {
         selectedIteration{ s, e ->
             if((s >= start && e <= end)){
                 deleted.add(WordPosItem(s, e, ""))
+                //println("--->($s, $e, ${textView.text.substring(s, e)})")
             }
         }
         DataBaseServices.deleteTextWordPos(id, deleted)

@@ -23,6 +23,7 @@ import com.example.englishbytext.Interfaces.NotifyActivity
 import com.example.englishbytext.Objects.DataBaseServices
 import com.example.englishbytext.Objects.Lib
 import com.example.englishbytext.Objects.Setting
+import com.example.englishbytext.Objects.TextManagement
 import com.example.englishbytext.R
 import com.example.englishbytext.Utilites.*
 import java.lang.Exception
@@ -32,7 +33,9 @@ import kotlin.concurrent.thread
 class F_WordsList : MyFragment() {
 
     //region init
-
+    /*
+    fgType -> addWordList, deleteWords
+     */
     //====================================
     //++++++++++++++++++++++  Vars
     //====================================
@@ -58,6 +61,7 @@ class F_WordsList : MyFragment() {
     private lateinit var deleteWords : ImageView
     private lateinit var makeFavorite : ImageView
     private lateinit var copyToFolder : ImageView
+    private lateinit var selectAll : ImageView
     private lateinit var favoriteActiveLabel : TextView
     private lateinit var regexActiveLabel : TextView
 
@@ -79,6 +83,7 @@ class F_WordsList : MyFragment() {
         deleteWords = activity?.findViewById(R.id.deleteWords)!!
         makeFavorite = activity?.findViewById(R.id.makeFavorite)!!
         copyToFolder = activity?.findViewById(R.id.copyToFolder)!!
+        selectAll = activity?.findViewById(R.id.selectAll)!!
         favoriteActiveLabel = activity?.findViewById(R.id.favoriteActiveLabel)!!
         regexActiveLabel = activity?.findViewById(R.id.regexActiveLabel)!!
         practiceBtn = activity?.findViewById(R.id.practiceBtn)!!
@@ -113,12 +118,12 @@ class F_WordsList : MyFragment() {
         deleteWords.setOnClickListener { deleteWords() }
         makeFavorite.setOnClickListener { makeItFavorite() }
         copyToFolder.setOnClickListener { copyToFolderClick() }
+        selectAll.setOnClickListener { selectAllClick() }
     }
 
     //region addWord
     private fun addWordList(){
         Lib.printLog("addWordItem")
-
 
         dialogEditItem = D_editItem(gContext){
             when(fgType){
@@ -181,11 +186,11 @@ class F_WordsList : MyFragment() {
     //region delete
     private fun deleteWords(){
         println("--Delete Words")
-        val mainPath = gContext.getExternalFilesDir("/")!!.absolutePath
         when(fgType){
             "Main" -> deleteFromMainList()
             "Tags" -> deleteFromTag()
             "Folders" -> deleteFromFolder()
+            "Text" -> deleteFromText()
         }
     }
 
@@ -243,6 +248,24 @@ class F_WordsList : MyFragment() {
         ask.buildAndDisplay()
     }
 
+    private fun deleteFromText(){
+        val mainPath = gContext.getExternalFilesDir("/")!!.absolutePath
+
+        val ask = D_ask(gContext, "Delete From ?"){
+            val list = wordListAdapter.getSelected()
+            if(it){
+                DataBaseServices.deleteTextWords(TextManagement.selectedItem, list)
+            }else{
+                DataBaseServices.deleteWords(mainPath, list)
+            }
+            deaSelectMode()
+            wordListAdapter.changeList()
+        }
+        ask.approveText = "From Text"
+        ask.denyText = "Permanently"
+        ask.buildAndDisplay()
+    }
+
     //endregion
 
     private fun makeItFavorite(){
@@ -260,6 +283,10 @@ class F_WordsList : MyFragment() {
             Lib.showMessage(gContext, "Copy Done")
         }
         copyToFolderDialog.buildAndDisplay()
+    }
+
+    private fun selectAllClick(){
+        wordListAdapter.selectAll()
     }
 
     private fun filterModeSetUp(){
@@ -361,14 +388,8 @@ class F_WordsList : MyFragment() {
             "Main" -> {
                 "Main"
             }
-            "Tags" ->{
-                passedData
-            }
-            "Folders" ->{
-                passedData
-            }
             else ->{
-                ""
+                passedData
             }
         }
         pathView.text = t
@@ -405,12 +426,13 @@ class F_WordsList : MyFragment() {
     }
 
     private fun onSelectMode(on : Boolean){
-        addWordList.visibility = if(!on) View.VISIBLE else View.GONE
+        addWordList.visibility = if(!on && fgType != "Text") View.VISIBLE else View.GONE
         filterMode.visibility = if(!on) View.VISIBLE else View.GONE
         wordListSearch.visibility = if(!on) View.VISIBLE else View.GONE
         practiceBtn.visibility = if(!on) View.VISIBLE else View.GONE
         deleteWords.visibility = if(on) View.VISIBLE else View.GONE
         makeFavorite.visibility = if(on) View.VISIBLE else View.GONE
+        selectAll.visibility = if(on) View.VISIBLE else View.GONE
 
         copyToFolder.visibility = if(on) View.VISIBLE else View.GONE
         Lib.hideKeyboardFrom(gContext, wordListSearch)
@@ -420,14 +442,12 @@ class F_WordsList : MyFragment() {
 
     //region fragment
 
-    fun deaSelectMode() : Boolean{
+    private fun deaSelectMode() : Boolean{
         onSelectMode(false)
         return wordListAdapter.deaSelectMode()
     }
 
-    fun onBackPress() : Boolean{
-        return false
-    }
+
 
     //endregion
 
@@ -440,6 +460,11 @@ class F_WordsList : MyFragment() {
             fgType = bundle.getString(FgType)!!
             passedData = bundle.getString(PassedData)!!
         }
+    }
+
+    override fun onBackPress(): Boolean {
+        if (deaSelectMode()) return true
+        return false
     }
 
     //endregion

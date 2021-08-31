@@ -36,7 +36,6 @@ class A_tag (context : Context, val event : (Int, String) -> Unit)
         thread{
             listCount = (DataBaseServices.getTagsCount())
             Handler(context.mainLooper).post {
-                println("--${listCount.keys}")
                 notifyDataSetChanged()
             }
         }

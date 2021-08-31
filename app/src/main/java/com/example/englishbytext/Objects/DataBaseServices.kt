@@ -284,6 +284,23 @@ object DataBaseServices {
         return res
     }
 
+    fun getWordsOfText(id : Int) : ArrayList<Word>{
+        println("--->getWordsOfText")
+        val res = ArrayList<Word>()
+        val q = "SELECT * FROM $T_words WHERE $A_word IN (SELECT $A_word FROM $T_wordsText WHERE $A_textID = $id)"
+
+        val cursor = dataBase.rawQuery(q, null)
+        if(cursor.moveToFirst()){
+            do{
+                val name = cursor.getString(0).fromBase64ToString()
+                val isFavorite = cursor.getInt(1) == 1
+                res.add(Word(name, isFavorite))
+            }while (cursor.moveToNext())
+        }
+        cursor.close()
+        return res
+    }
+
     fun getTextWordsCount() : HashMap<Int, Int>{
         val res = HashMap<Int, Int>()
         val q = "SELECT id, COUNT(*) FROM $T_wordsText group by $A_textID"
@@ -351,6 +368,15 @@ object DataBaseServices {
                 val s = it.s
                 val e = it.e
                 val q = "DELETE FROM $T_wordsText WHERE $A_textID = $id AND $A_posStart = $s AND $A_posEnd = $e"
+                dataBase.execSQL(q)
+            }
+        }
+    }
+
+    fun deleteTextWords(id : Int, words : ArrayList<String>){
+        transaction {
+            words.forEach{
+                val q = "DELETE FROM $T_wordsText WHERE $A_textID = $id AND $A_word = '${it.toBase64()}'"
                 dataBase.execSQL(q)
             }
         }
@@ -936,8 +962,7 @@ object DataBaseServices {
             for(item in deleteList){
                 val p = item.toBase64()
                 val q = "delete from $T_folders where $A_path = '$p'"
-                println("--->$item")
-                //dataBase.execSQL(q)
+                dataBase.execSQL(q)
             }
         }
 

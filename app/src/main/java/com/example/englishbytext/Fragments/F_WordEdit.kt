@@ -642,22 +642,22 @@ class F_WordEdit : MyFragment() {
 
     //region Methods
 
-    fun deaSelectImageMode() : Boolean{
+    private fun deaSelectImageMode() : Boolean{
         activeAddImage()
         return imagesAdapter.disableSelectImage()
     }
 
-    fun deaSelectAudioMode() : Boolean{
+    private fun deaSelectAudioMode() : Boolean{
         activeAddAudio()
         return audiosAdapter.disableSelectAudio()
     }
 
-    fun deaSelectRelated() : Boolean{
+    private fun deaSelectRelated() : Boolean{
         activeAddRelated()
         return relatedAdapter.deaSelect()
     }
 
-    fun deaSelectTag() : Boolean{
+    private fun deaSelectTag() : Boolean{
         activeAddTag()
         return tagsAdapter.deaSelect()
     }
@@ -670,6 +670,16 @@ class F_WordEdit : MyFragment() {
     //endregion
 
     //region override
+
+    override fun onBackPress(): Boolean {
+        if (deaSelectImageMode()) return true
+        if (deaSelectAudioMode()) return true
+        if (deaSelectRelated()) return true
+        if (deaSelectTag()) return true
+        deaAudioMedia()
+        return false
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when(requestCode){
             GALLERY_REQUEST_CODE -> {

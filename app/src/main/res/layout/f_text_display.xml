@@ -25,20 +25,41 @@
 
                 >
 
-                <TextView
-                    android:id="@+id/titleView"
+                <RelativeLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
-                    android:paddingHorizontal="20dp"
-                    android:gravity="center"
-                    android:text="Title"
-                    android:textStyle="bold"
-                    android:layout_marginVertical="5dp"
-                    android:layout_marginHorizontal="25dp"
-                    android:textSize="24sp"
-                    android:textColor="@color/black"
-                    />
+                    >
+
+                    <TextView
+                        android:id="@+id/titleView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        tools:text="TitleTitleTitleT itleTi tleTitleTitle efwe wefwe efwe wefwe"
+                        android:textStyle="bold"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="40dp"
+                        android:layout_marginVertical="4dp"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:layout_centerVertical="true"
+                        />
+
+                    <ImageView
+                        android:id="@+id/menuView"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@drawable/ic_more_vert_24"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_centerVertical="true"
+                        android:backgroundTint="@color/black"
+                        />
+
+                </RelativeLayout>
+
+
 
                 <TextView
                     android:id="@+id/textView"

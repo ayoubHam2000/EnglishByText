@@ -10,7 +10,6 @@ object FoldersManagement {
 
     fun updateFolderList(){
         list.clear()
-        println("-->${getPath()}")
         val l = DataBaseServices.getListOfFolders(getPath())
         for(item in l){
             list.add(getFolderBaseName(item))

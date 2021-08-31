@@ -160,7 +160,7 @@ class F_Text : MyFragment() {
 
     //region function
 
-    fun deaSelectMode() : Boolean{
+    private fun deaSelectMode() : Boolean{
         return if(textAdapter.onSelectMode){
             textAdapter.deactivateSelection()
             btnAddTextBtn.setBackgroundResource(R.drawable.ic__add)
@@ -177,5 +177,10 @@ class F_Text : MyFragment() {
 
     //endregion
 
+    //region override
+    override fun onBackPress(): Boolean {
+        return deaSelectMode()
+    }
+    //endregion
     
 }

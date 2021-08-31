@@ -18,14 +18,14 @@ import com.example.englishbytext.Utilites.OpenItem
 import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
 
-class A_WordList(val context : Context, val fgType : String, val passedData : String, val event : (Int, String) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class A_WordList(val context : Context, private val fgType : String, private val passedData : String, val event : (Int, String) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //region init
     private val layout = R.layout.a_wordlist_item
     private val list = WordsManagement.wordList
     private val filterList = ArrayList<Word>()
     private var onSelectMode = false
-    private val selected = HashMap<String, Boolean>()
+    private val selectedHashMap = HashMap<String, Boolean>()
     private var hasImagesMap = HashMap<String, Boolean>()
     private var hasAudiosMap = HashMap<String, Boolean>()
 
@@ -90,7 +90,7 @@ class A_WordList(val context : Context, val fgType : String, val passedData : St
 
             setFavoriteView(position)
             setHasMedia(position)
-            setSelectedView(false)
+            setSelectedView(position)
             favoriteBtn.setOnClickListener {makeFavorite(position) }
             mainLayout.setOnClickListener { itemClick(position) }
             mainLayout.setOnLongClickListener {
@@ -123,15 +123,18 @@ class A_WordList(val context : Context, val fgType : String, val passedData : St
         private fun itemClick(position: Int){
             if(onSelectMode){
                 val n = filterList[position].name
-                selected[n] = selected[n] == null || selected[n] == false
-                setSelectedView(selected[n]!!)
+                selectedHashMap[n] = selectedHashMap[n] == null || selectedHashMap[n] == false
+                setSelectedView(position)
             }else{
                 event(OpenItem, filterList[position].name)
             }
         }
 
-        private fun setSelectedView(selected: Boolean){
-            if(selected){
+        private fun setSelectedView(position: Int){
+            val n = list[position].name
+            println("--->$position ${(selectedHashMap)[list[position].name] == true}")
+            val s = (selectedHashMap)[n] == true
+            if(s){
                 selectedItem.visibility = View.VISIBLE
                 val width = mainLayout.width
                 val height = mainLayout.height
@@ -145,8 +148,8 @@ class A_WordList(val context : Context, val fgType : String, val passedData : St
             if(!onSelectMode){
                 val n = filterList[position].name
                 event(OnSelectMode, "")
-                selected[n] = true
-                setSelectedView(true)
+                selectedHashMap[n] = true
+                setSelectedView(position)
                 onSelectMode = true
             }
         }
@@ -156,8 +159,8 @@ class A_WordList(val context : Context, val fgType : String, val passedData : St
     fun getSelected() : ArrayList<String>{
         val res = ArrayList<String>()
         if(onSelectMode){
-            for(item in selected.keys){
-                if(selected[item]!!){
+            for(item in selectedHashMap.keys){
+                if(selectedHashMap[item]!!){
                     res.add(item)
                 }
             }
@@ -167,7 +170,7 @@ class A_WordList(val context : Context, val fgType : String, val passedData : St
 
     fun deaSelectMode() : Boolean{
         if(onSelectMode){
-            selected.clear()
+            selectedHashMap.clear()
             notifyDataSetChanged()
             onSelectMode = false
             return true
@@ -175,6 +178,14 @@ class A_WordList(val context : Context, val fgType : String, val passedData : St
         return false
     }
 
+    fun selectAll(){
+        for(item in filterList){
+            val n = item.name
+            selectedHashMap[n] = true
+            notifyDataSetChanged()
+        }
+
+    }
 
     //endregion
 

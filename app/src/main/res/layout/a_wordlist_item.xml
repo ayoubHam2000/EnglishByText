@@ -104,8 +104,8 @@
         android:id="@+id/selectedItem"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@color/tranBlack50"
-        android:visibility="invisible"
+        android:background="@color/tranBlack80"
+        android:visibility="visible"
         />
 
 

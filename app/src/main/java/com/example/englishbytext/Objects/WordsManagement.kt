@@ -17,6 +17,10 @@ object WordsManagement {
             "Main" -> wordList.addAll(DataBaseServices.getWords(""))
             "Tags" -> wordList.addAll(DataBaseServices.getWords(passedData))
             "Folders" -> wordList.addAll(DataBaseServices.getListOfWordsFromFolder(passedData))
+            "Text" -> {
+                if(TextManagement.selectedItem != -1)
+                    wordList.addAll(DataBaseServices.getWordsOfText(TextManagement.selectedItem))
+            }
         }
 
     }

@@ -1,5 +1,12 @@
 package com.example.englishbytext.Utilites
 //$s,$e|
+/*
+Folders
+Tags
+Main
+Text
+ */
+
 //Names
 const val AllSet = "AllSets"
 const val PassedData = "PassedData"

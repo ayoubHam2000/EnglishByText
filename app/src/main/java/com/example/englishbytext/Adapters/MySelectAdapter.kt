@@ -37,13 +37,10 @@ abstract class MySelectAdapter (val context : Context)
 
         parent.setOnClickListener {
             if(onSelectMode){
-                println("--Click")
                 val width = parent.width
                 val height = parent.height
 
-                println("--${selected[position]}")
                 selected[position] = (selected[position] == null || selected[position] == false)
-                println("--${selected[position]}")
                 if(selected[position]!!){
                     selectedImage.layoutParams = RelativeLayout.LayoutParams(width, height)
                     selectedImage.visibility = View.VISIBLE

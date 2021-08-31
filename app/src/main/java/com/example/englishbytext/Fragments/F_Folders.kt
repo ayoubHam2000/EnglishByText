@@ -239,7 +239,7 @@ class F_Folders : MyFragment() {
 
     //region back press
 
-    fun folderPop() : Boolean{
+    private fun folderPop() : Boolean{
         if(!folderAdapter.onSelectMode && FoldersManagement.path.isNotEmpty()){
             FoldersManagement.exitFolder()
             folderAdapter.changeList()
@@ -249,7 +249,7 @@ class F_Folders : MyFragment() {
         return false
     }
 
-    fun deaSelectFolder() : Boolean{
+    private fun deaSelectFolder() : Boolean{
         val result = folderAdapter.deaSelect()
         selectModeActionBarView()
         return result
@@ -257,6 +257,16 @@ class F_Folders : MyFragment() {
 
     //endregion
 
+    //endregion
+
+    //region override
+
+    override fun onBackPress(): Boolean {
+        if(folderPop()) return true
+        if(deaSelectFolder()) return true
+        return false
+    }
 
     //endregion
+
 }

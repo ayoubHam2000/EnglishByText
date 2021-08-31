@@ -46,6 +46,9 @@ abstract class MyFragment : Fragment() {
         initFun()
     }
 
+    open fun onBackPress() : Boolean{
+        return false
+    }
 
     abstract fun getMainLayout() : Int
     abstract fun getNotifyListenerId() : Int
