@@ -16,14 +16,13 @@ class MySelectMenu(val event : () -> Unit) : ActionMode.Callback {
         //inflater.inflate(R.menu.m_select_menu, menu)
         //menu?.clear()
 
-        //println("-->onCreateActionMode")
+
         return true
     }
 
 
 
     override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-        //println("-->onPrepareActionMode")
         menu?.clear()
         return false
     }
@@ -36,7 +35,7 @@ class MySelectMenu(val event : () -> Unit) : ActionMode.Callback {
     }
 
     override fun onDestroyActionMode(mode: ActionMode?) {
-        //println("-->onDestroyActionMode")
+
         event()
     }
 

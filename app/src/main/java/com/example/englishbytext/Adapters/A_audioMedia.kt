@@ -95,7 +95,7 @@ class A_audioMedia(
         }
 
         private fun onAudioClick(position: Int){
-            println("-->Audio Click")
+            println(">>>Audio Click")
             val isPlayed = mediaPlayer.playClick(list[position].value)
             if(isPlayed){
                 selectedReadAudio = position

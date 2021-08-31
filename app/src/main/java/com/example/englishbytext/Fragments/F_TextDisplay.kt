@@ -255,7 +255,6 @@ class F_TextDisplay : MyFragment() {
     }
 
     private fun openWordEdit(w: String){
-        //println("--> Open Text")
         //WordsManagement.selectedWordName = w
         val bundle = Bundle()
         bundle.putString("WORD_NAME", w)

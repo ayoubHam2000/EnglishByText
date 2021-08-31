@@ -147,7 +147,6 @@ object DataBaseServices {
             }while (sCursor.moveToNext())
         }
         sCursor.close()
-        println("--> $setNameF -- $setName -- $q -- ${result.count()}")
         return result
     }
 
@@ -285,7 +284,7 @@ object DataBaseServices {
     }
 
     fun getWordsOfText(id : Int) : ArrayList<Word>{
-        println("--->getWordsOfText")
+        println(">>>getWordsOfText")
         val res = ArrayList<Word>()
         val q = "SELECT * FROM $T_words WHERE $A_word IN (SELECT $A_word FROM $T_wordsText WHERE $A_textID = $id)"
 
@@ -524,7 +523,7 @@ object DataBaseServices {
         for(item in images) files.add("$path/$IMAGE_FOLDER/$item")
         for(item in audios) files.add("$path/$AUDIO_FOLDER/$item")
 
-        println("--$files")
+        println(">>>$files")
         transaction {
             dataBase.execSQL("DELETE FROM $T_words WHERE $A_word IN $words")
             dataBase.execSQL("DELETE FROM $T_wordsText WHERE $A_word IN $words")
@@ -1218,7 +1217,7 @@ object DataBaseServices {
                     Lib.showMessage(context, "Load Done")
                 }
             }else{
-                println("-->Folders Not Valid")
+                println(">>>Folders Not Valid")
                 Handler(context.mainLooper).post {
                     Lib.showMessage(context, "Something Went Wrong")
                 }
@@ -1290,7 +1289,7 @@ object DataBaseServices {
                 }
             }
         }else{
-            println("-->${table}.txt Not Exist")
+            println(">>>${table}.txt Not Exist")
         }
     }
 

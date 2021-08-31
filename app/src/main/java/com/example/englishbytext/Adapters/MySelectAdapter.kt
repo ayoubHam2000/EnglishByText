@@ -53,7 +53,6 @@ abstract class MySelectAdapter (val context : Context)
 
         parent.setOnLongClickListener {
             if(!onSelectMode){
-                println("--OnLongSelect ${parent.childCount}")
                 onSelectMode = true
                 parent.performClick()
                 onSelectModeActive()

@@ -20,7 +20,6 @@ class MyEditText : androidx.appcompat.widget.AppCompatEditText {
                 val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
                 val text = clipboard?.primaryClip?.getItemAt(0)?.coerceToText(context)?.toString()
                 val format = text?.replace("\\n[a-z]".toRegex(), " ")
-                println("-- $text")
                 setText(format)
             }
         }

@@ -192,6 +192,12 @@ class F_WordEdit : MyFragment() {
         val mainPath = gContext.getExternalFilesDir("/")!!.absolutePath
         DataBaseServices.deleteWords(mainPath, arrayListOf(wordName))
         navController.popBackStack()
+        for(item in WordsManagement.wordList){
+            if(item.name == wordName){
+                WordsManagement.wordList.remove(item)
+                break
+            }
+        }
     }
 
     //endregion
@@ -320,12 +326,12 @@ class F_WordEdit : MyFragment() {
 
     //region images
     private fun addImage(){
-        println("-->ADD IMAGE")
+        println(">>>ADD IMAGE")
         getLastImages()
     }
 
     private fun addImageFromGallery(){
-        println("-->ADD IMAGE")
+        println(">>>ADD IMAGE")
         startAddImage()
     }
 
@@ -401,7 +407,7 @@ class F_WordEdit : MyFragment() {
 
     private fun addAudio(){
         if(Lib.isAudioPermissionGranted(gContext, this)){
-            println("--> Add audio")
+            println(">>> Add audio")
             audioRecorder = D_recordDialog(gContext){
                 val path = it
                 DataBaseServices.insertAudio(wordName, path)
@@ -688,7 +694,7 @@ class F_WordEdit : MyFragment() {
                         launchImageCrop(it)
                     }
                 } else {
-                    println("-->couldn't select image from the gallery")
+                    println(">>>couldn't select image from the gallery")
                 }
             }
 
@@ -699,7 +705,7 @@ class F_WordEdit : MyFragment() {
                         saveImageToDataBase(it)
                     }
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    println("-->CropError : ${result.error}")
+                    println(">>>CropError : ${result.error}")
                 }
             }
         }

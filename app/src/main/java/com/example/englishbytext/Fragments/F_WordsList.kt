@@ -185,7 +185,7 @@ class F_WordsList : MyFragment() {
 
     //region delete
     private fun deleteWords(){
-        println("--Delete Words")
+        println(">>>Delete Words")
         when(fgType){
             "Main" -> deleteFromMainList()
             "Tags" -> deleteFromTag()
@@ -269,7 +269,7 @@ class F_WordsList : MyFragment() {
     //endregion
 
     private fun makeItFavorite(){
-        println("--Favorite Words")
+        println(">>>Favorite Words")
         val list = wordListAdapter.getSelected()
         DataBaseServices.updateIsFavoriteWords(list)
         deaSelectMode()

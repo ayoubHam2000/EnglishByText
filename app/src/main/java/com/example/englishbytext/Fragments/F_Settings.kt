@@ -179,7 +179,7 @@ class F_Settings : MyFragment() {
                         loadData(it)
                     }
                 } else {
-                    println("-->couldn't get path")
+                    println(">>>couldn't get path")
                 }
             }
             FILE_SAVE_FOLDER -> {
@@ -188,7 +188,7 @@ class F_Settings : MyFragment() {
                         saveFile(it)
                     }
                 } else {
-                    println("-->couldn't get path for save file")
+                    println(">>>couldn't get path for save file")
                 }
             }
         }

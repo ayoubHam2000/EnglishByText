@@ -183,7 +183,7 @@ class D_WordInfo(context : Context, val wordName : String) : MyDialogBuilder(con
         imagesAdapter.changeList()
     }
     private fun addImage(){
-        println("-->ADD IMAGE")
+        println(">>>ADD IMAGE")
         //event(AddImage)
     }
 
@@ -216,7 +216,7 @@ class D_WordInfo(context : Context, val wordName : String) : MyDialogBuilder(con
     //region Audio
 
     private fun addAudio(){
-        println("--> Add audio")
+        println(">>> Add audio")
     }
 
     private fun initAudioRV(){

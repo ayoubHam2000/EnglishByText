@@ -140,13 +140,13 @@ class F_Text : MyFragment() {
     }
 
     private fun openItem(id : Int){
-        println("--> Open Text")
+        println(">>> Open Text")
         TextManagement.selectedItem = id
         navController.navigate(R.id.action_f_Text_to_f_TextDisplay)
     }
 
     private fun editItem(id : Int){
-        println("--> Edit Text")
+        println(">>> Edit Text")
         TextManagement.selectedItem = id
         navController.navigate(R.id.action_f_Text_to_f_EditText)
     }

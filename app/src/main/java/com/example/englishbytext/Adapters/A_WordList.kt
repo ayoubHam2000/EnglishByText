@@ -132,7 +132,6 @@ class A_WordList(val context : Context, private val fgType : String, private val
 
         private fun setSelectedView(position: Int){
             val n = list[position].name
-            println("--->$position ${(selectedHashMap)[list[position].name] == true}")
             val s = (selectedHashMap)[n] == true
             if(s){
                 selectedItem.visibility = View.VISIBLE

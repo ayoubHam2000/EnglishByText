@@ -78,17 +78,17 @@ class MediaAudio(
 
     private fun playAudio(fileName: String){
         try{
-            println("-->try playAudio audio : $playedFileName (status $statusPlay)")
+            println(">>>try playAudio audio : $playedFileName (status $statusPlay)")
             val file = context.getExternalFilesDir("$AUDIO_FOLDER/$fileName")
             mediaPlayer?.setDataSource(file?.absolutePath)
             mediaPlayer?.prepare()
             mediaPlayer?.start()
             statusPlay = PLAYING
             playedFileName = fileName
-            println("-->success playing Audio : $playedFileName (status $statusPlay)")
+            println(">>>success playing Audio : $playedFileName (status $statusPlay)")
         }catch (e: IOException) {
             e.printStackTrace()
-            println("-->failed playing Audio : $playedFileName (status $statusPlay)")
+            println(">>>failed playing Audio : $playedFileName (status $statusPlay)")
             Lib.showMessage(context, R.string.something_went_wrong)
         }
     }
@@ -96,20 +96,20 @@ class MediaAudio(
     private fun pauseAudio() {
         mediaPlayer?.pause()
         statusPlay = PAUSED
-        println("-->pauseAudio audio : $playedFileName (status $statusPlay)")
+        println(">>>pauseAudio audio : $playedFileName (status $statusPlay)")
     }
 
     private fun resumeAudio() {
         mediaPlayer?.start()
         statusPlay = PLAYING
-        println("-->resumePlaying audio : $playedFileName (status $statusPlay)")
+        println(">>>resumePlaying audio : $playedFileName (status $statusPlay)")
     }
 
     private fun resetPlayer() {
         mediaPlayer?.stop()
         mediaPlayer?.reset()
         statusPlay = NOT_PLAYING
-        println("-->resetPlayer audio : $playedFileName (status $statusPlay)")
+        println(">>>resetPlayer audio : $playedFileName (status $statusPlay)")
     }
 
     //endregion
@@ -149,7 +149,7 @@ class MediaAudio(
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss.SSS", Locale.US).format(Date())
         val name = "Audio_$timeStamp.m4a"
         val fileOutPut = context.getExternalFilesDir("/")!!.absolutePath
-        println("-->try recordAudio audio : $name (status $statusRecord)")
+        println(">>>try recordAudio audio : $name (status $statusRecord)")
         try {
             mediaRecorder?.setAudioSource(MediaRecorder.AudioSource.MIC)
             mediaRecorder?.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
@@ -163,9 +163,9 @@ class MediaAudio(
             mediaRecorder?.start()
             statusRecord = RECORDING
             recordedFileName = name
-            println("-->success recordAudio audio : $name (status $statusRecord)")
+            println(">>>success recordAudio audio : $name (status $statusRecord)")
         } catch (e: IOException) {
-            println("-->failed recordAudio audio : $name (status $statusRecord)")
+            println(">>>failed recordAudio audio : $name (status $statusRecord)")
             Lib.showMessage(context, R.string.something_went_wrong)
             e.printStackTrace()
         }
@@ -174,25 +174,25 @@ class MediaAudio(
     private fun pauseRecording() {
         mediaRecorder?.pause()
         statusRecord = PAUSED
-        println("-->pauseRecording audio : $recordedFileName (status $statusRecord)")
+        println(">>>pauseRecording audio : $recordedFileName (status $statusRecord)")
     }
 
     private fun resumeRecording() {
         mediaRecorder?.resume()
         statusRecord = RECORDING
-        println("-->resumeRecording audio : $recordedFileName (status $statusRecord)")
+        println(">>>resumeRecording audio : $recordedFileName (status $statusRecord)")
     }
 
     private fun resetRecord() {
         mediaRecorder?.stop()
         mediaRecorder?.reset()
         statusRecord = NOT_RECORDING
-        println("-->stopRecording audio : $recordedFileName (status $statusRecord)")
+        println(">>>stopRecording audio : $recordedFileName (status $statusRecord)")
     }
 
     private fun discardRecoding() {
         if(recordedFileName != null){
-            println("-->discardRecoding audio : $recordedFileName (status $statusRecord)")
+            println(">>>discardRecoding audio : $recordedFileName (status $statusRecord)")
             deleteFile(recordedFileName)
             recordedFileName = null
         }
@@ -216,7 +216,7 @@ class MediaAudio(
         mediaRecorder = null
         statusRecord = NOT_INIT
         recordedFileName = null
-        println("-->exit Media Release resource")
+        println(">>>exit Media Release resource")
     }
 
     //listener
@@ -227,7 +227,7 @@ class MediaAudio(
     private fun deleteFile(name: String?) {
         val theFile = context.getExternalFilesDir("$AUDIO_FOLDER/$name")
         theFile?.delete()
-        println("-->file $name deleted")
+        println(">>>file $name deleted")
     }
     //endregion
 

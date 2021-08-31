@@ -64,7 +64,6 @@ class F_CardsPractice : MyFragment() {
     }
 
     private fun nextPage(position: Int){
-        println("-->position = $position")
         if(position == cardsAdapter.list.count()){
             Lib.showMessage(gContext, "End")
         }
