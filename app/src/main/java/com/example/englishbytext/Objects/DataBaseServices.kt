@@ -9,6 +9,7 @@ import android.os.Handler
 import android.util.Base64
 import com.example.englishbytext.*
 import com.example.englishbytext.Classes.schemas.*
+import com.example.englishbytext.Objects.DataBaseServices.toBase64
 import com.example.englishbytext.Utilites.*
 import java.io.File
 import java.io.FileInputStream
@@ -457,6 +458,39 @@ object DataBaseServices {
         dataBase.execSQL("INSERT OR IGNORE INTO $T_words($A_word, $A_favorite) VALUES('$name', '0')")
     }
 
+    fun insertWordsFromPdf(list : ArrayList<WordFile>){
+        transaction {
+            for(item in list){
+                val name = item.word.toBase64()
+                dataBase.execSQL("INSERT OR IGNORE INTO $T_words($A_word, $A_favorite) VALUES('$name', '0')")
+                for(def in item.definitions){
+                    insertDefinition(item.word, def)
+                }
+                for(exp in item.examples){
+                    insertExamples(item.word, exp)
+                }
+            }
+            when(FileManagement.fgType){
+                "Tags" ->{
+                    val tag = FileManagement.passedData.toBase64()
+                    for(item in list){
+                        val word = item.word.toBase64()
+                        val q = "INSERT OR IGNORE INTO $T_wordTags VALUES('$word', '$tag')"
+                        dataBase.execSQL(q)
+                    }
+                }
+                "Folders" ->{
+                    val p = FileManagement.passedData.toBase64()
+                    for(item in list){
+                        val n = item.word.toBase64()
+                        val q = "Insert OR IGNORE into $T_words_Folder($A_word, $A_path) values('$n', '$p')"
+                        dataBase.execSQL(q)
+                    }
+                }
+            }
+        }
+    }
+
     fun isWordNotExist(n: String) : Boolean{
         val name = n.toBase64()
         val q = "SELECT $A_word FROM $T_words WHERE $A_word = '$name'"
@@ -612,14 +646,14 @@ object DataBaseServices {
     fun insertExamples(w: String, e: String){
         val word = w.toBase64()
         val example = e.toBase64()
-        dataBase.execSQL("INSERT INTO $T_examples ($A_word, $A_example) VALUES ('$word', '$example')")
+        dataBase.execSQL("INSERT OR IGNORE INTO $T_examples ($A_word, $A_example) VALUES ('$word', '$example')")
     }
 
     fun insertDefinition(w: String, d: String){
         val word = w.toBase64()
         val definition = d.toBase64()
 
-        dataBase.execSQL("INSERT INTO $T_definitions ($A_word, $A_definition) VALUES ('$word', '$definition')")
+        dataBase.execSQL("INSERT OR IGNORE INTO $T_definitions ($A_word, $A_definition) VALUES ('$word', '$definition')")
     }
 
     fun insertImage(w: String, im: String){
@@ -749,7 +783,7 @@ object DataBaseServices {
     fun insertWordTag(w: String, t: String){
         val word = w.toBase64()
         val tag = t.toBase64()
-        val q = "INSERT INTO $T_wordTags VALUES('$word', '$tag')"
+        val q = "INSERT OR IGNORE INTO $T_wordTags VALUES('$word', '$tag')"
         insertTag(t)
         dataBase.execSQL(q)
     }
@@ -834,7 +868,7 @@ object DataBaseServices {
         val p = path.toBase64()
         val n = name.toBase64()
 
-        val q = "Insert into $T_words_Folder($A_word, $A_path) values('$n', '$p')"
+        val q = "Insert OR IGNORE into $T_words_Folder($A_word, $A_path) values('$n', '$p')"
         dataBase.execSQL(q)
     }
 

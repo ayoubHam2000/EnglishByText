@@ -10,18 +10,37 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/pathView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp"
-            android:paddingHorizontal="10dp"
-            android:textColor="@color/black"
-            android:fontFamily="sans-serif-condensed"
-            android:textStyle="bold"
-            android:textSize="17sp"
-            tools:text="./A"
-            />
+            android:layout_height="30dp"
+
+            >
+
+            <TextView
+                android:id="@+id/pathView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginVertical="5dp"
+                android:paddingHorizontal="10dp"
+                android:textColor="@color/black"
+                android:fontFamily="sans-serif-condensed"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                tools:text="./A"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_arrow_forward_24"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="15dp"
+                />
+
+        </RelativeLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_Folders"

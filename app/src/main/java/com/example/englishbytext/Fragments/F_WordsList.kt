@@ -1,10 +1,14 @@
 package com.example.englishbytext.Fragments
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,10 +24,7 @@ import com.example.englishbytext.Classes.Objects.D_ask
 import com.example.englishbytext.Classes.Objects.D_copy_to_folder
 import com.example.englishbytext.Dialogs.D_editItem
 import com.example.englishbytext.Interfaces.NotifyActivity
-import com.example.englishbytext.Objects.DataBaseServices
-import com.example.englishbytext.Objects.Lib
-import com.example.englishbytext.Objects.Setting
-import com.example.englishbytext.Objects.TextManagement
+import com.example.englishbytext.Objects.*
 import com.example.englishbytext.R
 import com.example.englishbytext.Utilites.*
 import java.lang.Exception
@@ -119,6 +120,11 @@ class F_WordsList : MyFragment() {
         makeFavorite.setOnClickListener { makeItFavorite() }
         copyToFolder.setOnClickListener { copyToFolderClick() }
         selectAll.setOnClickListener { selectAllClick() }
+
+        addWordList.setOnLongClickListener {
+            getFileUri()
+            true
+        }
     }
 
     //region addWord
@@ -448,6 +454,51 @@ class F_WordsList : MyFragment() {
     }
 
 
+
+    //endregion
+
+    //region getWordsFrom Pdf
+
+    private fun getFileUri(){
+        if(Lib.isStoragePermissionGranted(gContext, this)){
+            val intent = Intent()
+            intent.type = "*/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            val mimetypes = arrayOf("application/pdf")
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes)
+            startActivityForResult(intent, 100)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == 100){
+            if(resultCode == Activity.RESULT_OK){
+                val filePath = data?.data?.path
+                if(filePath != null){
+                    importFile(data.data!!)
+                }else{
+                    Lib.showMessage(gContext, "Something went wrong")
+                    Log.d("ERROR", "filePath = NULL")
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun importFile(filePath: Uri){
+        FileManagement.fgType = fgType
+        FileManagement.passedData = passedData
+
+        FileManagement.startWorking(gContext, filePath){
+            val mainHandler =  Handler(gContext.mainLooper)
+            val myRunnable =  Runnable {
+                Lib.showMessage(gContext, "Complete")
+                wordListAdapter.changeList()
+            }
+            mainHandler.post(myRunnable)
+        }
+
+    }
 
     //endregion
 

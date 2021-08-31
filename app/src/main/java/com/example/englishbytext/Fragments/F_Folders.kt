@@ -62,6 +62,8 @@ class F_Folders : MyFragment() {
         initRecyclerView()
 
         pathView.text = FoldersManagement.getPath()
+
+        pathView.setOnClickListener { pathViewClick() }
         btnAddFolder.setOnClickListener { addFolderClick() }
         btnDeleteFolder.setOnClickListener { deleteFoldersClick() }
         modifyFolder.setOnClickListener { modifyFolderClick() }
@@ -71,6 +73,12 @@ class F_Folders : MyFragment() {
     //endregion
 
     //region Folders
+
+    private fun pathViewClick(){
+        if(FoldersManagement.getPath() != "."){
+            openFolderContentClick(FoldersManagement.getPath())
+        }
+    }
 
     private fun addFolderClick(){
         var dialog : D_editItem? = null
@@ -155,7 +163,8 @@ class F_Folders : MyFragment() {
                 selectModeActionBarView()
             }
             OpenFolderContent -> {
-                openFolderContentClick(folderName)
+                val path = FoldersManagement.getPath() + "/" + folderName
+                openFolderContentClick(path)
             }
             SelectModeClick ->{
                 selectModeClick()
@@ -175,7 +184,8 @@ class F_Folders : MyFragment() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                openFolderContentClick(folderAdapter.list[viewHolder.absoluteAdapterPosition])
+                val path = FoldersManagement.getPath() + "/" + folderAdapter.list[viewHolder.absoluteAdapterPosition]
+                openFolderContentClick(path)
             }
 
             override fun onChildDraw(c: Canvas,
@@ -221,11 +231,11 @@ class F_Folders : MyFragment() {
         }
     }
 
-    private fun openFolderContentClick(folderName: String){
+    private fun openFolderContentClick(path: String){
         val bundle = Bundle()
 
         bundle.putString(FgType, "Folders")
-        bundle.putString(PassedData, FoldersManagement.getPath() + "/" + folderName)
+        bundle.putString(PassedData, path)
         navController.navigate(R.id.f_WordsList, bundle)
     }
 
