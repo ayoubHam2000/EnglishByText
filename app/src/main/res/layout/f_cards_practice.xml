@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.F_CardsPractice"
+    >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        >
+
+        <com.example.englishbytext.Classes.Custom.MyViewPage
+            android:id="@+id/practiceViewPage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </com.example.englishbytext.Classes.Custom.MyViewPage>
+
+
+
+    </LinearLayout>
+
+</FrameLayout>

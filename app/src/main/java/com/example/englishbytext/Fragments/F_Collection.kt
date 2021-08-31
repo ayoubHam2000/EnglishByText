@@ -17,50 +17,53 @@ import com.example.englishbytext.Classes.Objects.D_ask
 import com.example.englishbytext.Classes.schemas.Collections
 import com.example.englishbytext.Dialogs.D_editItem
 import com.example.englishbytext.Interfaces.NotifyActivity
-import com.example.englishbytext.Objects.CollectionManagement
-import com.example.englishbytext.Objects.DataBaseServices
-import com.example.englishbytext.Objects.Lib
+import com.example.englishbytext.Objects.*
 import com.example.englishbytext.Objects.Lib.printLog
-import com.example.englishbytext.Objects.SetManagement
 import com.example.englishbytext.R
 import com.example.englishbytext.Utilites.*
 
 
-class F_Collection : Fragment() {
+class F_Collection : MyFragment() {
 
     //region var, int
-    //var
-    private lateinit var gContext : Context
-    private lateinit var collectionAdapter : A_collection
-    private var listener : NotifyActivity? = null
 
-    //view
-    private lateinit var navController : NavController
+    //====================================
+    //++++++++++++++++++++++  vars
+    //====================================
+    private lateinit var collectionAdapter : A_collection
+
+
+    //====================================
+    //++++++++++++++++++++++  view
+    //====================================
     private lateinit var recyclerView : RecyclerView
     private lateinit var dialogEditItem : D_editItem
     private lateinit var btnAddCollection : ImageView
     private lateinit var emptyPageNot : LinearLayout
 
-    private val mainLayout = R.layout.f_collection
 
-    private fun mainInitFun(){
-        listener?.notifyActivity(OpenCollectionFrag)
-        initVar(requireView())
-        initFun()
+    //====================================
+    //++++++++++++++++++++++  init
+    //====================================
+    override fun getMainLayout(): Int {
+        return R.layout.f_collection
     }
 
-    private fun initVar(view : View){
-        gContext = view.context
-        navController = Navigation.findNavController(view)
+    override fun getNotifyListenerId(): Int {
+        return OpenCollectionFrag
+    }
+
+    override fun initVar(view: View) {
         recyclerView = view.findViewById(R.id.r_CollectionNames)
         emptyPageNot =  view.findViewById(R.id.t_createNewSet)
         btnAddCollection = activity?.findViewById(R.id.addCollection)!!
     }
 
-    private fun initFun(){
+    override fun initFun() {
         initRecyclerView()
         btnAddCollection.setOnClickListener { createNewCollection() }
     }
+
 
     //endregion
 
@@ -176,31 +179,6 @@ class F_Collection : Fragment() {
         collectionAdapter.changeList()
     }
 
-    //endregion
-
-    //region other
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        listener = context as? NotifyActivity
-        if (listener == null) {
-            throw ClassCastException("$context must implement OnArticleSelectedListener")
-        }
-    }
-
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(mainLayout, container, false)
-    }
-
-
-
-    override fun onStart() {
-        super.onStart()
-        mainInitFun()
-    }
     //endregion
 
 }

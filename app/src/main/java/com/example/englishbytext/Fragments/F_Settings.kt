@@ -28,16 +28,19 @@ import com.example.englishbytext.Utilites.RefreshData
 import kotlin.concurrent.thread
 
 
-class F_Settings : Fragment() {
+class F_Settings : MyFragment() {
 
     //region init
-    private lateinit var gContext : Context
-    private val layout = R.layout.f__settings
-    private var listener : NotifyActivity? = null
+
+    //====================================
+    //++++++++++++++++++++++  Vars
+    //====================================
     private val FILE_PATH_CODE = 100
     private val FILE_SAVE_FOLDER = 101
 
-    //view
+    //====================================
+    //++++++++++++++++++++++  View
+    //====================================
     private lateinit var darkModeSwitch : SwitchCompat
     private lateinit var textSize : TextView
     private lateinit var textStyle : TextView
@@ -49,11 +52,18 @@ class F_Settings : Fragment() {
     private lateinit var textStyleSelected : TextView
     private lateinit var textFontSelected : TextView
 
+    //====================================
+    //++++++++++++++++++++++  Init
+    //====================================
+    override fun getMainLayout(): Int {
+        return R.layout.f__settings
+    }
 
+    override fun getNotifyListenerId(): Int {
+        return OpenSettings
+    }
 
-    private fun initView(view: View){
-        listener?.notifyActivity(OpenSettings)
-
+    override fun initVar(view: View) {
         darkModeSwitch = view.findViewById(R.id.darkModeSwitch)
         textSize = view.findViewById(R.id.textSize)
         textStyle = view.findViewById(R.id.textStyle)
@@ -64,12 +74,9 @@ class F_Settings : Fragment() {
         textSizeSelected = view.findViewById(R.id.textSizeSelected)
         textStyleSelected = view.findViewById(R.id.textStyleSelected)
         textFontSelected = view.findViewById(R.id.textFontSelected)
-
-
-        initFun()
     }
 
-    private fun initFun(){
+    override fun initFun(){
         darkModeSwitch.isChecked = Setting.isDarkMode
         textSizeSelected.text = Setting.getTextFountText()
         textStyleSelected.text = Setting.getTextStyleText()
@@ -90,7 +97,7 @@ class F_Settings : Fragment() {
 
     //endregion
 
-    //region
+    //region frg
     private fun setDarkMode(){
         if(darkModeSwitch.isChecked){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -185,29 +192,6 @@ class F_Settings : Fragment() {
                 }
             }
         }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        listener = context as? NotifyActivity
-        if (listener == null) {
-            throw ClassCastException("$context must implement OnArticleSelectedListener")
-        }
-    }
-
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(layout, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        gContext = view.context
-        initView(view)
     }
 
     //endregion

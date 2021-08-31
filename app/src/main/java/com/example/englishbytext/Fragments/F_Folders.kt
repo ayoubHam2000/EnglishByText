@@ -34,6 +34,7 @@ class F_Folders : MyFragment() {
     private lateinit var recyclerView : RecyclerView
     private lateinit var btnAddFolder : ImageView
     private lateinit var btnDeleteFolder : ImageView
+    private lateinit var modifyFolder : ImageView
     private lateinit var pathView : TextView
 
 
@@ -49,10 +50,12 @@ class F_Folders : MyFragment() {
     }
 
     override fun initVar(view: View){
-        recyclerView = view.findViewById(R.id.rv_Folders)
         btnAddFolder = activity?.findViewById(R.id.addFolder)!!
         btnDeleteFolder = activity?.findViewById(R.id.deleteFolder)!!
-        pathView = activity?.findViewById(R.id.pathView)!!
+        modifyFolder = activity?.findViewById(R.id.modifyFolder)!!
+
+        recyclerView = view.findViewById(R.id.rv_Folders)
+        pathView = view.findViewById(R.id.pathView)!!
     }
 
     override fun initFun(){
@@ -61,6 +64,7 @@ class F_Folders : MyFragment() {
         pathView.text = FoldersManagement.getPath()
         btnAddFolder.setOnClickListener { addFolderClick() }
         btnDeleteFolder.setOnClickListener { deleteFoldersClick() }
+        modifyFolder.setOnClickListener { modifyFolderClick() }
 
     }
 
@@ -95,10 +99,36 @@ class F_Folders : MyFragment() {
     }
 
     private fun deleteFoldersClick(){
-        val list = folderAdapter.getSelected()
+        val list = folderAdapter.getSelectedFormat()
         DataBaseServices.deleteFolders(list)
         folderAdapter.changeList()
-        deaSelectTag()
+        deaSelectFolder()
+    }
+
+    private fun modifyFolderClick(){
+        val selectedItem = folderAdapter.list[folderAdapter.getSelected()[0]]
+        val path = FoldersManagement.getPath() + "/" + selectedItem
+        var dialog : D_editItem? = null
+
+        dialog = D_editItem(gContext){folderNewName->
+            val newPath = FoldersManagement.getPath() + "/" + folderNewName
+            when{
+                !DataBaseServices.isFolderExist(newPath) ->{
+                    DataBaseServices.updateFolderName(path, newPath)
+                    deaSelectFolder() //it also change the list
+                    dialog?.dismiss()
+                }
+                else->{
+                    dialog!!.inputName.error = "Tag Already Exist In the List"
+                }
+            }
+        }
+
+        dialog.textHint = "Folder Name"
+        dialog.maxChar = MaxTagChars
+        dialog.maxLine = 1
+        dialog.textInput = selectedItem
+        dialog.buildAndDisplay()
     }
 
     private fun initRecyclerView(){
@@ -126,6 +156,9 @@ class F_Folders : MyFragment() {
             }
             OpenFolderContent -> {
                 openFolderContentClick(folderName)
+            }
+            SelectModeClick ->{
+                selectModeClick()
             }
         }
     }
@@ -180,9 +213,11 @@ class F_Folders : MyFragment() {
         if(folderAdapter.onSelectMode){
             btnAddFolder.visibility = View.GONE
             btnDeleteFolder.visibility = View.VISIBLE
+            modifyFolder.visibility = View.VISIBLE
         }else{
             btnAddFolder.visibility = View.VISIBLE
             btnDeleteFolder.visibility = View.GONE
+            modifyFolder.visibility = View.GONE
         }
     }
 
@@ -192,6 +227,14 @@ class F_Folders : MyFragment() {
         bundle.putString(FgType, "Folders")
         bundle.putString(PassedData, FoldersManagement.getPath() + "/" + folderName)
         navController.navigate(R.id.f_WordsList, bundle)
+    }
+
+    private fun selectModeClick(){
+        if(folderAdapter.getSelectedCount() == 1){
+            modifyFolder.visibility = View.VISIBLE
+        }else{
+            modifyFolder.visibility = View.GONE
+        }
     }
 
     //region back press
@@ -206,8 +249,8 @@ class F_Folders : MyFragment() {
         return false
     }
 
-    fun deaSelectTag() : Boolean{
-        val result = folderAdapter.deaSelectMode()
+    fun deaSelectFolder() : Boolean{
+        val result = folderAdapter.deaSelect()
         selectModeActionBarView()
         return result
     }

@@ -14,7 +14,7 @@ import com.example.englishbytext.Utilites.OnSelectMode
 import com.example.englishbytext.Utilites.OpenItem
 
 class A_RelatedWordItem(context : Context, val wordName : String, val event : (Int, String) -> Unit)
-    : A_MySelectAdapter(context) {
+    : MySelectAdapter(context) {
 
     //region Init
     private val layout = R.layout.a_related_item
@@ -39,7 +39,9 @@ class A_RelatedWordItem(context : Context, val wordName : String, val event : (I
         fun bindView(position: Int){
             itemName.text = list[position].value
             addSelectItem(parentView, position){
-                event(OpenItem, list[position].value)
+                if(!onSelectMode){
+                    event(OpenItem, list[position].value)
+                }
             }
         }
     }

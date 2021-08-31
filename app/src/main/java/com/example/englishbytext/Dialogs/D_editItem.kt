@@ -6,6 +6,7 @@ import android.text.InputType
 import android.text.TextWatcher
 import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
@@ -53,6 +54,8 @@ class D_editItem(context: Context, val event: (String) -> Unit) :
 
     private fun setView(){
         defineMaxChar(inputName)
+        defineDoneBtn(inputName)
+
         inputName.hint = if(textHint.isEmpty()) context.getString(R.string.write_something_here) else textHint
         if(maxLine != -1) {
             inputName.inputType = InputType.TYPE_CLASS_TEXT
@@ -81,6 +84,15 @@ class D_editItem(context: Context, val event: (String) -> Unit) :
                         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
                     }
             )
+        }
+    }
+
+    private fun defineDoneBtn(editText: EditText){
+        editText.setOnEditorActionListener { v, actionId, event ->
+            if(actionId == EditorInfo.IME_ACTION_DONE){
+                addItem(editText)
+            }
+            false
         }
     }
 

@@ -22,32 +22,45 @@ import com.example.englishbytext.Utilites.OpenTextEditFrag
 import com.example.englishbytext.Utilites.SaveChanges
 
 
-class F_EditText : Fragment() {
+class F_EditText : MyFragment() {
 
-    //region Init, vars
-    private var listener : NotifyActivity? = null
-    private val layout = R.layout.f_edit_text
-    private lateinit var gContext : Context
+    //region var, int
+
+    //====================================
+    //++++++++++++++++++++++  vars
+    //====================================
     private var theTextId : Int = -1
     private var saveDone = false
 
 
-    //view
+    //====================================
+    //++++++++++++++++++++++  view
+    //====================================
     private lateinit var titleEditor : EditText
     private lateinit var textEditor : EditText
 
-    private fun initFun(view: View){
-        listener?.notifyActivity(OpenTextEditFrag)
 
+    //====================================
+    //++++++++++++++++++++++  init
+    //====================================
+    override fun getMainLayout(): Int {
+        return R.layout.f_edit_text
+    }
+
+    override fun getNotifyListenerId(): Int {
+        return OpenTextEditFrag
+    }
+
+    override fun initVar(view: View) {
         titleEditor = view.findViewById(R.id.titleEditor)
         textEditor = view.findViewById(R.id.textEditor)
-
-        intFun()
     }
 
-    private fun intFun(){
+    override fun initFun() {
+        theTextId = TextManagement.selectedItem
         setLayout()
     }
+
 
     //endregion
 
@@ -140,29 +153,5 @@ class F_EditText : Fragment() {
 
     //endregion
 
-    //region override
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        listener = context as? NotifyActivity
-        if (listener == null) {
-            throw ClassCastException("$context must implement OnArticleSelectedListener")
-        }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
-        return inflater.inflate(layout, container, false)
-    }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        gContext = view.context
-        theTextId = TextManagement.selectedItem
-        initFun(view)
-    }
-
-    //endregion
 
 }

@@ -135,6 +135,12 @@
                     android:text="@string/folders"
                     />
 
+                <TextView
+                    android:id="@+id/allFoldersNbr"
+                    style="@style/slide_item_number"
+
+                    />
+
 
             </LinearLayout>
 

@@ -13,14 +13,15 @@ import com.example.englishbytext.Objects.DataBaseServices
 import com.example.englishbytext.R
 import com.example.englishbytext.Utilites.OnSelectMode
 import com.example.englishbytext.Utilites.OpenItem
+import com.example.englishbytext.Utilites.SelectModeClick
 import kotlin.concurrent.thread
 
 class A_tag (context : Context, val event : (Int, String) -> Unit)
-    : A_MySelectAdapter(context) {
+    : MySelectAdapter(context) {
 
     //region Init
     private val layout = R.layout.a_tag_item
-    private val list = ArrayList<StringId>()
+    val list = ArrayList<StringId>()
     private var listCount = HashMap<String, Int>()
 
 
@@ -62,7 +63,11 @@ class A_tag (context : Context, val event : (Int, String) -> Unit)
             countWords.text = count
 
             addSelectItem(parentView, position){
-                event(OpenItem, list[position].value)
+                if(!onSelectMode){
+                    event(OpenItem, list[position].value)
+                }else{
+                    event(SelectModeClick, "")
+                }
             }
         }
     }

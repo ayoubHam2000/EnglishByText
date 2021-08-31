@@ -8,9 +8,7 @@ import com.example.englishbytext.R
 
 /*
 
-TODO : related definition and examples and image and audio
-TODO : setting for the above
-TODO : Instructions
+
 
 
 

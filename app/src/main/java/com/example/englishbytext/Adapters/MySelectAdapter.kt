@@ -13,12 +13,12 @@ import com.example.englishbytext.Classes.schemas.StringId
 import com.example.englishbytext.Objects.DataBaseServices
 import com.example.englishbytext.R
 
-abstract class A_MySelectAdapter (val context : Context)
+abstract class MySelectAdapter (val context : Context)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //region Init
     private val selected = HashMap<Int, Boolean>()
-    private var onSelectMode = false
+    var onSelectMode = false
 
 
     //endregion
@@ -50,9 +50,8 @@ abstract class A_MySelectAdapter (val context : Context)
                 }else{
                     selectedImage.visibility = View.INVISIBLE
                 }
-            }else{
-                click()
             }
+            click()
         }
 
         parent.setOnLongClickListener {
@@ -84,6 +83,15 @@ abstract class A_MySelectAdapter (val context : Context)
             return true
         }
         return false
+    }
+
+    fun getSelectedCount() : Int{
+        var res = 0
+        for(item in selected.keys){
+            if(selected[item] == true)
+                res++
+        }
+        return res
     }
 
     abstract fun onSelectModeActive()

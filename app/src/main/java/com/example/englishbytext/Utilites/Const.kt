@@ -37,6 +37,8 @@ const val OpenDefinition = 13
 const val OpenExample = 14
 const val AddImage = 15
 const val OpenFolderContent = 16
+const val SelectModeClick = 17
+const val NextPage = 18
 
 //section
 const val NormalSection = -1
@@ -54,6 +56,7 @@ const val OpenTagFg = 8
 const val OnProcess = 9
 const val RefreshData = 10
 const val OpenAllFoldersFrag = 11
+const val OpenCardsPractice = 12
 
 //arg
 const val ARG_CollectionName = "ARG_CollectionName"

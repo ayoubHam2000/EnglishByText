@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.englishbytext.Adapters.A_WordList
 import com.example.englishbytext.Classes.Objects.D_ask
+import com.example.englishbytext.Classes.Objects.D_copy_to_folder
 import com.example.englishbytext.Dialogs.D_editItem
 import com.example.englishbytext.Interfaces.NotifyActivity
 import com.example.englishbytext.Objects.DataBaseServices
@@ -28,51 +29,66 @@ import java.lang.Exception
 import kotlin.concurrent.thread
 
 
-class F_WordsList : Fragment() {
+class F_WordsList : MyFragment() {
 
     //region init
-    private var listener : NotifyActivity? = null
-    private lateinit var gContext : Context
+
+    //====================================
+    //++++++++++++++++++++++  Vars
+    //====================================
     private lateinit var wordListAdapter : A_WordList
-    private val layout = R.layout.f_words_list
     lateinit var popupMenu : PopupMenu
     lateinit var dialogEditItem : D_editItem
-
+    //search
     private var continueSearch = true
     private var oldSearch = ""
     //used by previous fragment (tags, folders)
     var fgType = ""
     var passedData = ""
 
-    //view
-    private lateinit var navController : NavController
+    //====================================
+    //++++++++++++++++++++++  Views
+    //====================================
+    private lateinit var pathView : TextView
     private lateinit var wordListRV : RecyclerView
     private lateinit var wordListSearch : EditText
     private lateinit var addWordList : ImageView
+    private lateinit var practiceBtn : ImageView
     private lateinit var filterMode : LinearLayout
     private lateinit var deleteWords : ImageView
     private lateinit var makeFavorite : ImageView
-
+    private lateinit var copyToFolder : ImageView
     private lateinit var favoriteActiveLabel : TextView
     private lateinit var regexActiveLabel : TextView
 
-    private fun initFun(view : View){
-        listener?.notifyActivity(OpenWordList)
-        navController = Navigation.findNavController(view)
+    //====================================
+    //++++++++++++++++++++++  Init
+    //====================================
+    override fun getMainLayout(): Int {
+        return R.layout.f_words_list
+    }
 
+    override fun getNotifyListenerId(): Int {
+        return OpenWordList
+    }
+
+    override fun initVar(view: View) {
         wordListSearch = activity?.findViewById(R.id.wordListSearch)!!
         addWordList = activity?.findViewById(R.id.addWordList)!!
         filterMode = activity?.findViewById(R.id.filterMode)!!
         deleteWords = activity?.findViewById(R.id.deleteWords)!!
         makeFavorite = activity?.findViewById(R.id.makeFavorite)!!
+        copyToFolder = activity?.findViewById(R.id.copyToFolder)!!
         favoriteActiveLabel = activity?.findViewById(R.id.favoriteActiveLabel)!!
         regexActiveLabel = activity?.findViewById(R.id.regexActiveLabel)!!
+        practiceBtn = activity?.findViewById(R.id.practiceBtn)!!
 
+        pathView = view.findViewById(R.id.pathView)
         wordListRV = view.findViewById(R.id.wordListRV)
-        intFun()
     }
 
-    private fun intFun(){
+    override fun initFun() {
+        setPathView()
         initWordListRV()
         initActionBar()
         startSearch(wordListSearch.text.toString())
@@ -93,8 +109,10 @@ class F_WordsList : Fragment() {
         if(oldSearch.isNotEmpty()) wordListSearch.setText(oldSearch)
 
         addWordList.setOnClickListener { addWordList() }
+        practiceBtn.setOnClickListener { practiceBtnClick() }
         deleteWords.setOnClickListener { deleteWords() }
         makeFavorite.setOnClickListener { makeItFavorite() }
+        copyToFolder.setOnClickListener { copyToFolderClick() }
     }
 
     //region addWord
@@ -111,6 +129,10 @@ class F_WordsList : Fragment() {
         }
         dialogEditItem.textHint = gContext.getString(R.string.addWord)
         dialogEditItem.buildAndDisplay()
+    }
+
+    private fun practiceBtnClick(){
+        navController.navigate(R.id.action_f_WordsList_to_f_CardsPractice)
     }
 
     private fun addWordInListWord(name : String){
@@ -232,6 +254,14 @@ class F_WordsList : Fragment() {
         startSearch(wordListSearch.text.toString())
     }
 
+    private fun copyToFolderClick(){
+        val copyToFolderDialog = D_copy_to_folder(gContext){path->
+            DataBaseServices.copyWordsToFolder(path, wordListAdapter.getSelected())
+            Lib.showMessage(gContext, "Copy Done")
+        }
+        copyToFolderDialog.buildAndDisplay()
+    }
+
     private fun filterModeSetUp(){
         popupMenu.setOnMenuItemClickListener {
             when(it.itemId){
@@ -324,6 +354,28 @@ class F_WordsList : Fragment() {
 
     //endregion
 
+    //region path
+
+    private fun setPathView(){
+        val t = when(fgType){
+            "Main" -> {
+                "Main"
+            }
+            "Tags" ->{
+                passedData
+            }
+            "Folders" ->{
+                passedData
+            }
+            else ->{
+                ""
+            }
+        }
+        pathView.text = t
+    }
+
+    //endregion
+
     //region RV
 
     private fun initWordListRV(){
@@ -356,8 +408,11 @@ class F_WordsList : Fragment() {
         addWordList.visibility = if(!on) View.VISIBLE else View.GONE
         filterMode.visibility = if(!on) View.VISIBLE else View.GONE
         wordListSearch.visibility = if(!on) View.VISIBLE else View.GONE
+        practiceBtn.visibility = if(!on) View.VISIBLE else View.GONE
         deleteWords.visibility = if(on) View.VISIBLE else View.GONE
         makeFavorite.visibility = if(on) View.VISIBLE else View.GONE
+
+        copyToFolder.visibility = if(on) View.VISIBLE else View.GONE
         Lib.hideKeyboardFrom(gContext, wordListSearch)
     }
 
@@ -370,26 +425,13 @@ class F_WordsList : Fragment() {
         return wordListAdapter.deaSelectMode()
     }
 
-    fun notifyList(){
-        wordListAdapter.changeList()
+    fun onBackPress() : Boolean{
+        return false
     }
 
     //endregion
 
     //region override
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        listener = context as? NotifyActivity
-        if (listener == null) {
-            throw ClassCastException("$context must implement OnArticleSelectedListener")
-        }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(layout, container, false)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -397,17 +439,7 @@ class F_WordsList : Fragment() {
         if(bundle != null){
             fgType = bundle.getString(FgType)!!
             passedData = bundle.getString(PassedData)!!
-
-            println("7--->$fgType")
-            println("7--->$passedData")
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        gContext = view.context
-
-        initFun(view)
     }
 
     //endregion

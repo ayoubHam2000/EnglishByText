@@ -50,7 +50,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="8dp"
             android:orientation="horizontal"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -59,6 +58,16 @@
 
             >
 
+            <ImageView
+                android:id="@+id/copyToFolder"
+                style="@style/MainActivity_Action_Bar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/ic_copy"
+                android:layout_marginEnd="14dp"
+                android:visibility="gone"
+                />
 
             <ImageView
                 android:id="@+id/deleteWords"
@@ -67,7 +76,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/ic_delete_24"
-                android:layout_marginStart="10dp"
+                android:layout_marginEnd="14dp"
                 android:visibility="gone"
                 />
 
@@ -79,7 +88,7 @@
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/ic_favorite_active"
                 android:backgroundTint="@color/red"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginEnd="14dp"
                 android:visibility="gone"
                 />
 
@@ -89,10 +98,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp"
+                android:layout_marginEnd="14dp"
                 android:layout_marginBottom="5dp"
                 android:visibility="visible"
                 >
+
+
 
                 <LinearLayout
                     android:layout_width="24dp"
@@ -138,7 +149,16 @@
 
             </LinearLayout>
 
-
+            <ImageView
+                android:id="@+id/practiceBtn"
+                style="@style/MainActivity_Action_Bar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/ic_practice"
+                android:layout_marginEnd="14dp"
+                android:visibility="visible"
+                />
 
             <ImageView
                 android:id="@+id/addWordList"
@@ -147,7 +167,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/ic__add"
-                android:layout_marginStart="10dp"
+                android:layout_marginEnd="14dp"
                 android:visibility="visible"
                 />
 

@@ -46,15 +46,18 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class F_WordEdit : Fragment() {
+class F_WordEdit : MyFragment() {
 
     //region init
-    private lateinit var gContext : Context
-    private val layout = R.layout.f_word_edit
-    private lateinit var navController : NavController
-    private var listener : NotifyActivity? = null
+
+    //====================================
+    //++++++++++++++++++++++  Vars
+    //====================================
     private var wordName = ""
 
+    //====================================
+    //++++++++++++++++++++++  Views
+    //====================================
     private lateinit var definitionAdapter : A_def_exp
     private lateinit var exampleAdapter : A_def_exp
     private lateinit var imagesAdapter : A_imageMedia
@@ -83,11 +86,18 @@ class F_WordEdit : Fragment() {
     private lateinit var copyWord : ImageView
     private lateinit var deleteWord : ImageView
 
+    //====================================
+    //++++++++++++++++++++++  Init
+    //====================================
+    override fun getMainLayout(): Int {
+        return R.layout.f_word_edit
+    }
 
-    private fun initFun(view: View){
-        listener?.notifyActivity(OpenWordEdit)
-        navController = Navigation.findNavController(view)
+    override fun getNotifyListenerId(): Int {
+        return OpenWordEdit
+    }
 
+    override fun initVar(view: View) {
         parentLayout = view.findViewById(R.id.parentLayout)
         wordNameTextView = view.findViewById(R.id.wordName)
         favoriteBtn = view.findViewById(R.id.favoriteBtn)
@@ -108,11 +118,9 @@ class F_WordEdit : Fragment() {
         sayIt = view.findViewById(R.id.sayIt)
         copyWord = view.findViewById(R.id.copyWord)
         deleteWord = view.findViewById(R.id.deleteWord)
-
-        intFun()
     }
 
-    private fun intFun(){
+    override fun initFun() {
         wordNameTextView.text = wordName
         parentLayout.setBackgroundColor(gContext.getColor(R.color.transparent2))
 
@@ -687,14 +695,6 @@ class F_WordEdit : Fragment() {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        listener = context as? NotifyActivity
-        if (listener == null) {
-            throw ClassCastException("$context must implement OnArticleSelectedListener")
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle = arguments
@@ -703,20 +703,6 @@ class F_WordEdit : Fragment() {
             WordsManagement.selectedWordName = wordName
         }
     }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(layout, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        gContext = view.context
-        //wordName = WordsManagement.selectedWordName
-        initFun(view)
-    }
-
 
     //endregion
 

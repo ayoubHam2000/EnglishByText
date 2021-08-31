@@ -63,7 +63,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/ic__add"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="15dp"
                 android:visibility="visible"
                 />
 
@@ -74,7 +74,18 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/ic_delete_24"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="15dp"
+                android:visibility="gone"
+                />
+
+            <ImageView
+                android:id="@+id/modifyTag"
+                style="@style/MainActivity_Action_Bar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/ic__edit"
+                android:layout_marginStart="15dp"
                 android:visibility="gone"
                 />
 

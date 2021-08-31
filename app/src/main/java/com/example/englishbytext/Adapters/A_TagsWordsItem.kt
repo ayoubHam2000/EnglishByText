@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.englishbytext.Classes.schemas.StringId
 import com.example.englishbytext.Classes.schemas.WordInfoId
 import com.example.englishbytext.Objects.DataBaseServices
 import com.example.englishbytext.R
@@ -15,7 +14,7 @@ import com.example.englishbytext.Utilites.OnSelectMode
 import com.example.englishbytext.Utilites.OpenItem
 
 class A_TagsWordsItem (context : Context, val wordName : String, val event : (Int, String) -> Unit)
-    : A_MySelectAdapter(context) {
+    : MySelectAdapter(context) {
 
     //region Init
     private val layout = R.layout.a_related_item
@@ -46,7 +45,9 @@ class A_TagsWordsItem (context : Context, val wordName : String, val event : (In
             }
 
             addSelectItem(parentView, position){
-                event(OpenItem, list[position].value)
+                if(!onSelectMode){
+                    event(OpenItem, list[position].value)
+                }
             }
         }
     }

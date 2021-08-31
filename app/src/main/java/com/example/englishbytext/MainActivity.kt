@@ -166,14 +166,17 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
     private fun refreshWordsItems(){
         val allWordsNbr = findViewById<TextView>(R.id.allWordsNbr)
         val allTags = findViewById<TextView>(R.id.allTagsNbr)
+        val allFolders = findViewById<TextView>(R.id.allFoldersNbr)
 
         thread {
             val totalWords = DataBaseServices.tableCountByQuery("SELECT $A_word FROM $T_words")
             val tagsNbr = DataBaseServices.tableCountByQuery("SELECT $A_tag FROM $T_tags")
+            val foldersNbr = DataBaseServices.tableCountByQuery("SELECT $A_path FROM $T_folders")
 
             Handler(this.mainLooper).post{
                 allWordsNbr.text = totalWords.toString()
                 allTags.text = tagsNbr.toString()
+                allFolders.text = foldersNbr.toString()
             }
 
         }
@@ -401,6 +404,7 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
                 fragment.deaAudioMedia()
             }
             is F_WordsList -> {
+                if(fragment.onBackPress()) return
                 if (fragment.deaSelectMode()) return
             }
             is F_Tags -> {
@@ -408,7 +412,7 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
             }
             is F_Folders ->{
                 if(fragment.folderPop()) return
-                if(fragment.deaSelectTag()) return
+                if(fragment.deaSelectFolder()) return
             }
         }
         super.onBackPressed()
@@ -426,6 +430,7 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
             OpenWordList -> openWordList()
             OpenTagFg -> openTagFg()
             OpenAllFoldersFrag -> openFolderFg()
+            OpenCardsPractice -> openCardsPractice()
             OnProcess -> {
                 Handler(this.mainLooper).post {
                     if (onProcess) {
@@ -490,6 +495,10 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
 
     private fun openFolderFg(){
         initActionBarLayout(R.layout.action_folder)
+    }
+
+    private fun openCardsPractice(){
+        hideActionBar()
     }
 
     //region Common

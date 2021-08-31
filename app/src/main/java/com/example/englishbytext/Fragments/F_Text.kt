@@ -25,39 +25,48 @@ import com.example.englishbytext.R
 import com.example.englishbytext.Utilites.*
 
 
-class F_Text : Fragment() {
+class F_Text : MyFragment() {
 
     //region int
+
+    //====================================
+    //++++++++++++++++++++++  Vars
+    //====================================
     private lateinit var collection : Collections
-    private lateinit var gContext : Context
     private lateinit var textAdapter : A_textItem
-    private var listener : NotifyActivity? = null
 
 
-    //view
-    private lateinit var navController : NavController
+    //====================================
+    //++++++++++++++++++++++  Views
+    //====================================
     private lateinit var recyclerView : RecyclerView
     private lateinit var dialogEditItem : D_editItem
     private lateinit var btnAddTextBtn : ImageView
     private lateinit var emptyPageNot : LinearLayout
-    private val mainLayout = R.layout.f_text
 
-    private fun initFun(view : View){
-        listener?.notifyActivity(OpenTextFrag)
-        initVar(view)
-        intFun()
+    //====================================
+    //++++++++++++++++++++++  Init
+    //====================================
+    override fun getMainLayout(): Int {
+        return R.layout.f_text
     }
 
-    private fun initVar(view : View){
+    override fun getNotifyListenerId(): Int {
+        return OpenTextFrag
+    }
+
+    override fun initVar(view : View){
         navController = Navigation.findNavController(view)
         recyclerView = view.findViewById(R.id.r_textRecyclerView)
         emptyPageNot =  view.findViewById(R.id.t_createNewSet)
         btnAddTextBtn = activity?.findViewById(R.id.addText)!!
     }
 
-    private fun intFun(){
+    override fun initFun() {
+        collection = CollectionManagement.selectedCol
         initText()
     }
+
 
     //endregion
 
@@ -168,28 +177,5 @@ class F_Text : Fragment() {
 
     //endregion
 
-    //region other
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        listener = context as? NotifyActivity
-        if (listener == null) {
-            throw ClassCastException("$context must implement OnArticleSelectedListener")
-        }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
-        return inflater.inflate(mainLayout, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        gContext = view.context
-        collection = CollectionManagement.selectedCol
-        initFun(view)
-    }
-
-    //endregion
     
 }

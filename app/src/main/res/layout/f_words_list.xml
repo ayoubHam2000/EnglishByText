@@ -5,14 +5,34 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.F_WordsList">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/wordListRV"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="2dp"
-        android:paddingBottom="73dp"
-        android:scrollbars="vertical"
-        android:clipToPadding="false"
-        />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/pathView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
+            android:paddingHorizontal="10dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            tools:text="./A"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/wordListRV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:paddingBottom="73dp"
+            android:scrollbars="vertical"
+            android:clipToPadding="false"
+            />
+
+    </LinearLayout>
+
 
 </FrameLayout>

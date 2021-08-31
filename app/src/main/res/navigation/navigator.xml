@@ -85,6 +85,9 @@
         <action
             android:id="@+id/action_f_WordsList_to_f_WordEdit"
             app:destination="@id/f_WordEdit" />
+        <action
+            android:id="@+id/action_f_WordsList_to_f_CardsPractice"
+            app:destination="@id/f_CardsPractice" />
     </fragment>
     <fragment
         android:id="@+id/f_Tags"
@@ -96,4 +99,13 @@
         android:name="com.example.englishbytext.Fragments.F_Folders"
         android:label="f_folders"
         tools:layout="@layout/f_folders" />
+    <fragment
+        android:id="@+id/f_CardsPractice"
+        android:name="com.example.englishbytext.Fragments.F_CardsPractice"
+        android:label="f_cards_practice"
+        tools:layout="@layout/f_cards_practice" >
+        <action
+            android:id="@+id/action_f_CardsPractice_to_f_WordEdit"
+            app:destination="@id/f_WordEdit" />
+    </fragment>
 </navigation>

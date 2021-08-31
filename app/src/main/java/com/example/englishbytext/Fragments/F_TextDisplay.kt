@@ -30,31 +30,39 @@ import com.example.englishbytext.T_words
 import com.example.englishbytext.Utilites.OpenTextDisplayFrag
 
 
-class F_TextDisplay : Fragment() {
+class F_TextDisplay : MyFragment() {
 
     //region Int
-    private lateinit var gContext : Context
-    private val mainLayout = R.layout.f_text_display
-    private var listener : NotifyActivity? = null
-
-    //view
-    private lateinit var navController : NavController
+    //====================================
+    //++++++++++++++++++++++  Views
+    //====================================
     private lateinit var titleView : TextView
     private lateinit var textView : TextView
     private lateinit var textScroller : ScrollView
     private lateinit var selectionAction : LinearLayout
 
-    private fun initFun(view: View){
-        println("-->INTI VIEW")
-        listener?.notifyActivity(OpenTextDisplayFrag)
-        navController = Navigation.findNavController(view)
+    //====================================
+    //++++++++++++++++++++++  Init
+    //====================================
+    override fun getMainLayout(): Int {
+        return R.layout.f_text_display
+    }
 
+    override fun getNotifyListenerId(): Int {
+        return OpenTextDisplayFrag
+    }
+
+    override fun initVar(view: View) {
         titleView = view.findViewById(R.id.titleView)
         textView = view.findViewById(R.id.textView)
         textScroller = view.findViewById(R.id.textScroller)
         selectionAction = view.findViewById(R.id.selectionAction)
+    }
+
+    override fun initFun() {
         setLayout()
     }
+
 
     //endregion
 
@@ -260,14 +268,6 @@ class F_TextDisplay : Fragment() {
 
     //region override
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        listener = context as? NotifyActivity
-        if (listener == null) {
-            throw ClassCastException("$context must implement OnArticleSelectedListener")
-        }
-    }
-
     override fun onPause() {
         super.onPause()
         val pos = textScroller.scrollY
@@ -295,19 +295,6 @@ class F_TextDisplay : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        gContext = view.context
-        initFun(view)
-    }
-
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-
-        return inflater.inflate(mainLayout, container, false)
-    }
 
     //endregion
 }

@@ -78,6 +78,17 @@
                 android:visibility="gone"
                 />
 
+            <ImageView
+                android:id="@+id/modifyFolder"
+                style="@style/MainActivity_Action_Bar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/ic__edit"
+                android:layout_marginStart="15dp"
+                android:visibility="gone"
+                />
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
