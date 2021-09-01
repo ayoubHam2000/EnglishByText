@@ -28,6 +28,9 @@ class A_WordList(val context : Context, private val fgType : String, private val
     private val selectedHashMap = HashMap<String, Boolean>()
     private var hasImagesMap = HashMap<String, Boolean>()
     private var hasAudiosMap = HashMap<String, Boolean>()
+    private var hasTagMap = HashMap<String, Boolean>()
+    private var hasFolderMap = HashMap<String, Boolean>()
+    private var hasTextMap = HashMap<String, Boolean>()
 
     fun changeList(){
         WordsManagement.updateWordList(fgType, passedData)
@@ -40,6 +43,9 @@ class A_WordList(val context : Context, private val fgType : String, private val
         thread{
             hasImagesMap = DataBaseServices.getWordsHasImages()
             hasAudiosMap = DataBaseServices.getWordsHasAudios()
+            hasTagMap = DataBaseServices.getWordsHasTag()
+            hasFolderMap = DataBaseServices.getWordsHasFolder()
+            hasTextMap = DataBaseServices.getWordsHasText()
             Handler(context.mainLooper).post { notifyDataSetChanged() }
         }
     }
@@ -83,6 +89,9 @@ class A_WordList(val context : Context, private val fgType : String, private val
         private val wordNbr : TextView = itemView.findViewById(R.id.wordNbr)
         private val hasAudios : ImageView = itemView.findViewById(R.id.hasAudios)
         private val hasImage : ImageView = itemView.findViewById(R.id.hasImage)
+        private val hasTag : ImageView = itemView.findViewById(R.id.hasTag)
+        private val hasFolder : ImageView = itemView.findViewById(R.id.hasFolder)
+        private val hasText : ImageView = itemView.findViewById(R.id.hasText)
 
         fun bindView(position: Int){
             wordNbr.text = (position + 1).toString()
@@ -102,6 +111,10 @@ class A_WordList(val context : Context, private val fgType : String, private val
         private fun setHasMedia(position: Int){
             hasImage.visibility = if(hasImagesMap[filterList[position].name] != null) View.VISIBLE else View.GONE
             hasAudios.visibility = if(hasAudiosMap[filterList[position].name] != null) View.VISIBLE else View.GONE
+
+            hasTag.visibility = if(hasTagMap[filterList[position].name] != null) View.VISIBLE else View.GONE
+            hasFolder.visibility = if(hasFolderMap[filterList[position].name] != null) View.VISIBLE else View.GONE
+            hasText.visibility = if(hasTextMap[filterList[position].name] != null) View.VISIBLE else View.GONE
         }
 
         private fun setFavoriteView(position: Int){

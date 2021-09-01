@@ -63,6 +63,7 @@ class F_WordsList : MyFragment() {
     private lateinit var makeFavorite : ImageView
     private lateinit var copyToFolder : ImageView
     private lateinit var selectAll : ImageView
+    private lateinit var updateOrderView : ImageView
     private lateinit var favoriteActiveLabel : TextView
     private lateinit var regexActiveLabel : TextView
 
@@ -85,6 +86,7 @@ class F_WordsList : MyFragment() {
         makeFavorite = activity?.findViewById(R.id.makeFavorite)!!
         copyToFolder = activity?.findViewById(R.id.copyToFolder)!!
         selectAll = activity?.findViewById(R.id.selectAll)!!
+        updateOrderView = activity?.findViewById(R.id.updateOrderView)!!
         favoriteActiveLabel = activity?.findViewById(R.id.favoriteActiveLabel)!!
         regexActiveLabel = activity?.findViewById(R.id.regexActiveLabel)!!
         practiceBtn = activity?.findViewById(R.id.practiceBtn)!!
@@ -120,6 +122,7 @@ class F_WordsList : MyFragment() {
         makeFavorite.setOnClickListener { makeItFavorite() }
         copyToFolder.setOnClickListener { copyToFolderClick() }
         selectAll.setOnClickListener { selectAllClick() }
+        updateOrderView.setOnClickListener { updateOrderViewClick() }
 
         addWordList.setOnLongClickListener {
             getFileUri()
@@ -295,6 +298,12 @@ class F_WordsList : MyFragment() {
         wordListAdapter.selectAll()
     }
 
+    private fun updateOrderViewClick(){
+        DataBaseServices.updateWordLevelOrder(wordListAdapter.getSelected())
+        deaSelectMode()
+        wordListAdapter.changeList()
+    }
+
     private fun filterModeSetUp(){
         popupMenu.setOnMenuItemClickListener {
             when(it.itemId){
@@ -439,6 +448,7 @@ class F_WordsList : MyFragment() {
         deleteWords.visibility = if(on) View.VISIBLE else View.GONE
         makeFavorite.visibility = if(on) View.VISIBLE else View.GONE
         selectAll.visibility = if(on) View.VISIBLE else View.GONE
+        updateOrderView.visibility = if(on) View.VISIBLE else View.GONE
 
         copyToFolder.visibility = if(on) View.VISIBLE else View.GONE
         Lib.hideKeyboardFrom(gContext, wordListSearch)

@@ -59,6 +59,17 @@
             >
 
             <ImageView
+                android:id="@+id/updateOrderView"
+                style="@style/MainActivity_Action_Bar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/ic_upgrade_24"
+                android:layout_marginEnd="16dp"
+                android:visibility="gone"
+                />
+
+            <ImageView
                 android:id="@+id/selectAll"
                 style="@style/MainActivity_Action_Bar"
                 android:layout_width="24dp"

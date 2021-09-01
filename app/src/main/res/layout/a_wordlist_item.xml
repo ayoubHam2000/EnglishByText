@@ -64,6 +64,33 @@
             >
 
             <ImageView
+                android:id="@+id/hasText"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/ic_text_fields_24"
+                android:backgroundTint="@color/gray2"
+                android:layout_marginEnd="7dp"
+                />
+
+            <ImageView
+                android:id="@+id/hasTag"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/ic_tag"
+                android:backgroundTint="@color/gray2"
+                android:layout_marginEnd="7dp"
+                />
+
+            <ImageView
+                android:id="@+id/hasFolder"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:background="@drawable/ic_folder_24"
+                android:backgroundTint="@color/gray2"
+                android:layout_marginEnd="7dp"
+                />
+
+            <ImageView
                 android:id="@+id/hasAudios"
                 android:layout_width="15dp"
                 android:layout_height="15dp"

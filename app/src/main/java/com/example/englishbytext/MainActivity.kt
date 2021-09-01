@@ -170,13 +170,17 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
 
         thread {
             val totalWords = DataBaseServices.tableCountByQuery("SELECT $A_word FROM $T_words")
+
             val tagsNbr = DataBaseServices.tableCountByQuery("SELECT $A_tag FROM $T_tags")
+            val wordsInTags = DataBaseServices.tableCountByQuery("SELECT distinct $A_word FROM $T_wordTags")
+
             val foldersNbr = DataBaseServices.tableCountByQuery("SELECT $A_path FROM $T_folders")
+            val wordsInFolder = DataBaseServices.tableCountByQuery("SELECT distinct $A_word FROM $T_words_Folder")
 
             Handler(this.mainLooper).post{
                 allWordsNbr.text = totalWords.toString()
-                allTags.text = tagsNbr.toString()
-                allFolders.text = foldersNbr.toString()
+                allTags.text = "$tagsNbr ($wordsInTags)"
+                allFolders.text = "$foldersNbr ($wordsInFolder)"
             }
 
         }

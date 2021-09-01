@@ -287,7 +287,7 @@ object DataBaseServices {
     fun getWordsOfText(id : Int) : ArrayList<Word>{
         println(">>>getWordsOfText")
         val res = ArrayList<Word>()
-        val q = "SELECT * FROM $T_words WHERE $A_word IN (SELECT $A_word FROM $T_wordsText WHERE $A_textID = $id)"
+        val q = "SELECT * FROM $T_words WHERE $A_word IN (SELECT $A_word FROM $T_wordsText WHERE $A_textID = $id)  Order by $A_level_order DESC"
 
         val cursor = dataBase.rawQuery(q, null)
         if(cursor.moveToFirst()){
@@ -455,14 +455,14 @@ object DataBaseServices {
     fun insertWord(n: String){
         val name = n.toBase64()
 
-        dataBase.execSQL("INSERT OR IGNORE INTO $T_words($A_word, $A_favorite) VALUES('$name', '0')")
+        val currentTime = System.currentTimeMillis()
+        dataBase.execSQL("INSERT OR IGNORE INTO $T_words($A_word, $A_favorite, $A_created_time) VALUES('$name', '0', $currentTime)")
     }
 
     fun insertWordsFromPdf(list : ArrayList<WordFile>){
         transaction {
             for(item in list){
-                val name = item.word.toBase64()
-                dataBase.execSQL("INSERT OR IGNORE INTO $T_words($A_word, $A_favorite) VALUES('$name', '0')")
+                insertWord(item.word)
                 for(def in item.definitions){
                     insertDefinition(item.word, def)
                 }
@@ -500,11 +500,12 @@ object DataBaseServices {
     fun getWords(t: String) : ArrayList<Word>{
         val tag = t.toBase64()
         val res = ArrayList<Word>()
-        val q = if(t.isNotEmpty()) {
-            "SELECT * FROM $T_words WHERE $A_word IN (SELECT $A_word FROM $T_wordTags WHERE $A_tag = '$tag')"
-        }else{
-            "SELECT * FROM $T_words"
-        }
+        var q = "SELECT $A_word, $A_favorite FROM $T_words"
+        q += if(t.isNotEmpty()) {
+            " WHERE $A_word IN (SELECT $A_word FROM $T_wordTags WHERE $A_tag = '$tag')"
+        }else ""
+
+        q += " Order by $A_level_order DESC"
         val cursor = dataBase.rawQuery(q, null)
         if(cursor.moveToFirst()){
             do{
@@ -524,6 +525,21 @@ object DataBaseServices {
 
     fun getWordsHasAudios() : HashMap<String, Boolean> {
         val q = "SELECT Distinct $A_word FROM $T_audios"
+        return getWordsHasMedia(q)
+    }
+
+    fun getWordsHasTag() : HashMap<String, Boolean>{
+        val q = "SELECT Distinct $A_word FROM $T_wordTags"
+        return getWordsHasMedia(q)
+    }
+
+    fun getWordsHasFolder() : HashMap<String, Boolean>{
+        val q = "SELECT Distinct $A_word FROM $T_words_Folder"
+        return getWordsHasMedia(q)
+    }
+
+    fun getWordsHasText() : HashMap<String, Boolean>{
+        val q = "SELECT Distinct $A_word FROM $T_wordsText"
         return getWordsHasMedia(q)
     }
 
@@ -700,6 +716,13 @@ object DataBaseServices {
         val name = n.toBase64()
         val value = v.toInt()
         dataBase.execSQL("UPDATE $T_words SET $A_favorite = $value WHERE $A_word = '$name'")
+    }
+
+    fun updateWordLevelOrder(l : ArrayList<String>){
+        val maxL = getListInt("select max($A_level_order) from words")
+        val max = (if(maxL.isNotEmpty()) maxL[0] else 0) + 1
+        val list = l.toBase64()
+        dataBase.execSQL("update $T_words set $A_level_order = $max where $A_word IN $list")
     }
 
     //endregion
@@ -922,7 +945,7 @@ object DataBaseServices {
         val res = ArrayList<Word>()
 
 
-        val q = "SELECT * FROM $T_words WHERE $A_word IN (Select $A_word From $T_words_Folder Where $A_path = '$p')"
+        val q = "SELECT * FROM $T_words WHERE $A_word IN (Select $A_word From $T_words_Folder Where $A_path = '$p')  Order by $A_level_order DESC"
         val cursor = dataBase.rawQuery(q, null)
         if(cursor.moveToFirst()){
             do{
@@ -1110,7 +1133,7 @@ object DataBaseServices {
         toBase64: Boolean = true
     ) : String{
         return if(format){
-            val newList = ArrayList<String>()
+            val newList = ArrayList<String>(l.count())
             for(item in l){
                 if(toBase64){
                     newList.add("'${item.toBase64()}'")
@@ -1313,7 +1336,9 @@ object DataBaseServices {
 
             dataBase.execSQL("DELETE FROM $table")
             f.forEachLine {
+                //val data = ArrayList(it.split("||"))
                 val data = it.split("||")
+                //println("--> $table || ${data.size}. $data")
                 if(data.size == colNumber){
                     val res = StringBuilder()
                     for(item in data)
