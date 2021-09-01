@@ -24,38 +24,44 @@ object FileManagement {
     }
 
     private fun getFromText(context : Context, fileUri : Uri) : ArrayList<WordFile>{
-        var data = getTextFromPdf(context, fileUri).replace("Page \\d+?\n".toRegex(), "")
-        data = data.replace("Summary[ \n]of[ \n]Annotations".toRegex(), "")
-        val units = data.split("#\\d.*?\\n".toRegex())
+        val data = getTextFromPdf(context, fileUri).replace("\n", "||")
+        val units = "\\+.*?\\+".toRegex().findAll(data)
         val words = ArrayList<WordFile>()
 
         for(unit in units){
-            val lines = unit.split("\n")
+            //println("-->${unit.value}")
+            val items = unit.value.replace("(^[+]|[+]$)".toRegex(), "") .split("||")
             val word = WordFile()
             var case = 0
-            for(i in lines){
+            for(i in items){
                 val item = i.trim()
-                if(item.isEmpty() || item.isBlank()) continue
-                if(case == 0){
-                    word.word = item
-                    case++
-                }else if(case == 1){
-                    if(item.matches("---ex".toRegex())){
-                        case++
-                        continue
+                if(item.isNotEmpty()){
+                    when {
+                        case == 0 -> {
+                            word.word = item
+                            case++
+                        }
+                        item.matches("^-[^-].*".toRegex()) -> {
+                            word.definitions.add(item.replace("^-".toRegex(), ""))
+                        }
+                        item.matches("^--[^-].*".toRegex()) -> {
+                            word.examples.add(item.replace("^--".toRegex(), ""))
+                            case++
+                        }
+                        case == 1 -> {
+                            val last = word.definitions.count() - 1
+                            word.definitions[last] =  word.definitions[last] + " $item"
+                        }
+                        case > 1 -> {
+                            val last = word.definitions.count() - 1
+                            word.examples[last] =  word.examples[last] + " $item"
+                        }
                     }
-                    word.definitions.add(item.replace("^-".toRegex(), ""))
-                }else if(case == 2){
-                    word.examples.add(item.replace("^-".toRegex(), ""))
                 }
             }
-            if(case > 0)
-            words.add(word)
-        }
-        println("---> ${units.count()}")
-        for((i, item) in words.withIndex()){
-            print("--->${i+1}. ")
-            item.print()
+            if(word.word.isNotEmpty()){
+                words.add(word)
+            }
         }
         return words
     }
