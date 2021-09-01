@@ -543,6 +543,11 @@ object DataBaseServices {
         return getWordsHasMedia(q)
     }
 
+    fun getWordsHasRelated() : HashMap<String, Boolean>{
+        val q = "select $A_word from $T_relatedWord union select $A_related from $T_relatedWord"
+        return getWordsHasMedia(q)
+    }
+
     private fun getWordsHasMedia(q : String) : HashMap<String, Boolean>{
         val res = HashMap<String, Boolean>()
         val cursor = dataBase.rawQuery(q, null)

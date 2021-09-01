@@ -3,6 +3,15 @@ package com.example.englishbytext
 /*
 ALTER TABLE words ADD COLUMN created_time Date;
 
+delete from words where word in (
+select word from words where word not in (
+select word from relatedWord union
+select related from relatedWord union
+select word from wordsfolder union
+select word from wordTags union
+select word from wordsText)
+);
+
  */
 
 //sets(*setName, color)

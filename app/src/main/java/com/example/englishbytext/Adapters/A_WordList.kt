@@ -31,6 +31,7 @@ class A_WordList(val context : Context, private val fgType : String, private val
     private var hasTagMap = HashMap<String, Boolean>()
     private var hasFolderMap = HashMap<String, Boolean>()
     private var hasTextMap = HashMap<String, Boolean>()
+    private var hasRelatedMap = HashMap<String, Boolean>()
 
     fun changeList(){
         WordsManagement.updateWordList(fgType, passedData)
@@ -43,9 +44,11 @@ class A_WordList(val context : Context, private val fgType : String, private val
         thread{
             hasImagesMap = DataBaseServices.getWordsHasImages()
             hasAudiosMap = DataBaseServices.getWordsHasAudios()
+
             hasTagMap = DataBaseServices.getWordsHasTag()
             hasFolderMap = DataBaseServices.getWordsHasFolder()
             hasTextMap = DataBaseServices.getWordsHasText()
+            hasRelatedMap = DataBaseServices.getWordsHasRelated()
             Handler(context.mainLooper).post { notifyDataSetChanged() }
         }
     }
@@ -92,6 +95,7 @@ class A_WordList(val context : Context, private val fgType : String, private val
         private val hasTag : ImageView = itemView.findViewById(R.id.hasTag)
         private val hasFolder : ImageView = itemView.findViewById(R.id.hasFolder)
         private val hasText : ImageView = itemView.findViewById(R.id.hasText)
+        private val hasRelated : ImageView = itemView.findViewById(R.id.hasRelated)
 
         fun bindView(position: Int){
             wordNbr.text = (position + 1).toString()
@@ -115,6 +119,7 @@ class A_WordList(val context : Context, private val fgType : String, private val
             hasTag.visibility = if(hasTagMap[filterList[position].name] != null) View.VISIBLE else View.GONE
             hasFolder.visibility = if(hasFolderMap[filterList[position].name] != null) View.VISIBLE else View.GONE
             hasText.visibility = if(hasTextMap[filterList[position].name] != null) View.VISIBLE else View.GONE
+            hasRelated.visibility = if(hasRelatedMap[filterList[position].name] != null) View.VISIBLE else View.GONE
         }
 
         private fun setFavoriteView(position: Int){
