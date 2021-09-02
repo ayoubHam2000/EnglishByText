@@ -13,24 +13,19 @@ object Setting {
     var selectedTextFontType = 0
     var onRegexSearch = false
     var onFavoriteSearch = false
+    var sortTypeWordList = SORT_DEFAULT_DESC
 
-    //region preValue
-    private val textSizeOptions = arrayOf(0.5f, 0.75f, 1f, 1.5f, 2f)
-    private val textFontOptions = arrayOf(
-            "sans-serif-thin",
-            "casual",
-            "cursive",
-            "monospace",
-            "sans-serif",
-            "sans-serif-condensed",
-    )
-    private val textFontTypeOptions = arrayOf(
-        Typeface.NORMAL,
-        Typeface.BOLD,
-        Typeface.ITALIC,
-        Typeface.BOLD_ITALIC
-    )
+    //region sort
+
+    fun setSortTypeWordList(value : String, update : Boolean = true){
+        if(update)
+            DataBaseServices.updateVar(V_SortTypeWordList, value)
+        sortTypeWordList = value.toInt()
+    }
+
     //endregion
+
+    //region collections
 
     fun setCategorySection(value : String, update : Boolean = true){
         if(update)
@@ -80,7 +75,24 @@ object Setting {
         onFavoriteSearch = value.toBoolean()
     }
 
-    //------------------------
+    //endregion
+
+    //region Text
+    private val textSizeOptions = arrayOf(0.5f, 0.75f, 1f, 1.5f, 2f)
+    private val textFontOptions = arrayOf(
+            "sans-serif-thin",
+            "casual",
+            "cursive",
+            "monospace",
+            "sans-serif",
+            "sans-serif-condensed",
+    )
+    private val textFontTypeOptions = arrayOf(
+            Typeface.NORMAL,
+            Typeface.BOLD,
+            Typeface.ITALIC,
+            Typeface.BOLD_ITALIC
+    )
 
     fun getTextSize() : Float{
         return textSizeOptions[selectedTextSize]
@@ -122,5 +134,7 @@ object Setting {
         )
         return textFont[selectedTextFontType]
     }
+
+    //endregion
 
 }

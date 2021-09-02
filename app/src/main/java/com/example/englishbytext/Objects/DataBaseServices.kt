@@ -284,23 +284,6 @@ object DataBaseServices {
         return res
     }
 
-    fun getWordsOfText(id : Int) : ArrayList<Word>{
-        println(">>>getWordsOfText")
-        val res = ArrayList<Word>()
-        val q = "SELECT * FROM $T_words WHERE $A_word IN (SELECT $A_word FROM $T_wordsText WHERE $A_textID = $id)  Order by $A_level_order DESC"
-
-        val cursor = dataBase.rawQuery(q, null)
-        if(cursor.moveToFirst()){
-            do{
-                val name = cursor.getString(0).fromBase64ToString()
-                val isFavorite = cursor.getInt(1) == 1
-                res.add(Word(name, isFavorite))
-            }while (cursor.moveToNext())
-        }
-        cursor.close()
-        return res
-    }
-
     fun getTextWordsCount() : HashMap<Int, Int>{
         val res = HashMap<Int, Int>()
         val q = "SELECT id, COUNT(*) FROM $T_wordsText group by $A_textID"
@@ -422,6 +405,10 @@ object DataBaseServices {
 
         val favoriteSearch = getVar(V_OnFavoriteSearch, false.toString())
         Setting.setFavoriteSearch(favoriteSearch, false)
+
+        val sortTypeWordList = getVar(V_SortTypeWordList, SORT_DEFAULT_DESC.toString())
+        Setting.setSortTypeWordList(sortTypeWordList, false)
+
     }
 
     private fun getVar(varId: Int, defaultValue: String) : String{
@@ -497,16 +484,10 @@ object DataBaseServices {
         return tableCountByQuery(q) == 0
     }
 
-    fun getWords(t: String) : ArrayList<Word>{
-        val tag = t.toBase64()
+    fun getWords(query: String) : ArrayList<Word>{
         val res = ArrayList<Word>()
-        var q = "SELECT $A_word, $A_favorite FROM $T_words"
-        q += if(t.isNotEmpty()) {
-            " WHERE $A_word IN (SELECT $A_word FROM $T_wordTags WHERE $A_tag = '$tag')"
-        }else ""
 
-        q += " Order by $A_level_order DESC"
-        val cursor = dataBase.rawQuery(q, null)
+        val cursor = dataBase.rawQuery(query, null)
         if(cursor.moveToFirst()){
             do{
                 val name = cursor.getString(0).fromBase64ToString()
@@ -929,6 +910,7 @@ object DataBaseServices {
         }
         return true
     }
+
     fun getListOfFolders(path : String) : ArrayList<String>{
         val result = ArrayList<String>()
 
@@ -943,24 +925,6 @@ object DataBaseServices {
             }
         }
         return result
-    }
-
-    fun getListOfWordsFromFolder(path : String) : ArrayList<Word>{
-        val p = path.toBase64()
-        val res = ArrayList<Word>()
-
-
-        val q = "SELECT * FROM $T_words WHERE $A_word IN (Select $A_word From $T_words_Folder Where $A_path = '$p')  Order by $A_level_order DESC"
-        val cursor = dataBase.rawQuery(q, null)
-        if(cursor.moveToFirst()){
-            do{
-                val name = cursor.getString(0).fromBase64ToString()
-                val isFavorite = cursor.getInt(1) == 1
-                res.add(Word(name, isFavorite))
-            }while (cursor.moveToNext())
-        }
-        cursor.close()
-        return res
     }
 
     //endregion
@@ -1186,12 +1150,12 @@ object DataBaseServices {
         }
     }
 
-    private fun String.toBase64() : String{
+    fun String.toBase64() : String{
         val bytes = this.toByteArray()
         return Base64.encodeToString(bytes, Base64.DEFAULT).replace("[\\x0a]".toRegex(), "")
     }
 
-    private fun String.fromBase64ToString() : String{
+    fun String.fromBase64ToString() : String{
         return try{
             val originByte = Base64.decode(this, Base64.DEFAULT)
             return String(originByte)

@@ -181,4 +181,18 @@ class F_Tags : MyFragment() {
 
     //endregion
 
+    //region override
+
+    override fun onPause() {
+        super.onPause()
+        saveStatesMap["View1"] = tagRv.layoutManager?.onSaveInstanceState()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        tagRv.layoutManager?.onRestoreInstanceState(saveStatesMap["View1"])
+    }
+
+    //endregion
+
 }

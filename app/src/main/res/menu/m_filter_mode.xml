@@ -10,6 +10,24 @@
     <item
         android:title="Regex"
         android:id="@+id/isOnRegex"
-        android:checkable="true"/>
+        android:checkable="true"
+
+        />
+
+    <group
+        android:id="@+id/sort_group">
+        <item android:title="@string/sort">
+            <menu>
+                <item
+                    android:id="@+id/defaultSort"
+                    android:title="@string/theDefault"/>
+                <item
+                    android:id="@+id/createdTimeSort"
+                    android:title="@string/created_time"/>
+            </menu>
+        </item>
+    </group>
+
+
 
 </menu>

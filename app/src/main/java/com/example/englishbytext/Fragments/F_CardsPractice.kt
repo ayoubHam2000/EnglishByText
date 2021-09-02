@@ -1,7 +1,9 @@
 package com.example.englishbytext.Fragments
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
+import android.view.ViewGroup
 import androidx.viewpager.widget.ViewPager
 import com.example.englishbytext.Adapters.A_Cards_Practice
 import com.example.englishbytext.Objects.Lib
@@ -9,6 +11,7 @@ import com.example.englishbytext.R
 import com.example.englishbytext.Utilites.Edit
 import com.example.englishbytext.Utilites.NextPage
 import com.example.englishbytext.Utilites.OpenCardsPractice
+import kotlin.reflect.KClass
 
 class F_CardsPractice : MyFragment() {
 
@@ -51,7 +54,6 @@ class F_CardsPractice : MyFragment() {
         cardsAdapter = A_Cards_Practice(gContext){ eventName, pos->
             pageViewerAdapterEvent(eventName, pos)
         }
-
         //cardsAdapter.changeList()
         practiceViewPage.adapter = cardsAdapter
     }
@@ -74,6 +76,20 @@ class F_CardsPractice : MyFragment() {
         val bundle = Bundle()
         bundle.putString("WORD_NAME", cardsAdapter.list[position].name)
         navController.navigate(R.id.action_f_CardsPractice_to_f_WordEdit, bundle)
+    }
+
+    //endregion
+
+    //region override
+
+    override fun onPause() {
+        super.onPause()
+        saveStatesMap["Pager"] = practiceViewPage.onSaveInstanceState()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        practiceViewPage.onRestoreInstanceState(saveStatesMap["Pager"])
     }
 
     //endregion

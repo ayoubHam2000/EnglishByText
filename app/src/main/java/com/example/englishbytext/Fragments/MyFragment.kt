@@ -2,12 +2,14 @@ package com.example.englishbytext.Fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.example.englishbytext.Classes.Custom.MyViewPage
 import com.example.englishbytext.Interfaces.NotifyActivity
 import com.example.englishbytext.R
 import com.example.englishbytext.Utilites.OpenCollectionFrag
@@ -17,6 +19,8 @@ abstract class MyFragment : Fragment() {
     protected var listener : NotifyActivity? = null
     protected lateinit var gContext : Context
     protected lateinit var navController : NavController
+
+    protected val saveStatesMap = HashMap<String, Parcelable?>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -35,6 +39,7 @@ abstract class MyFragment : Fragment() {
     }
 
     override fun onStart() {
+        println("---> onStart")
         super.onStart()
 
         val view = requireView()

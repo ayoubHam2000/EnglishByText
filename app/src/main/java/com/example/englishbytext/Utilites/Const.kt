@@ -77,3 +77,11 @@ const val FILES_FOLDER = "Files"
 
 //bundel
 const val SELECTED_TAG = "SELECTED_TAG"
+
+//Sort
+//sort should be continous 0 1 2 3 ..
+//always type1 ASC, type1 DESC, type2 ASC, type2 DESC ...
+const val SORT_DEFAULT_ASC = 0
+const val SORT_DEFAULT_DESC = 1
+const val SORT_CREATED_TIME_ASC = 2
+const val SORT_CREATED_TIME_DESC = 3

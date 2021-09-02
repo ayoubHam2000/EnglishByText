@@ -181,5 +181,19 @@ class F_Collection : MyFragment() {
 
     //endregion
 
+    //region override
+
+    override fun onPause() {
+        super.onPause()
+        saveStatesMap["View1"] = recyclerView.layoutManager?.onSaveInstanceState()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        recyclerView.layoutManager?.onRestoreInstanceState(saveStatesMap["View1"])
+    }
+
+    //endregion
+
 
 }
