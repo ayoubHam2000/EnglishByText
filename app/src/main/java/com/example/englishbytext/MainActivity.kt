@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
     }
 
     private fun initDarkMode(){
-        if(Setting.isDarkMode){
+        if(MainSetting.isDarkMode){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         }else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -104,12 +104,13 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
         onOpenSlideBar()
         collapse()
         openSettings()
+        openStatistic()
         openAllWords()
         openTagsWords()
         openFolders()
     }
 
-    //region settings
+    //region open items
 
     private fun onOpenSlideBar(){
         val openDrawerListener = object : DrawerLayout.DrawerListener {
@@ -132,6 +133,16 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
             navigateToFg(R.id.f_Settings)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
+    }
+
+    private fun openStatistic(){
+        val statisticIcon = findViewById<ImageView>(R.id.goStatistic)
+
+        statisticIcon.setOnClickListener {
+            navigateToFg(R.id.f_Statistic)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+
     }
 
     private fun openAllWords(){
@@ -199,7 +210,7 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
             openCloseCategoriesImg.setBackgroundResource(R.drawable.ic_keyboard_arrow_down_24)
             View.GONE
         }
-        Setting.setCategorySection(action.toString())
+        MainSetting.setCategorySection(action.toString())
     }
 
     private fun collapseCollection(action: Boolean){
@@ -213,7 +224,7 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
             openCloseCollectionsImg.setBackgroundResource(R.drawable.ic_keyboard_arrow_down_24)
             View.GONE
         }
-        Setting.setCollectionSection(action.toString())
+        MainSetting.setCollectionSection(action.toString())
     }
 
     private fun collapse(){
@@ -221,15 +232,15 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
         val openCloseCollection = findViewById<LinearLayout>(R.id.openCloseCollection)
 
         openCloseCategories.setOnClickListener {
-            collapseCategory(!Setting.categorySection)
+            collapseCategory(!MainSetting.categorySection)
         }
 
         openCloseCollection.setOnClickListener {
-            collapseCollection(!Setting.collectionSection)
+            collapseCollection(!MainSetting.collectionSection)
         }
 
-        collapseCategory(Setting.categorySection)
-        collapseCollection(Setting.collectionSection)
+        collapseCategory(MainSetting.categorySection)
+        collapseCollection(MainSetting.collectionSection)
     }
     //endregion
 
@@ -406,6 +417,7 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
             OpenTextDisplayFrag -> openTextDisplayFrag()
             OpenWordEdit -> openWordEditFrag()
             OpenSettings -> openSettingsFrag()
+            OpenStatisticFrag -> openStatisticFrag()
             OpenWordList -> openWordList()
             OpenTagFg -> openTagFg()
             OpenAllFoldersFrag -> openFolderFg()
@@ -457,6 +469,10 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
     }
 
     private fun openSettingsFrag(){
+        hideActionBar()
+    }
+
+    private fun openStatisticFrag(){
         hideActionBar()
     }
 

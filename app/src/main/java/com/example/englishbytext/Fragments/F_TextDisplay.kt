@@ -1,7 +1,6 @@
 package com.example.englishbytext.Fragments
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
@@ -13,17 +12,10 @@ import android.text.style.ClickableSpan
 import android.util.TypedValue
 import android.view.*
 import android.widget.*
-import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import com.example.englishbytext.A_word
 import com.example.englishbytext.Classes.Custom.MySelectMenu
 import com.example.englishbytext.Classes.schemas.WordPosItem
-import com.example.englishbytext.Interfaces.NotifyActivity
 import com.example.englishbytext.Objects.*
 import com.example.englishbytext.R
-import com.example.englishbytext.T_words
 import com.example.englishbytext.Utilites.FgType
 import com.example.englishbytext.Utilites.OpenTextDisplayFrag
 import com.example.englishbytext.Utilites.PassedData
@@ -231,8 +223,8 @@ class F_TextDisplay : MyFragment() {
     }
 
     private fun textStyle(){
-        val size = 16 * Setting.getTextSize()
-        val typeface = Typeface.create(Setting.getTextFont(), Setting.getFontsType())
+        val size = 16 * MainSetting.getTextSize()
+        val typeface = Typeface.create(MainSetting.getTextFont(), MainSetting.getFontsType())
 
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size)
         textView.typeface = typeface

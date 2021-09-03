@@ -7,7 +7,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.core.view.get
 import com.example.englishbytext.Dialogs.MyDialogBuilder
-import com.example.englishbytext.Objects.Setting
+import com.example.englishbytext.Objects.MainSetting
 import com.example.englishbytext.R
 
 class D_textSize(context : Context, val event : () -> Unit) : MyDialogBuilder(context, R.layout.d_text_size_option) {
@@ -32,13 +32,13 @@ class D_textSize(context : Context, val event : () -> Unit) : MyDialogBuilder(co
     }
 
     private fun checkedItem() : Int{
-        return Setting.selectedTextSize
+        return MainSetting.selectedTextSize
     }
 
     private fun commit(){
         val id = listRadioButton.findViewById<RadioButton>(listRadioButton.checkedRadioButtonId)
         val selected = listRadioButton.indexOfChild(id)
-        Setting.setTextSize(selected.toString())
+        MainSetting.setTextSize(selected.toString())
         dismiss()
     }
 

@@ -3,7 +3,7 @@ package com.example.englishbytext.Objects
 import android.graphics.Typeface
 import com.example.englishbytext.Utilites.*
 
-object Setting {
+object MainSetting {
 
     var categorySection = true
     var collectionSection = true
@@ -14,6 +14,9 @@ object Setting {
     var onRegexSearch = false
     var onFavoriteSearch = false
     var sortTypeWordList = SORT_DEFAULT_DESC
+
+    //not save in the data base
+    var isRandomSortIsActive = false
 
     //region sort
 

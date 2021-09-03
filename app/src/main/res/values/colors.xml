@@ -33,7 +33,7 @@
     <color name="wordEdit_selectItem">#371D65F8</color>
 
     <color name="folder_selectItem">#321AFF00</color>
-    <color name="folder_item_background">#FAC0B2</color>
+    <color name="folder_item_background">#FFFFFF</color>
     <!--    endregion-->
 
     <color name="deletedColor">#F64747</color>

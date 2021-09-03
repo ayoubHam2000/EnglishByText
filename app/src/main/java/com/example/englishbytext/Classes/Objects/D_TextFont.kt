@@ -9,7 +9,7 @@ import android.widget.RadioGroup
 import android.widget.RelativeLayout
 import androidx.core.view.get
 import com.example.englishbytext.Dialogs.MyDialogBuilder
-import com.example.englishbytext.Objects.Setting
+import com.example.englishbytext.Objects.MainSetting
 import com.example.englishbytext.R
 
 class D_TextFont(context : Context, val event : () -> Unit) : MyDialogBuilder(context, R.layout.d_text_style_option) {
@@ -34,18 +34,18 @@ class D_TextFont(context : Context, val event : () -> Unit) : MyDialogBuilder(co
     }
 
     private fun checkedItem() : Int{
-        return Setting.selectedTextFont
+        return MainSetting.selectedTextFont
     }
 
     private fun commit(){
         val id = listRadioButton.findViewById<RadioButton>(listRadioButton.checkedRadioButtonId)
         val selected = listRadioButton.indexOfChild(id)
-        Setting.setTextStyle(selected.toString())
+        MainSetting.setTextStyle(selected.toString())
         dismiss()
     }
 
     private fun addFonts(){
-        val fonts = Setting.getFonts()
+        val fonts = MainSetting.getFonts()
         for(item in fonts){
             val typeface = Typeface.create(item, Typeface.NORMAL)
             val newRadio = RadioButton(context)

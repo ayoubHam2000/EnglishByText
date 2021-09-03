@@ -108,4 +108,9 @@
             android:id="@+id/action_f_CardsPractice_to_f_WordEdit"
             app:destination="@id/f_WordEdit" />
     </fragment>
+    <fragment
+        android:id="@+id/f_Statistic"
+        android:name="com.example.englishbytext.Fragments.F_Statistic"
+        android:label="f_statistic"
+        tools:layout="@layout/f_statistic" />
 </navigation>

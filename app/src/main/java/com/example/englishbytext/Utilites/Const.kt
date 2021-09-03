@@ -1,4 +1,8 @@
 package com.example.englishbytext.Utilites
+
+import com.example.englishbytext.A_created_time
+import com.example.englishbytext.A_level_order
+
 //$s,$e|
 /*
 Folders
@@ -15,6 +19,7 @@ const val FgType = "FgType"
 //settings
 const val MaxSetName = 30
 const val MaxCollectionName = 30
+const val MaxFolderName = 50
 const val MaxTextName = 30
 const val MaxTextChars = 50
 const val MaxTagChars = 70
@@ -64,6 +69,7 @@ const val OnProcess = 9
 const val RefreshData = 10
 const val OpenAllFoldersFrag = 11
 const val OpenCardsPractice = 12
+const val OpenStatisticFrag = 13
 
 //arg
 const val ARG_CollectionName = "ARG_CollectionName"
@@ -79,9 +85,11 @@ const val FILES_FOLDER = "Files"
 const val SELECTED_TAG = "SELECTED_TAG"
 
 //Sort
-//sort should be continous 0 1 2 3 ..
+//sort should be continuous 0 1 2 3 ..
 //always type1 ASC, type1 DESC, type2 ASC, type2 DESC ...
 const val SORT_DEFAULT_ASC = 0
 const val SORT_DEFAULT_DESC = 1
 const val SORT_CREATED_TIME_ASC = 2
 const val SORT_CREATED_TIME_DESC = 3
+
+val SORT_WORD_LIST_BY = arrayListOf(A_level_order, A_level_order, A_created_time, A_created_time)

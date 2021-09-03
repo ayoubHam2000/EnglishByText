@@ -22,6 +22,14 @@
             >
 
             <ImageView
+                android:id="@+id/goStatistic"
+                style="@style/slide_item_images"
+                android:background="@drawable/ic_statistic"
+                android:layout_gravity="end"
+                android:layout_marginEnd="15dp"
+                />
+
+            <ImageView
                 android:id="@+id/goToSetting"
                 style="@style/slide_item_images"
                 android:background="@drawable/ic_settings_24"

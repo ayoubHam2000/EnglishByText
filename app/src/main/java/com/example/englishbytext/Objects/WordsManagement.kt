@@ -3,10 +3,7 @@ package com.example.englishbytext.Objects
 import com.example.englishbytext.*
 import com.example.englishbytext.Classes.schemas.Word
 import com.example.englishbytext.Objects.DataBaseServices.toBase64
-import com.example.englishbytext.Utilites.SORT_CREATED_TIME_ASC
-import com.example.englishbytext.Utilites.SORT_CREATED_TIME_DESC
-import com.example.englishbytext.Utilites.SORT_DEFAULT_ASC
-import com.example.englishbytext.Utilites.SORT_DEFAULT_DESC
+import com.example.englishbytext.Utilites.*
 
 
 object WordsManagement {
@@ -22,9 +19,13 @@ object WordsManagement {
         wordList.clear()
 
         val query = getWordQuery(fgType, passedData)
-        println("---> $query")
-        wordList.addAll(DataBaseServices.getWords(query))
+        println(">>> $query ,Random = ${MainSetting.isRandomSortIsActive}")
 
+        when {
+            MainSetting.isRandomSortIsActive -> wordList.addAll(DataBaseServices.getWords(query).shuffled())
+            MainSetting.sortTypeWordList % 2 == 1 -> wordList.addAll(DataBaseServices.getWords(query).reversed())
+            else -> wordList.addAll(DataBaseServices.getWords(query))
+        }
     }
 
     private fun getWordQuery(fgType : String, passedData : String) : String{
@@ -48,13 +49,9 @@ object WordsManagement {
     }
 
     private fun getSortType() : String{
-        return "Order by " + when(com.example.englishbytext.Objects.Setting.sortTypeWordList){
-            SORT_DEFAULT_ASC -> A_level_order
-            SORT_DEFAULT_DESC -> "$A_level_order DESC"
-            SORT_CREATED_TIME_ASC -> A_created_time
-            SORT_CREATED_TIME_DESC -> "$A_created_time DESC"
-            else -> "$A_level_order DESC"
-        }
+        val sortType = MainSetting.sortTypeWordList
+        //no DESC
+        return "Order By " + SORT_WORD_LIST_BY[sortType]
     }
 
 }

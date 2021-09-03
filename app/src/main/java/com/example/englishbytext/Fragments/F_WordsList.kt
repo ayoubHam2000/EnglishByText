@@ -11,7 +11,6 @@ import android.text.SpannableString
 import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
@@ -318,13 +317,18 @@ class F_WordsList : MyFragment() {
                 R.id.isOnRegex -> onRegexFilterClick()
                 R.id.defaultSort -> onDefaultSortFilterClick()
                 R.id.createdTimeSort -> onCreatedTimeFilterClick()
+                R.id.randomSort-> onRandomFilterClick()
             }
             true
         }
-        popupMenu.menu.getItem(0).isChecked = Setting.onFavoriteSearch
-        popupMenu.menu.getItem(1).isChecked = Setting.onRegexSearch
-        favoriteActiveLabel.visibility = if(Setting.onFavoriteSearch) View.VISIBLE else View.GONE
-        regexActiveLabel.visibility = if(Setting.onRegexSearch) View.VISIBLE else View.GONE
+        popupMenu.menu.getItem(0).isChecked = MainSetting.onFavoriteSearch
+        popupMenu.menu.getItem(1).isChecked = MainSetting.onRegexSearch
+
+        val randomViewItem = popupMenu.menu.getItem(2).subMenu.getItem(2)
+        randomViewItem.isChecked = MainSetting.isRandomSortIsActive
+
+        favoriteActiveLabel.visibility = if(MainSetting.onFavoriteSearch) View.VISIBLE else View.GONE
+        regexActiveLabel.visibility = if(MainSetting.onRegexSearch) View.VISIBLE else View.GONE
         filterView()
     }
 
@@ -335,7 +339,7 @@ class F_WordsList : MyFragment() {
         val selectedOrder = arrayListOf("Default DESC", "Default ASC", "Created Time DESC", "Created Time ASC")
         val defaultValue = arrayListOf("Default", "Created Time")
         val selectedSort = arrayListOf(default, createdTime)
-        val sortType = Setting.sortTypeWordList
+        val sortType = MainSetting.sortTypeWordList
 
         //reset items to default value
         for(i in 0..1){
@@ -352,37 +356,47 @@ class F_WordsList : MyFragment() {
     private fun onFavoriteFilterClick(){
         val item = popupMenu.menu.getItem(0)
         item.isChecked = !item.isChecked
-        Setting.setFavoriteSearch(item.isChecked.toString())
-        favoriteActiveLabel.visibility = if(Setting.onFavoriteSearch) View.VISIBLE else View.GONE
+        MainSetting.setFavoriteSearch(item.isChecked.toString())
+        favoriteActiveLabel.visibility = if(MainSetting.onFavoriteSearch) View.VISIBLE else View.GONE
         onFilterChange(true)
     }
 
     private fun onRegexFilterClick(){
         val item = popupMenu.menu.getItem(1)
         item.isChecked = !item.isChecked
-        Setting.setRegexSearch(item.isChecked.toString())
-        regexActiveLabel.visibility = if(Setting.onRegexSearch) View.VISIBLE else View.GONE
+        MainSetting.setRegexSearch(item.isChecked.toString())
+        regexActiveLabel.visibility = if(MainSetting.onRegexSearch) View.VISIBLE else View.GONE
         onFilterChange(true)
     }
 
     private fun onDefaultSortFilterClick(){
-        val newSortType = when(Setting.sortTypeWordList){
+        val newSortType = when(MainSetting.sortTypeWordList){
             SORT_DEFAULT_ASC -> SORT_DEFAULT_DESC
             SORT_DEFAULT_DESC -> SORT_DEFAULT_ASC
             else -> SORT_DEFAULT_DESC
         }
-        Setting.setSortTypeWordList(newSortType.toString())
+        MainSetting.setSortTypeWordList(newSortType.toString())
         filterView()
+        onFilterChange()
     }
 
     private fun onCreatedTimeFilterClick(){
-        val newSortType = when(Setting.sortTypeWordList){
+        val newSortType = when(MainSetting.sortTypeWordList){
             SORT_CREATED_TIME_ASC -> SORT_CREATED_TIME_DESC
             SORT_CREATED_TIME_DESC -> SORT_CREATED_TIME_ASC
             else -> SORT_CREATED_TIME_DESC
         }
-        Setting.setSortTypeWordList(newSortType.toString())
+        MainSetting.setSortTypeWordList(newSortType.toString())
         filterView()
+        onFilterChange()
+    }
+
+    private fun onRandomFilterClick(){
+        val randomViewItem = popupMenu.menu.getItem(2).subMenu.getItem(2)
+
+        MainSetting.isRandomSortIsActive = !MainSetting.isRandomSortIsActive
+        randomViewItem.isChecked = MainSetting.isRandomSortIsActive
+        onFilterChange()
     }
 
     private fun onFilterChange(forceEmpty : Boolean = false){

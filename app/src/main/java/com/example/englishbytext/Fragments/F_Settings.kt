@@ -1,26 +1,20 @@
 package com.example.englishbytext.Fragments
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.os.Handler
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
-import androidx.fragment.app.Fragment
 import com.example.englishbytext.Classes.Objects.D_TextFont
 import com.example.englishbytext.Classes.Objects.D_TextFontType
 import com.example.englishbytext.Classes.Objects.D_textSize
-import com.example.englishbytext.Interfaces.NotifyActivity
 import com.example.englishbytext.Objects.DataBaseServices
 import com.example.englishbytext.Objects.Lib
-import com.example.englishbytext.Objects.Setting
+import com.example.englishbytext.Objects.MainSetting
 import com.example.englishbytext.R
 import com.example.englishbytext.Utilites.OnProcess
 import com.example.englishbytext.Utilites.OpenSettings
@@ -77,10 +71,10 @@ class F_Settings : MyFragment() {
     }
 
     override fun initFun(){
-        darkModeSwitch.isChecked = Setting.isDarkMode
-        textSizeSelected.text = Setting.getTextFountText()
-        textStyleSelected.text = Setting.getTextStyleText()
-        textFontSelected.text = Setting.fetTextFontText()
+        darkModeSwitch.isChecked = MainSetting.isDarkMode
+        textSizeSelected.text = MainSetting.getTextFountText()
+        textStyleSelected.text = MainSetting.getTextStyleText()
+        textFontSelected.text = MainSetting.fetTextFontText()
 
         darkModeSwitch.setOnClickListener { setDarkMode() }
 
@@ -101,10 +95,10 @@ class F_Settings : MyFragment() {
     private fun setDarkMode(){
         if(darkModeSwitch.isChecked){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            Setting.setIsDarkMode("true")
+            MainSetting.setIsDarkMode("true")
         }else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            Setting.setIsDarkMode("false")
+            MainSetting.setIsDarkMode("false")
         }
     }
 
@@ -148,21 +142,21 @@ class F_Settings : MyFragment() {
 
     private fun changeTextSize(){
         val dialog = D_textSize(gContext){
-            textSizeSelected.text = Setting.getTextFountText()
+            textSizeSelected.text = MainSetting.getTextFountText()
         }
         dialog.buildAndDisplay()
     }
 
     private fun textStyle(){
         val dialog = D_TextFont(gContext){
-            textStyleSelected.text = Setting.getTextStyleText()
+            textStyleSelected.text = MainSetting.getTextStyleText()
         }
         dialog.buildAndDisplay()
     }
 
     private fun textFont(){
         val dialog = D_TextFontType(gContext){
-            textFontSelected.text = Setting.fetTextFontText()
+            textFontSelected.text = MainSetting.fetTextFontText()
         }
         dialog.buildAndDisplay()
     }

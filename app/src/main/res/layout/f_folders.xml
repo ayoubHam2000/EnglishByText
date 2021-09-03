@@ -8,44 +8,48 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-
+            android:layout_height="50dp"
             >
 
             <TextView
                 android:id="@+id/pathView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxHeight="50dp"
                 android:layout_centerVertical="true"
                 android:layout_marginVertical="5dp"
-                android:paddingHorizontal="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginEnd="40dp"
                 android:textColor="@color/black"
                 android:fontFamily="sans-serif-condensed"
                 android:textStyle="bold"
-                android:textSize="17sp"
-                tools:text="./A"
+                android:textSize="15sp"
+                tools:text="./A/Harry Potter And the/A/Harry Potter And the/A/Harry Pot jlk hjhkh"
                 />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:background="@drawable/ic_arrow_forward_24"
-                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
                 android:layout_marginEnd="15dp"
                 />
 
         </RelativeLayout>
 
 
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_Folders"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            />
 
 
     </LinearLayout>

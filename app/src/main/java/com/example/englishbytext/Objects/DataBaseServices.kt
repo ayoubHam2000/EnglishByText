@@ -9,7 +9,6 @@ import android.os.Handler
 import android.util.Base64
 import com.example.englishbytext.*
 import com.example.englishbytext.Classes.schemas.*
-import com.example.englishbytext.Objects.DataBaseServices.toBase64
 import com.example.englishbytext.Utilites.*
 import java.io.File
 import java.io.FileInputStream
@@ -383,31 +382,31 @@ object DataBaseServices {
         SetManagement.setSelectedSet(selectedSet)
 
         val categorySection = getVar(V_CategorySection, "true")
-        Setting.setCategorySection(categorySection, false)
+        MainSetting.setCategorySection(categorySection, false)
 
         val collectionSection = getVar(V_CollectionSection, "true")
-        Setting.setCollectionSection(collectionSection, false)
+        MainSetting.setCollectionSection(collectionSection, false)
 
         val isDarkMode = getVar(V_DarkMode, "true")
-        Setting.setIsDarkMode(isDarkMode, false)
+        MainSetting.setIsDarkMode(isDarkMode, false)
 
         val textSize = getVar(V_TextSize, 2.toString())
-        Setting.setTextSize(textSize, false)
+        MainSetting.setTextSize(textSize, false)
 
         val textStyle = getVar(V_TextStyle, 0.toString())
-        Setting.setTextStyle(textStyle, false)
+        MainSetting.setTextStyle(textStyle, false)
 
         val textFont = getVar(V_TextFont, 0.toString())
-        Setting.setTextFont(textFont, false)
+        MainSetting.setTextFont(textFont, false)
 
         val regexSearch = getVar(V_OnRegexSearch, false.toString())
-        Setting.setRegexSearch(regexSearch, false)
+        MainSetting.setRegexSearch(regexSearch, false)
 
         val favoriteSearch = getVar(V_OnFavoriteSearch, false.toString())
-        Setting.setFavoriteSearch(favoriteSearch, false)
+        MainSetting.setFavoriteSearch(favoriteSearch, false)
 
         val sortTypeWordList = getVar(V_SortTypeWordList, SORT_DEFAULT_DESC.toString())
-        Setting.setSortTypeWordList(sortTypeWordList, false)
+        MainSetting.setSortTypeWordList(sortTypeWordList, false)
 
     }
 

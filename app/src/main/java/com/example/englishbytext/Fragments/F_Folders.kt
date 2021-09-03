@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.englishbytext.Adapters.A_Folders
+import com.example.englishbytext.Classes.Objects.D_ask
 import com.example.englishbytext.Dialogs.D_editItem
 import com.example.englishbytext.Objects.DataBaseServices
 import com.example.englishbytext.Objects.FoldersManagement
@@ -101,16 +102,21 @@ class F_Folders : MyFragment() {
 
         dialog.textHint = "Folder Name"
         dialog.maxLine = 1
-        dialog.maxChar = MaxSetName
+        dialog.maxChar = MaxFolderName
         dialog.build()
         dialog.display()
     }
 
     private fun deleteFoldersClick(){
-        val list = folderAdapter.getSelectedFormat()
-        DataBaseServices.deleteFolders(list)
-        folderAdapter.changeList()
-        deaSelectFolder()
+        val ask = D_ask(gContext, "ARE YOU SURE ?"){
+            if(it){
+                val list = folderAdapter.getSelectedFormat()
+                DataBaseServices.deleteFolders(list)
+                folderAdapter.changeList()
+                deaSelectFolder()
+            }
+        }
+        ask.buildAndDisplay()
     }
 
     private fun modifyFolderClick(){

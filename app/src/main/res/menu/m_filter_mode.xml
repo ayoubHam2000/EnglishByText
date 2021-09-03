@@ -24,6 +24,11 @@
                 <item
                     android:id="@+id/createdTimeSort"
                     android:title="@string/created_time"/>
+                <item
+                    android:id="@+id/randomSort"
+                    android:title="@string/random"
+                    android:checkable="true"
+                    />
             </menu>
         </item>
     </group>
