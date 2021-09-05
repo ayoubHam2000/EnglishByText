@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/father"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/newColor7"
-    android:backgroundTint="@color/newColor7"
-    >
+    android:backgroundTint="@color/newColor7">
 
     <TextView
         android:id="@+id/progressNumber"
@@ -81,6 +80,20 @@
             android:background="@drawable/ic__edit"
             android:backgroundTint="@color/abs_white" />
 
+
+        <TextView
+            android:id="@+id/wordFrequencyView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="5dp"
+            tools:text="50"
+            android:textSize="19sp"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            android:textColor="@color/abs_white"
+            />
 
 
 

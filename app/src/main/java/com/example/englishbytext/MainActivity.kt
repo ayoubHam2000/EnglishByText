@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.englishbytext.Adapters.A_setItem
 import com.example.englishbytext.Classes.Objects.D_ask
 import com.example.englishbytext.Classes.Objects.D_ask_color
+import com.example.englishbytext.Classes.Objects.D_wordFrequency
 import com.example.englishbytext.Dialogs.D_editItem
 import com.example.englishbytext.Fragments.*
 import com.example.englishbytext.Interfaces.NotifyActivity
@@ -106,6 +107,8 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
         collapse()
         openSettings()
         openStatistic()
+        openSearchFrequency()
+
         openAllWords()
         openTagsWords()
         openFolders()
@@ -144,6 +147,17 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
+    }
+
+    private fun openSearchFrequency(){
+        val searchFrequency = findViewById<ImageView>(R.id.searchFrequency)
+
+        searchFrequency.setOnClickListener {
+            val dialog = D_wordFrequency(this)
+            dialog.build()
+            dialog.display()
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
     }
 
     private fun openAllWords(){

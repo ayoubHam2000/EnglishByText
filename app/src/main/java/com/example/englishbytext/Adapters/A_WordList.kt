@@ -90,6 +90,7 @@ class A_WordList(val context : Context, private val fgType : String, private val
         private val favoriteBtn : ImageView = itemView.findViewById(R.id.favoriteBtn)
         private val wordName : TextView = itemView.findViewById(R.id.wordName)
         private val wordNbr : TextView = itemView.findViewById(R.id.wordNbr)
+        private val wordFrequencyView : TextView = itemView.findViewById(R.id.wordFrequencyView)
         private val hasAudios : ImageView = itemView.findViewById(R.id.hasAudios)
         private val hasImage : ImageView = itemView.findViewById(R.id.hasImage)
         private val hasTag : ImageView = itemView.findViewById(R.id.hasTag)
@@ -100,6 +101,7 @@ class A_WordList(val context : Context, private val fgType : String, private val
         fun bindView(position: Int){
             wordNbr.text = (position + 1).toString()
             wordName.text = filterList[position].name
+            wordFrequencyView.text = WordsManagement.getWordFrequency(filterList[position].name).toString()
 
             setFavoriteView(position)
             setHasMedia(position)

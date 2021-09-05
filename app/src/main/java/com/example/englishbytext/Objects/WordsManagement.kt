@@ -13,7 +13,8 @@ object WordsManagement {
 
     val wordList = ArrayList<Word>()
     var selectedWordName : String = ""
-    val wordsFrequency = ArrayList<String>(29018)
+    val wordsFrequency = HashMap<String, Int>(25285)
+
 
 
     object Setting{
@@ -62,6 +63,10 @@ object WordsManagement {
 
     //region words frequency
 
+    fun getWordFrequency(word : String) : Int{
+        return wordsFrequency[word] ?: 0
+    }
+
     private fun getText(context : Context) : String{
         val file = context.assets.open("dic.txt")
         val size = file.available()
@@ -75,10 +80,11 @@ object WordsManagement {
         if(wordsFrequency.isNotEmpty()) return
         thread {
             val text = getText(context)
-            val words = text.split("\n")
+            val words = text.split("\r\n")
             for(item in words){
-                if(item.isNotEmpty()){
-                    wordsFrequency.add(item)
+                val s = item.split(" : ")
+                if(item.isNotEmpty() && s.count() == 2){
+                    wordsFrequency[s[0]] = (s[1]).toInt()
                 }
             }
             println(">>> Done Load Word Frequency")

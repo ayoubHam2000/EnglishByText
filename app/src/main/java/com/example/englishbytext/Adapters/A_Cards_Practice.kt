@@ -62,9 +62,12 @@ class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : Pa
         private val favoriteWord : ImageView = view.findViewById(R.id.favoriteWord)
         private val editWord : ImageView = view.findViewById(R.id.editWord)
         private val theWordName : TextView = view.findViewById(R.id.theWord)
+        private val wordFrequencyView : TextView = view.findViewById(R.id.wordFrequencyView)
 
         fun bindView(position: Int){
             theWordName.text = list[position].name
+            wordFrequencyView.text = WordsManagement.getWordFrequency(list[position].name).toString()
+
             backgroundView(position)
             progressPages(position)
             favoriteView(position)
