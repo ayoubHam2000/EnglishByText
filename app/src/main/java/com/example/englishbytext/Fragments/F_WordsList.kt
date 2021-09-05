@@ -137,6 +137,7 @@ class F_WordsList : MyFragment() {
             }
         }
         dialogEditItem.textHint = gContext.getString(R.string.addWord)
+        dialogEditItem.listSuggestion = WordsManagement.wordsFrequency
         dialogEditItem.buildAndDisplay()
     }
 

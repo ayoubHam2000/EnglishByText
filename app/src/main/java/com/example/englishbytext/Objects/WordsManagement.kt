@@ -1,15 +1,20 @@
 package com.example.englishbytext.Objects
 
+import android.content.Context
 import com.example.englishbytext.*
 import com.example.englishbytext.Classes.schemas.Word
+import com.example.englishbytext.Classes.schemas.WordFrequency
 import com.example.englishbytext.Objects.DataBaseServices.toBase64
 import com.example.englishbytext.Utilites.*
+import kotlin.concurrent.thread
 
 
 object WordsManagement {
 
     val wordList = ArrayList<Word>()
     var selectedWordName : String = ""
+    val wordsFrequency = ArrayList<String>(29018)
+
 
     object Setting{
         var tableType = -1
@@ -53,5 +58,34 @@ object WordsManagement {
         //no DESC
         return "Order By " + SORT_WORD_LIST_BY[sortType]
     }
+
+
+    //region words frequency
+
+    private fun getText(context : Context) : String{
+        val file = context.assets.open("dic.txt")
+        val size = file.available()
+        val buffer = ByteArray(size)
+        file.read(buffer)
+        file.close()
+        return String(buffer)
+    }
+
+    fun addWordFrequency(context: Context){
+        if(wordsFrequency.isNotEmpty()) return
+        thread {
+            val text = getText(context)
+            val words = text.split("\n")
+            for(item in words){
+                if(item.isNotEmpty()){
+                    wordsFrequency.add(item)
+                }
+            }
+            println(">>> Done Load Word Frequency")
+        }
+
+    }
+
+    //endregion
 
 }

@@ -73,10 +73,11 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
 
     private fun initApp(){
         DataBaseServices.initDataBase(this)
+        WordsManagement.addWordFrequency(this)
         initSlideBar()
         initDarkMode()
 
-        DataBaseServices.deleteFolderTable()
+
     }
 
     private fun initView(){

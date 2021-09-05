@@ -836,13 +836,6 @@ object DataBaseServices {
     //region Folders and WordsFolder
     //path always start with './'
 
-    fun deleteFolderTable(){
-        val q1 = "delete from $T_folders"
-        val q2 = "delete from $T_words_Folder"
-        //dataBase.execSQL(q1)
-        //dataBase.execSQL(q2)
-    }
-
     //region insert
 
     fun isFolderExist(path: String) : Boolean{
