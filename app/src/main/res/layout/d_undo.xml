@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/gray2"
+    >
+
+    <TextView
+        android:id="@+id/messageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Are You Sure ?"
+        android:layout_marginStart="35dp"
+        android:layout_marginVertical="15dp"
+        android:textColor="@color/abs_white"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-condensed"
+        />
+
+    <TextView
+        android:id="@+id/approve"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="@string/undo_action"
+        android:layout_marginEnd="35dp"
+        android:layout_marginVertical="15dp"
+        android:textColor="#FF5040"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-condensed"
+        />
+
+
+</RelativeLayout>

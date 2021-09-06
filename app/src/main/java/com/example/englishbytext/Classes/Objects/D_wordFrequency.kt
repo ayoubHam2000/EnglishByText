@@ -15,15 +15,14 @@ import com.example.englishbytext.Objects.Lib
 import com.example.englishbytext.Objects.WordsManagement
 import com.example.englishbytext.R
 import java.lang.Exception
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
 
 class D_wordFrequency(context: Context) : MyDialogBuilder(context, R.layout.d_word_frequency) {
 
-    lateinit var close : ImageView
-    lateinit var editText : AutoCompleteTextView
-    lateinit var result : TextView
+    private lateinit var close : ImageView
+    private lateinit var editText : AutoCompleteTextView
+    private lateinit var result : TextView
 
     var list = ArrayList<String>()
 

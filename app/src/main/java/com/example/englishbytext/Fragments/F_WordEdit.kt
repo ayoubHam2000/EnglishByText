@@ -3,7 +3,6 @@ package com.example.englishbytext.Fragments
 import android.app.Activity
 import android.content.ClipboardManager
 import android.content.ContentUris
-import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
 import android.database.Cursor
@@ -13,24 +12,19 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.englishbytext.Adapters.*
+import com.example.englishbytext.Classes.Objects.D_Ask_Bottom
 import com.example.englishbytext.Classes.Objects.D_ask
 import com.example.englishbytext.Classes.Objects.D_lastImages
 import com.example.englishbytext.Classes.Objects.D_recordDialog
 import com.example.englishbytext.Dialogs.D_editItem
-import com.example.englishbytext.Interfaces.NotifyActivity
 import com.example.englishbytext.Objects.DataBaseServices
 import com.example.englishbytext.Objects.Lib
 import com.example.englishbytext.Objects.WordsManagement
@@ -299,13 +293,13 @@ class F_WordEdit : MyFragment() {
                         val id = definitionAdapter.list[viewHolder.absoluteAdapterPosition].id
                         println("Remove Definition N ${viewHolder.absoluteAdapterPosition} | id -> $id")
                         removeDefinition(id)
-                        definitionAdapter.changeList()
+                        //definitionAdapter.changeList()
                     }
                     OpenExample -> {
                         val id = exampleAdapter.list[viewHolder.absoluteAdapterPosition].id
                         println("Remove Example N ${viewHolder.absoluteAdapterPosition} | id -> $id")
                         removeExample(id)
-                        exampleAdapter.changeList()
+                        //exampleAdapter.changeList()
                     }
                 }
 
@@ -314,11 +308,23 @@ class F_WordEdit : MyFragment() {
     }
 
     private fun removeExample(id: Int){
-        DataBaseServices.deleteExample(id)
+        val dialog = D_Ask_Bottom(){
+            if(it){
+                DataBaseServices.deleteExample(id)
+            }
+            exampleAdapter.changeList()
+        }
+        dialog.show(parentFragmentManager, "ASK_DELETE")
     }
 
     private fun removeDefinition(id: Int){
-        DataBaseServices.deleteDefinition(id)
+        val dialog = D_Ask_Bottom(){
+            if(it){
+                DataBaseServices.deleteDefinition(id)
+            }
+            definitionAdapter.changeList()
+        }
+        dialog.show(parentFragmentManager, "ASK_DELETE")
     }
 
     //endregion

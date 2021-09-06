@@ -85,6 +85,7 @@
     <string name="theDefault">Default</string>
     <string name="created_time">Created Time</string>
     <string name="random">Random</string>
+    <string name="undo_action">OK</string>
 
     <!--    endregion-->
 
