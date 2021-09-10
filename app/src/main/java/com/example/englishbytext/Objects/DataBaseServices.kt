@@ -9,9 +9,14 @@ import android.os.Handler
 import android.util.Base64
 import com.example.englishbytext.*
 import com.example.englishbytext.Classes.schemas.*
+import com.example.englishbytext.Classes.schemas.Collections
+import com.example.englishbytext.Objects.DataBaseServices.toBase64
 import com.example.englishbytext.Utilites.*
 import java.io.File
 import java.io.FileInputStream
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 object DataBaseServices {
@@ -491,7 +496,8 @@ object DataBaseServices {
             do{
                 val name = cursor.getString(0).fromBase64ToString()
                 val isFavorite = cursor.getInt(1) == 1
-                res.add(Word(name, isFavorite))
+                val isKnown = cursor.getInt(2) == 1
+                res.add(Word(name, isFavorite, isKnown))
             }while (cursor.moveToNext())
         }
         cursor.close()
@@ -528,6 +534,16 @@ object DataBaseServices {
         return getWordsHasMedia(q)
     }
 
+    fun getWordsHasDefinition() : HashMap<String, Boolean>{
+        val q = "select distinct $A_word from $T_definitions"
+        return getWordsHasMedia(q)
+    }
+
+    fun getWordsHasExample() : HashMap<String, Boolean>{
+        val q = "select distinct $A_word from $T_examples"
+        return getWordsHasMedia(q)
+    }
+
     private fun getWordsHasMedia(q : String) : HashMap<String, Boolean>{
         val res = HashMap<String, Boolean>()
         val cursor = dataBase.rawQuery(q, null)
@@ -539,15 +555,6 @@ object DataBaseServices {
         }
         cursor.close()
         return res
-    }
-
-    fun updateIsFavoriteWords(w: ArrayList<String>){
-        val list = w.toBase64()
-        val q = "SELECT $A_word FROM $T_words WHERE $A_word IN $list AND $A_favorite = 1"
-        val alreadyFavorite = getListString(q).toBase64()
-        dataBase.execSQL("UPDATE $T_words SET $A_favorite = 1 WHERE $A_word IN $list")
-        dataBase.execSQL("UPDATE $T_words SET $A_favorite = 0 WHERE $A_word IN $alreadyFavorite")
-
     }
 
     fun deleteWords(path: String, w: ArrayList<String>){
@@ -708,6 +715,25 @@ object DataBaseServices {
         val max = (if(maxL.isNotEmpty()) maxL[0] else 0) + 1
         val list = l.toBase64()
         dataBase.execSQL("update $T_words set $A_level_order = $max where $A_word IN $list")
+    }
+
+    fun updateIsWordKnown(l : ArrayList<String>){
+        val list = l.toBase64()
+        val q = "SELECT $A_word FROM $T_words WHERE $A_word IN $list AND $A_isKnown = 1"
+        val alreadyKnown = getListString(q).toBase64()
+
+        println("UPDATE $T_words SET $A_isKnown = 1 WHERE $A_word IN $list")
+        dataBase.execSQL("UPDATE $T_words SET $A_isKnown = 1 WHERE $A_word IN $list")
+        dataBase.execSQL("UPDATE $T_words SET $A_isKnown = 0 WHERE $A_word IN $alreadyKnown")
+    }
+
+    fun updateIsFavoriteWords(w: ArrayList<String>){
+        val list = w.toBase64()
+        val q = "SELECT $A_word FROM $T_words WHERE $A_word IN $list AND $A_favorite = 1"
+        val alreadyFavorite = getListString(q).toBase64()
+        dataBase.execSQL("UPDATE $T_words SET $A_favorite = 1 WHERE $A_word IN $list")
+        dataBase.execSQL("UPDATE $T_words SET $A_favorite = 0 WHERE $A_word IN $alreadyFavorite")
+
     }
 
     //endregion

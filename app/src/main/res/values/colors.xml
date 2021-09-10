@@ -22,7 +22,8 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="addCollectionColor">#1E38DD</color>
     <color name="abs_black">#000000</color>
-    <color name="wordListItem">#392F75BF</color>
+    <color name="wordListItem">#3949BF2F</color>
+<!--    392F75BF-->
 
     <!--    region myColors-->
     <color name="wordEdit_item_back">#4D75ED</color>

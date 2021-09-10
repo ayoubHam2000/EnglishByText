@@ -11,6 +11,7 @@ object FoldersManagement {
     fun updateFolderList(){
         list.clear()
         val l = DataBaseServices.getListOfFolders(getPath())
+        l.sortBy{it} //sort alphabetically
         for(item in l){
             list.add(getFolderBaseName(item))
         }

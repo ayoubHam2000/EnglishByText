@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.englishbytext.Adapters.A_WordList
@@ -23,6 +24,7 @@ import com.example.englishbytext.Dialogs.D_editItem
 import com.example.englishbytext.Objects.*
 import com.example.englishbytext.R
 import com.example.englishbytext.Utilites.*
+import java.util.*
 import kotlin.concurrent.thread
 
 
@@ -209,8 +211,7 @@ class F_WordsList : MyFragment() {
             if(it){
                 val list = wordListAdapter.getSelected()
                 DataBaseServices.deleteWords(mainPath, list)
-                deaSelectMode()
-                wordListAdapter.changeList()
+                afterDelete()
             }
         }
         ask.buildAndDisplay()
@@ -228,8 +229,7 @@ class F_WordsList : MyFragment() {
             }else{
                 DataBaseServices.deleteWords(mainPath, list)
             }
-            deaSelectMode()
-            wordListAdapter.changeList()
+            afterDelete()
         }
         ask.approveText = "From Tag"
         ask.denyText = "Permanently"
@@ -248,8 +248,7 @@ class F_WordsList : MyFragment() {
             }else{
                 DataBaseServices.deleteWords(mainPath, list)
             }
-            deaSelectMode()
-            wordListAdapter.changeList()
+            afterDelete()
         }
         ask.approveText = "From Folder"
         ask.denyText = "Permanently"
@@ -266,12 +265,18 @@ class F_WordsList : MyFragment() {
             }else{
                 DataBaseServices.deleteWords(mainPath, list)
             }
-            deaSelectMode()
-            wordListAdapter.changeList()
+            afterDelete()
         }
         ask.approveText = "From Text"
         ask.denyText = "Permanently"
         ask.buildAndDisplay()
+    }
+
+    private fun afterDelete(){
+        deaSelectMode()
+        wordListAdapter.changeList()
+        if(wordListSearch.text.toString().isNotEmpty())
+            startSearch(wordListSearch.text.toString())
     }
 
     //endregion
@@ -545,30 +550,30 @@ class F_WordsList : MyFragment() {
 
     //region getWordsFrom Pdf
 
+    private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            // There are no request codes
+
+
+            val filePath = result.data?.data?.path
+            if(filePath != null){
+                importFile(result.data?.data!!)
+            }else{
+                Lib.showMessage(gContext, "Something went wrong")
+                Log.d("ERROR", "filePath = NULL")
+            }
+        }
+    }
+
     private fun getFileUri(){
         if(Lib.isStoragePermissionGranted(gContext, this)){
             val intent = Intent()
             intent.type = "*/*"
             intent.action = Intent.ACTION_GET_CONTENT
-            val mimetypes = arrayOf("application/pdf")
+            val mimetypes = arrayOf("text/plain", "application/pdf")
             intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes)
-            startActivityForResult(intent, 100)
+            resultLauncher.launch(intent)
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == 100){
-            if(resultCode == Activity.RESULT_OK){
-                val filePath = data?.data?.path
-                if(filePath != null){
-                    importFile(data.data!!)
-                }else{
-                    Lib.showMessage(gContext, "Something went wrong")
-                    Log.d("ERROR", "filePath = NULL")
-                }
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun importFile(filePath: Uri){

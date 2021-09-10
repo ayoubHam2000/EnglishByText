@@ -13,7 +13,6 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.viewpager.widget.PagerAdapter
 import com.example.englishbytext.Classes.Custom.MyOnSwipeTouchListener
-import com.example.englishbytext.Classes.schemas.Word
 import com.example.englishbytext.Objects.DataBaseServices
 import com.example.englishbytext.Objects.Lib
 import com.example.englishbytext.Objects.WordsManagement
@@ -24,7 +23,9 @@ import com.example.englishbytext.Utilites.NextPage
 
 class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : PagerAdapter(){
 
-
+/*
+TODO : is known
+ */
     //region init
 
     //====================================
@@ -63,6 +64,7 @@ class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : Pa
         private val editWord : ImageView = view.findViewById(R.id.editWord)
         private val theWordName : TextView = view.findViewById(R.id.theWord)
         private val wordFrequencyView : TextView = view.findViewById(R.id.wordFrequencyView)
+        private val isKnownView : ImageView = view.findViewById(R.id.isKnown)
 
         fun bindView(position: Int){
             theWordName.text = list[position].name
@@ -71,10 +73,12 @@ class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : Pa
             backgroundView(position)
             progressPages(position)
             favoriteView(position)
+            isKnownView(position)
 
             //buttons
             favoriteWord.setOnClickListener { favoriteClick(position) }
             editWord.setOnClickListener {editWordClick(position)}
+            //isKnownView.setOnClickListener { isKnownClick(position) }
 
             //fun
             onSweep(position)
@@ -120,6 +124,15 @@ class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : Pa
             }
         }
 
+        private fun isKnownView(position: Int){
+            val isKnown = list[position].isKnown
+            if(isKnown){
+                isKnownView.setBackgroundResource(R.drawable.ic_resource_package)
+            }else{
+                isKnownView.setBackgroundResource(R.drawable.ic__edit)
+            }
+        }
+
         private fun backgroundView(position: Int){
             val theColor = theColors[position % theColors.count()]
 
@@ -136,6 +149,13 @@ class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : Pa
             theWord.isFavorite = f
             DataBaseServices.updateWordFavorite(theWord.name, f)
             favoriteView(position)
+        }
+
+        private fun isKnownClick(position: Int){
+            val theWord = list[position].name
+            list[position].isKnown = !list[position].isKnown
+            DataBaseServices.updateIsWordKnown(arrayListOf(theWord))
+            isKnownView(position)
         }
 
         private fun editWordClick(position: Int){

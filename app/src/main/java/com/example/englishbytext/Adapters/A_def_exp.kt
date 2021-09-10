@@ -28,10 +28,14 @@ class A_def_exp(val context : Context, val wordName : String, val type : Int) :
         list.clear()
         when(type){
             OpenDefinition->{
-                list.addAll(DataBaseServices.getWordDefinitions(wordName))
+                val l = DataBaseServices.getWordDefinitions(wordName)
+                l.sortByDescending{it.value}
+                list.addAll(l)
             }
             OpenExample->{
-                list.addAll(DataBaseServices.getWordExamples(wordName))
+                val l = DataBaseServices.getWordExamples(wordName)
+                l.sortByDescending{it.value}
+                list.addAll(l)
             }
         }
         notifyDataSetChanged()

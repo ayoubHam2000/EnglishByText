@@ -221,7 +221,7 @@ class F_WordEdit : MyFragment() {
         val clipboard = gContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
         val text = clipboard?.primaryClip?.getItemAt(0)?.coerceToText(gContext)?.toString()
         if(text != null)
-            insertDef(text)
+            insertDef("${definitionAdapter.list.count()}. $text")
     }
 
     private fun addDef(){
@@ -259,7 +259,7 @@ class F_WordEdit : MyFragment() {
         val clipboard = gContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
         val text = clipboard?.primaryClip?.getItemAt(0)?.coerceToText(gContext)?.toString()
         if(text != null)
-            insertExp(text)
+            insertExp("${exampleAdapter.list.count()}. ${text}")
     }
 
     private fun addExp(){

@@ -30,6 +30,7 @@ class A_copy_to_folder(val context : Context, val event : ()->Unit) : RecyclerVi
         for(item in paths){
             list.add(item.split("/").last())
         }
+        list.sortBy { it }
     }
 
     //endregion

@@ -66,9 +66,10 @@ class D_wordFrequency(context: Context) : MyDialogBuilder(context, R.layout.d_wo
         editText.addTextChangedListener(
                 object : TextWatcher {
                     override fun afterTextChanged(s: Editable) {
-                        if(s.trim().isNotEmpty() && s.count() > 1){
+                        val theWord = s.trim()
+                        if(theWord.isNotEmpty() && theWord.count() > 1){
                             thread {
-                                val t = s.toString()
+                                val t = theWord.toString()
                                 val res = setResult(t)
                                 Handler(context.mainLooper).post{
                                     if(t == editText.text.toString())

@@ -18,7 +18,8 @@ import com.example.englishbytext.Utilites.OpenItem
 import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
 
-class A_WordList(val context : Context, private val fgType : String, private val passedData : String, val event : (Int, String) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class A_WordList(val context : Context, private val fgType : String, private val passedData : String, val event : (Int, String) -> Unit)
+    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //region init
     private val layout = R.layout.a_wordlist_item
@@ -26,12 +27,15 @@ class A_WordList(val context : Context, private val fgType : String, private val
     private val filterList = ArrayList<Word>()
     private var onSelectMode = false
     private val selectedHashMap = HashMap<String, Boolean>()
+
     private var hasImagesMap = HashMap<String, Boolean>()
     private var hasAudiosMap = HashMap<String, Boolean>()
     private var hasTagMap = HashMap<String, Boolean>()
     private var hasFolderMap = HashMap<String, Boolean>()
     private var hasTextMap = HashMap<String, Boolean>()
     private var hasRelatedMap = HashMap<String, Boolean>()
+    private var hasExampleMap = HashMap<String, Boolean>()
+    private var hasDefinitionMap = HashMap<String, Boolean>()
 
     fun changeList(){
         WordsManagement.updateWordList(fgType, passedData)
@@ -42,6 +46,7 @@ class A_WordList(val context : Context, private val fgType : String, private val
 
     private fun getHasMedia(){
         thread{
+            val t = System.currentTimeMillis()
             hasImagesMap = DataBaseServices.getWordsHasImages()
             hasAudiosMap = DataBaseServices.getWordsHasAudios()
 
@@ -49,6 +54,9 @@ class A_WordList(val context : Context, private val fgType : String, private val
             hasFolderMap = DataBaseServices.getWordsHasFolder()
             hasTextMap = DataBaseServices.getWordsHasText()
             hasRelatedMap = DataBaseServices.getWordsHasRelated()
+            hasDefinitionMap = DataBaseServices.getWordsHasDefinition()
+            hasExampleMap = DataBaseServices.getWordsHasExample()
+            println("-->${(System.currentTimeMillis() - t)}")
             Handler(context.mainLooper).post { notifyDataSetChanged() }
         }
     }
@@ -97,6 +105,8 @@ class A_WordList(val context : Context, private val fgType : String, private val
         private val hasFolder : ImageView = itemView.findViewById(R.id.hasFolder)
         private val hasText : ImageView = itemView.findViewById(R.id.hasText)
         private val hasRelated : ImageView = itemView.findViewById(R.id.hasRelated)
+        private val hasDefinition : TextView = itemView.findViewById(R.id.hasDefinition)
+        private val hasExample : TextView = itemView.findViewById(R.id.hasExample)
 
         fun bindView(position: Int){
             wordNbr.text = (position + 1).toString()
@@ -122,6 +132,8 @@ class A_WordList(val context : Context, private val fgType : String, private val
             hasFolder.visibility = if(hasFolderMap[filterList[position].name] != null) View.VISIBLE else View.GONE
             hasText.visibility = if(hasTextMap[filterList[position].name] != null) View.VISIBLE else View.GONE
             hasRelated.visibility = if(hasRelatedMap[filterList[position].name] != null) View.VISIBLE else View.GONE
+            hasDefinition.visibility = if(hasDefinitionMap[filterList[position].name] != null) View.VISIBLE else View.GONE
+            hasExample.visibility = if(hasExampleMap[filterList[position].name] != null) View.VISIBLE else View.GONE
         }
 
         private fun setFavoriteView(position: Int){
@@ -151,8 +163,9 @@ class A_WordList(val context : Context, private val fgType : String, private val
         }
 
         private fun setSelectedView(position: Int){
-            val n = list[position].name
+            val n = filterList[position].name
             val s = (selectedHashMap)[n] == true
+            println("--> ${position + 1} $s")
             if(s){
                 selectedItem.visibility = View.VISIBLE
                 val width = mainLayout.width
@@ -201,9 +214,8 @@ class A_WordList(val context : Context, private val fgType : String, private val
         for(item in filterList){
             val n = item.name
             selectedHashMap[n] = true
-            notifyDataSetChanged()
         }
-
+        notifyDataSetChanged()
     }
 
     //endregion

@@ -93,8 +93,7 @@ class F_Folders : MyFragment() {
                 Lib.showMessage(gContext, "Name is Not Valid")
             }else{
                 DataBaseServices.insertFolder(path, it)
-                FoldersManagement.list.add(it)
-                folderAdapter.notifyDataSetChanged()
+                folderAdapter.changeList()
                 dialog!!.dismiss()
             }
 

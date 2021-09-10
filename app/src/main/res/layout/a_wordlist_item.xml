@@ -62,6 +62,32 @@
             android:layout_marginBottom="5dp"
             >
 
+            <TextView
+                android:id="@+id/hasExample"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                android:textColor="@color/gray2"
+                android:text = "Ex"
+                android:gravity="center"
+                android:fontFamily="sans-serif-condensed"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                android:layout_marginEnd="7dp"
+                />
+
+            <TextView
+                android:id="@+id/hasDefinition"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                android:textColor="@color/gray2"
+                android:text = "Def"
+                android:gravity="center"
+                android:fontFamily="sans-serif-condensed"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                android:layout_marginEnd="7dp"
+                />
+
             <ImageView
                 android:id="@+id/hasRelated"
                 android:layout_width="15dp"
@@ -131,11 +157,10 @@
             />
 
         <ImageView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/transparent2"
-            android:id="@+id/cardView"
-            />
+            android:background="@color/transparent2" />
 
     </RelativeLayout>
 

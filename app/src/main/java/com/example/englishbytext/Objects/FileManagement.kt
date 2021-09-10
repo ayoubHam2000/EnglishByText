@@ -6,7 +6,8 @@ import com.example.englishbytext.Classes.schemas.WordFile
 import com.itextpdf.text.pdf.PdfReader
 import com.itextpdf.text.pdf.parser.PdfTextExtractor
 import java.nio.charset.StandardCharsets
-import java.util.HashMap
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
 
 object FileManagement {
@@ -14,17 +15,67 @@ object FileManagement {
     var fgType = ""
     var passedData = ""
 
-    fun startWorking(c : Context, fileUri: Uri, complete: () -> Unit){
-        Lib.showMessage(c, "Start Working")
+
+    fun startWorking(context : Context, fileUri: Uri, complete: () -> Unit){
+        Lib.showMessage(context, "Start Working")
         thread {
-            val words = getFromText(c, fileUri)
+            val data = getText(context, fileUri)
+            val words = getListOfWords(data)
             DataBaseServices.insertWordsFromPdf(words)
             complete()
         }
     }
 
-    private fun getFromText(context : Context, fileUri : Uri) : ArrayList<WordFile>{
-        val data = getTextFromPdf(context, fileUri).replace("\n", "||")
+    private fun getText(context : Context, fileUri: Uri) : String{
+        when(findFileExtension(fileUri)){
+            "txt" ->{
+                return getTextFromText(context, fileUri)
+            }
+            "pdf" ->{
+                return getTextFromPdf(context, fileUri)
+            }
+        }
+        return ""
+    }
+
+    private fun getTextFromText(context : Context, filePath : Uri) : String{
+        println(">>> get from text ...")
+        val inputStream =  context.contentResolver.openInputStream(filePath)
+        if(inputStream != null){
+            val size = inputStream.available()
+            val buffer = ByteArray(size)
+            inputStream.read(buffer)
+            return String(buffer, StandardCharsets.UTF_8)
+        }else{
+            println("> error : file not found ${filePath.path}")
+        }
+        return ""
+    }
+
+    private fun getTextFromPdf(context : Context, fileUri : Uri) : String{
+        println(">>> get from Pdf ...")
+        try {
+            val parsedText = ArrayList<String>()
+            val inputStream = context.contentResolver.openInputStream(fileUri)
+            val reader = PdfReader(inputStream)
+            val max = reader.numberOfPages
+
+            for(item in 1..max){
+                parsedText.add(PdfTextExtractor.getTextFromPage(reader, item))
+            }
+
+            reader.close()
+            return parsedText.joinToString(" ")
+        } catch (e: Exception) {
+            println(">>| error Pdf")
+            println(e.printStackTrace())
+        }
+        return ""
+    }
+
+    private fun getListOfWords(text : String) : ArrayList<WordFile>{
+        val data = text.replace("\r\n", "||")
+        print("-->${data}")
         val units = "\\+.*?\\+".toRegex().findAll(data)
         val words = ArrayList<WordFile>()
 
@@ -66,25 +117,12 @@ object FileManagement {
         return words
     }
 
-    private fun getTextFromPdf(context : Context, fileUri : Uri) : String{
-        println(">>| get from Pdf ...")
-        try {
-            val parsedText = ArrayList<String>()
-            val inputStream = context.contentResolver.openInputStream(fileUri)
-            val reader = PdfReader(inputStream)
-            val max = reader.numberOfPages
+    //---------------------------------------------------------
+    //---------------------------------------------------------
 
-            for(item in 1..max){
-                parsedText.add(PdfTextExtractor.getTextFromPage(reader, item))
-            }
-
-            reader.close()
-            return parsedText.joinToString(" ")
-        } catch (e: Exception) {
-            println(">>| error Pdf")
-            println(e.printStackTrace())
-        }
-        return ""
+    private fun findFileExtension(fileUri : Uri) : String{
+        val arr = fileUri.path!!.split(".")
+        return arr[arr.count() - 1].toLowerCase(Locale.ROOT)
     }
 
 }

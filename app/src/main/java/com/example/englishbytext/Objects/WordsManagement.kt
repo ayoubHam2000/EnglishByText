@@ -35,7 +35,7 @@ object WordsManagement {
     }
 
     private fun getWordQuery(fgType : String, passedData : String) : String{
-        val q1 = "SELECT $A_word, $A_favorite FROM $T_words ?1"
+        val q1 = "SELECT $A_word, $A_favorite, $A_isKnown FROM $T_words ?1"
         val q2 = " WHERE $A_word IN (?1) ?2"
 
         val p = passedData.toBase64()
