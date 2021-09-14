@@ -220,8 +220,10 @@ class F_WordEdit : MyFragment() {
     private fun longAddDef(){
         val clipboard = gContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
         val text = clipboard?.primaryClip?.getItemAt(0)?.coerceToText(gContext)?.toString()
-        if(text != null)
-            insertDef("${definitionAdapter.list.count()}. $text")
+        if(text != null){
+            insertDef("${definitionAdapter.list.count() + 1}. $text")
+            Lib.shortMessage(gContext, "Def Added")
+        }
     }
 
     private fun addDef(){
@@ -258,8 +260,10 @@ class F_WordEdit : MyFragment() {
     private fun longAddExp(){
         val clipboard = gContext.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
         val text = clipboard?.primaryClip?.getItemAt(0)?.coerceToText(gContext)?.toString()
-        if(text != null)
-            insertExp("${exampleAdapter.list.count()}. ${text}")
+        if(text != null){
+            insertExp("${exampleAdapter.list.count()+1}. $text")
+            Lib.shortMessage(gContext, "Exp Added")
+        }
     }
 
     private fun addExp(){

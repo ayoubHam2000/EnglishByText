@@ -11,6 +11,7 @@ import android.text.SpannableString
 import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
@@ -349,7 +350,8 @@ class F_WordsList : MyFragment() {
         //reset items to default value
         for(i in 0..1){
             val spanString = SpannableString(defaultValue[i])
-            spanString.setSpan(ForegroundColorSpan(Color.WHITE), 0, spanString.length, 0)
+            val color = gContext.getColor(R.color.black)
+            spanString.setSpan(ForegroundColorSpan(color), 0, spanString.length, 0)
             selectedSort[i].title = spanString
         }
         //change the selected one
@@ -605,6 +607,11 @@ class F_WordsList : MyFragment() {
     }
 
     override fun onBackPress(): Boolean {
+        //clear focus from search field when the input is focus
+        if(wordListSearch.isFocused){
+            wordListSearch.clearFocus()
+            return true
+        }
         if (deaSelectMode()) return true
         return false
     }

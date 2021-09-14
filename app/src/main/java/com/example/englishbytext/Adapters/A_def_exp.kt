@@ -29,12 +29,12 @@ class A_def_exp(val context : Context, val wordName : String, val type : Int) :
         when(type){
             OpenDefinition->{
                 val l = DataBaseServices.getWordDefinitions(wordName)
-                l.sortByDescending{it.value}
+                l.sortBy{it.value}
                 list.addAll(l)
             }
             OpenExample->{
                 val l = DataBaseServices.getWordExamples(wordName)
-                l.sortByDescending{it.value}
+                l.sortBy{it.value}
                 list.addAll(l)
             }
         }
