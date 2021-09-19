@@ -3,13 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/projects/working.on/EnglishByText/app/src/main/res/drawable/box_width_radius.xml" value="0.2703125" />
         <entry key="..\:/projects/working.on/EnglishByText/app/src/main/res/layout/a_cards_practice_item.xml" value="0.25025641025641027" />
         <entry key="..\:/projects/working.on/EnglishByText/app/src/main/res/layout/a_folder_item.xml" value="0.25025641025641027" />
         <entry key="..\:/projects/working.on/EnglishByText/app/src/main/res/layout/a_related_item.xml" value="0.25416666666666665" />
         <entry key="..\:/projects/working.on/EnglishByText/app/src/main/res/layout/a_wordedit_info_item.xml" value="0.25416666666666665" />
         <entry key="..\:/projects/working.on/EnglishByText/app/src/main/res/layout/a_wordlist_item.xml" value="0.43381180223285487" />
+        <entry key="..\:/projects/working.on/EnglishByText/app/src/main/res/layout/action_word_list.xml" value="0.536" />
         <entry key="..\:/projects/working.on/EnglishByText/app/src/main/res/layout/d_undo.xml" value="0.536" />
+        <entry key="..\:/projects/working.on/EnglishByText/app/src/main/res/layout/f_cards_practice.xml" value="0.25025641025641027" />
         <entry key="..\:/projects/working.on/EnglishByText/app/src/main/res/layout/l_progress_layout.xml" value="0.25416666666666665" />
+        <entry key="..\:/projects/working.on/EnglishByText/app/src/main/res/menu/m_filter_mode.xml" value="0.24259259259259258" />
       </map>
     </option>
   </component>

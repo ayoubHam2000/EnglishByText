@@ -82,7 +82,10 @@
     <string name="folders">Folders</string>
     <string name="list_of_words">List Of Words</string>
     <string name="sort">Sort</string>
+    <string name="Filter">Filter</string>
     <string name="theDefault">Default</string>
+    <string name="hasExample">has Example</string>
+    <string name="hasDefinition">has Definition</string>
     <string name="created_time">Created Time</string>
     <string name="random">Random</string>
     <string name="undo_action">OK</string>

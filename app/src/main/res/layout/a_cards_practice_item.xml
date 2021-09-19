@@ -37,13 +37,12 @@
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/progressBar"
+        android:layout_marginHorizontal="17dp"
+        android:layout_marginVertical="20dp"
         android:background="@drawable/box_width_radius"
         android:backgroundTint="@color/magenta"
-        android:padding="15dp"
-        android:layout_below="@+id/progressBar"
-        android:layout_marginVertical="20dp"
-        android:layout_marginHorizontal="17dp"
-        >
+        android:padding="15dp">
 
         <ImageView
             android:id="@+id/isKnown"
@@ -54,8 +53,7 @@
             android:layout_marginEnd="10dp"
             android:background="@drawable/ic_resource_package"
             android:backgroundTint="@color/abs_white"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/favoriteWord"
@@ -100,14 +98,11 @@
             android:layout_centerHorizontal="true"
             android:layout_marginStart="8dp"
             android:layout_marginBottom="5dp"
-            tools:text="50"
-            android:textSize="19sp"
             android:fontFamily="sans-serif-condensed"
-            android:textStyle="bold"
             android:textColor="@color/abs_white"
-            />
-
-
+            android:textSize="19sp"
+            android:textStyle="bold"
+            tools:text="50" />
 
 
     </RelativeLayout>

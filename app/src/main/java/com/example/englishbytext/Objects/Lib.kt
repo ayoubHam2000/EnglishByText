@@ -175,7 +175,7 @@ object Lib {
         val popUpMenu = PopupMenu(context, view)
         popUpMenu.inflate(menu)
         view.setOnClickListener {
-            forceShowIconForMenu(popUpMenu)
+            //forceShowIconForMenu(popUpMenu)
             popUpMenu.show()
         }
 

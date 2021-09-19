@@ -2,10 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
-    <item
-        android:title="Favorite"
-        android:id="@+id/isFavorite"
-        android:checkable="true"/>
+
 
     <item
         android:title="Regex"
@@ -13,6 +10,36 @@
         android:checkable="true"
 
         />
+
+    <group
+        android:id="@+id/filter_group">
+        <item android:title="@string/Filter">
+            <menu>
+
+                <item
+                    android:id="@+id/isFavorite"
+                    android:title="Favorite"
+                    android:checkable="true"
+                    />
+
+                <item
+                    android:id="@+id/hasDefinition"
+                    android:title="hasDefinition"
+                    android:checkable="true"
+                    />
+
+                <item
+                    android:id="@+id/hasExample"
+                    android:title="@string/theDefault"
+                    android:checkable="true"
+                    />
+
+            </menu>
+
+
+        </item>
+
+    </group>
 
     <group
         android:id="@+id/sort_group">

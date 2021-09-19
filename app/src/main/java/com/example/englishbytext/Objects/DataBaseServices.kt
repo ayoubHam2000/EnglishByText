@@ -407,9 +407,6 @@ object DataBaseServices {
         val regexSearch = getVar(V_OnRegexSearch, false.toString())
         MainSetting.setRegexSearch(regexSearch, false)
 
-        val favoriteSearch = getVar(V_OnFavoriteSearch, false.toString())
-        MainSetting.setFavoriteSearch(favoriteSearch, false)
-
         val sortTypeWordList = getVar(V_SortTypeWordList, SORT_DEFAULT_DESC.toString())
         MainSetting.setSortTypeWordList(sortTypeWordList, false)
 

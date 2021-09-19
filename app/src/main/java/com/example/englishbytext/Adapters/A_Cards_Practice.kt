@@ -137,7 +137,7 @@ TODO : is known
             val theColor = theColors[position % theColors.count()]
 
             background.backgroundTintList = ColorStateList.valueOf(theColor)
-            getHexColor("dd",theColor)
+            //getHexColor("dd",theColor)
             Lib.changeBackgroundTint(Color.parseColor(getHexColor("dd", theColor)), father)
         }
 

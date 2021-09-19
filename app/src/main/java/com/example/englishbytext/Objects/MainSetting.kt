@@ -12,7 +12,6 @@ object MainSetting {
     var selectedTextFont = 0
     var selectedTextFontType = 0
     var onRegexSearch = false
-    var onFavoriteSearch = false
     var sortTypeWordList = SORT_DEFAULT_DESC
 
     //not save in the data base
@@ -72,11 +71,6 @@ object MainSetting {
         onRegexSearch = value.toBoolean()
     }
 
-    fun setFavoriteSearch(value: String, update: Boolean = true){
-        if(update)
-            DataBaseServices.updateVar(V_OnFavoriteSearch, value)
-        onFavoriteSearch = value.toBoolean()
-    }
 
     //endregion
 

@@ -11,7 +11,6 @@ import android.text.SpannableString
 import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
 import android.util.Log
-import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
@@ -21,11 +20,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.englishbytext.Adapters.A_WordList
 import com.example.englishbytext.Classes.Objects.D_ask
 import com.example.englishbytext.Classes.Objects.D_copy_to_folder
+import com.example.englishbytext.Classes.Objects.M_FilterPopUpMenu
+import com.example.englishbytext.Classes.schemas.FilterData
 import com.example.englishbytext.Dialogs.D_editItem
 import com.example.englishbytext.Objects.*
 import com.example.englishbytext.R
 import com.example.englishbytext.Utilites.*
-import java.util.*
 import kotlin.concurrent.thread
 
 
@@ -39,11 +39,12 @@ class F_WordsList : MyFragment() {
     //++++++++++++++++++++++  Vars
     //====================================
     private lateinit var wordListAdapter : A_WordList
-    lateinit var popupMenu : PopupMenu
+    lateinit var popupMenu : M_FilterPopUpMenu
     lateinit var dialogEditItem : D_editItem
     //search
     private var continueSearch = true
     private var oldSearch = ""
+    private var filterData = FilterData()
     //used by previous fragment (tags, folders)
     var fgType = ""
     var passedData = ""
@@ -97,7 +98,7 @@ class F_WordsList : MyFragment() {
         setPathView()
         initWordListRV()
         initActionBar()
-        startSearch(wordListSearch.text.toString())
+        //startSearch(wordListSearch.text.toString())
     }
 
     //endregion
@@ -107,7 +108,7 @@ class F_WordsList : MyFragment() {
     private fun initActionBar(){
         onSelectMode(false)
 
-        popupMenu = Lib.initPopupMenu(gContext, filterMode, R.menu.m_filter_mode)
+        popupMenu = M_FilterPopUpMenu(gContext, filterMode, R.menu.m_filter_mode)
         filterModeSetUp()
 
         wordListSearch.addTextChangedListener(searchWords())
@@ -183,12 +184,12 @@ class F_WordsList : MyFragment() {
     }
 
     private fun onAddWord(){
-        wordListAdapter.changeList()
+        notifyList()
         dialogEditItem.dismiss()
-        val s = wordListSearch.text.toString()
+        /*val s = wordListSearch.text.toString()
         if(s.isNotEmpty()){
             startSearch(s)
-        }
+        }*/
     }
 
 
@@ -275,9 +276,9 @@ class F_WordsList : MyFragment() {
 
     private fun afterDelete(){
         deaSelectMode()
-        wordListAdapter.changeList()
-        if(wordListSearch.text.toString().isNotEmpty())
-            startSearch(wordListSearch.text.toString())
+        notifyList()
+        /*if(wordListSearch.text.toString().isNotEmpty())
+            startSearch(wordListSearch.text.toString())*/
     }
 
     //endregion
@@ -292,8 +293,8 @@ class F_WordsList : MyFragment() {
         val list = wordListAdapter.getSelected()
         DataBaseServices.updateIsFavoriteWords(list)
         deaSelectMode()
-        wordListAdapter.changeList()
-        startSearch(wordListSearch.text.toString())
+        notifyList()
+        //startSearch(wordListSearch.text.toString())
     }
 
     private fun copyToFolderClick(){
@@ -311,7 +312,7 @@ class F_WordsList : MyFragment() {
     private fun updateOrderViewClick(){
         DataBaseServices.updateWordLevelOrder(wordListAdapter.getSelected())
         deaSelectMode()
-        wordListAdapter.changeList()
+        notifyList()
     }
     //endregion
 
@@ -319,29 +320,35 @@ class F_WordsList : MyFragment() {
     private fun filterModeSetUp(){
         popupMenu.setOnMenuItemClickListener {
             when(it.itemId){
-                R.id.isFavorite -> onFavoriteFilterClick()
                 R.id.isOnRegex -> onRegexFilterClick()
+
+                R.id.isFavorite -> onFavoriteFilterClick()
+                R.id.hasDefinition -> onHasDefinitionClick()
+                R.id.hasExample -> onHasExampleClick()
+
                 R.id.defaultSort -> onDefaultSortFilterClick()
                 R.id.createdTimeSort -> onCreatedTimeFilterClick()
                 R.id.randomSort-> onRandomFilterClick()
             }
             true
         }
-        popupMenu.menu.getItem(0).isChecked = MainSetting.onFavoriteSearch
-        popupMenu.menu.getItem(1).isChecked = MainSetting.onRegexSearch
+        initPopUpMenu()
+    }
 
-        val randomViewItem = popupMenu.menu.getItem(2).subMenu.getItem(2)
-        randomViewItem.isChecked = MainSetting.isRandomSortIsActive
+    private fun initPopUpMenu(){
+        popupMenu.getItemById(R.id.isFavorite).isChecked = filterData.isFavorite
+        popupMenu.getItemById(R.id.hasDefinition).isChecked = filterData.hasDefinition
+        popupMenu.getItemById(R.id.hasExample).isChecked = filterData.hasExample
 
-        favoriteActiveLabel.visibility = if(MainSetting.onFavoriteSearch) View.VISIBLE else View.GONE
         regexActiveLabel.visibility = if(MainSetting.onRegexSearch) View.VISIBLE else View.GONE
         filterView()
     }
 
     private fun filterView(){
         //sort
-        val default = popupMenu.menu.getItem(2).subMenu.getItem(0)
-        val createdTime = popupMenu.menu.getItem(2).subMenu.getItem(1)
+        val default = popupMenu.getItemById(R.id.defaultSort)
+        val createdTime = popupMenu.getItemById(R.id.createdTimeSort)
+
         val selectedOrder = arrayListOf("Default DESC", "Default ASC", "Created Time DESC", "Created Time ASC")
         val defaultValue = arrayListOf("Default", "Created Time")
         val selectedSort = arrayListOf(default, createdTime)
@@ -360,22 +367,39 @@ class F_WordsList : MyFragment() {
         selectedSort[sortType/2].title = spanString
     }
 
-    private fun onFavoriteFilterClick(){
-        val item = popupMenu.menu.getItem(0)
-        item.isChecked = !item.isChecked
-        MainSetting.setFavoriteSearch(item.isChecked.toString())
-        favoriteActiveLabel.visibility = if(MainSetting.onFavoriteSearch) View.VISIBLE else View.GONE
-        onFilterChange(true)
-    }
-
     private fun onRegexFilterClick(){
-        val item = popupMenu.menu.getItem(1)
+        val item = popupMenu.getItemById(R.id.isOnRegex)
         item.isChecked = !item.isChecked
+        filterData.onRegex = !filterData.onRegex
         MainSetting.setRegexSearch(item.isChecked.toString())
         regexActiveLabel.visibility = if(MainSetting.onRegexSearch) View.VISIBLE else View.GONE
-        onFilterChange(true)
+        notifyList()
     }
 
+    //-------------------------
+    private fun onFavoriteFilterClick(){
+        val item = popupMenu.getItemById(R.id.isFavorite)
+        item.isChecked = !filterData.isFavorite
+        filterData.isFavorite = !filterData.isFavorite
+        notifyList()
+    }
+
+    private fun onHasDefinitionClick(){
+        val item = popupMenu.getItemById(R.id.hasDefinition)
+        item.isChecked = !filterData.hasDefinition
+        filterData.hasDefinition = !filterData.hasDefinition
+        notifyList()
+    }
+
+    private fun onHasExampleClick(){
+        val item = popupMenu.getItemById(R.id.hasExample)
+        item.isChecked = !filterData.hasExample
+        filterData.hasExample = !filterData.hasExample
+        notifyList()
+    }
+
+
+    //---------------------------
     private fun onDefaultSortFilterClick(){
         val newSortType = when(MainSetting.sortTypeWordList){
             SORT_DEFAULT_ASC -> SORT_DEFAULT_DESC
@@ -384,7 +408,7 @@ class F_WordsList : MyFragment() {
         }
         MainSetting.setSortTypeWordList(newSortType.toString())
         filterView()
-        onFilterChange()
+        notifyList()
     }
 
     private fun onCreatedTimeFilterClick(){
@@ -395,21 +419,20 @@ class F_WordsList : MyFragment() {
         }
         MainSetting.setSortTypeWordList(newSortType.toString())
         filterView()
-        onFilterChange()
+        notifyList()
     }
 
     private fun onRandomFilterClick(){
-        val randomViewItem = popupMenu.menu.getItem(2).subMenu.getItem(2)
+        val randomViewItem = popupMenu.getItemById(R.id.randomSort)
 
         MainSetting.isRandomSortIsActive = !MainSetting.isRandomSortIsActive
         randomViewItem.isChecked = MainSetting.isRandomSortIsActive
-        onFilterChange()
+        notifyList()
     }
 
-    private fun onFilterChange(forceEmpty : Boolean = false){
-        wordListAdapter.changeList()
-        if(wordListSearch.text.isNotEmpty() || forceEmpty)
-            startSearch(wordListSearch.text.toString())
+    //---------------------------
+    private fun notifyList(){
+        wordListAdapter.changeList(filterData)
     }
 
     //endregion
@@ -451,19 +474,17 @@ class F_WordsList : MyFragment() {
     }
 
     private fun startSearch(s: String){
-        val favoriteOn = popupMenu.menu.getItem(0)
-        val regexOn = popupMenu.menu.getItem(1)
-        if(regexOn.isChecked){
-            if(isValidRegex(s)){
-                wordListAdapter.filterSearch(s, true, favoriteOn.isChecked)
-            }else{
-                Handler(gContext.mainLooper).post {
-                    wordListSearch.error = "Invalid regex"
-                }
+        val regexOn = popupMenu.getItemById(R.id.isOnRegex)
+
+        if(!isValidRegex(s)){
+            Handler(gContext.mainLooper).post {
+                wordListSearch.error = "Invalid regex"
             }
-        }else{
-            wordListAdapter.filterSearch(s, false, favoriteOn.isChecked)
+            return
         }
+
+        filterData.searchWord = s
+        notifyList()
     }
 
     private fun isValidRegex(regex: String) : Boolean{
@@ -502,7 +523,7 @@ class F_WordsList : MyFragment() {
         wordListAdapter = A_WordList(gContext, fgType, passedData){ event, wordName ->
             recyclerViewEvent(event, wordName)
         }
-        wordListAdapter.changeList()
+        notifyList()
 
         wordListRV.adapter = wordListAdapter
         wordListRV.layoutManager = layoutManager
@@ -586,7 +607,7 @@ class F_WordsList : MyFragment() {
             val mainHandler =  Handler(gContext.mainLooper)
             val myRunnable =  Runnable {
                 Lib.showMessage(gContext, "Complete")
-                wordListAdapter.changeList()
+                notifyList()
             }
             mainHandler.post(myRunnable)
         }

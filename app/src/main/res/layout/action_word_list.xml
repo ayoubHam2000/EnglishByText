@@ -141,7 +141,7 @@
                         android:autoSizeTextType="uniform"
                         android:autoSizeMinTextSize="3sp"
                         android:textColor="@color/black"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         android:gravity="center"
                         android:layout_weight="1"
                         />
@@ -150,7 +150,7 @@
                         android:id="@+id/regexActiveLabel"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="R"
+                        android:text="Regex"
                         android:autoSizeTextType="uniform"
                         android:autoSizeMinTextSize="3sp"
                         android:textColor="@color/black"

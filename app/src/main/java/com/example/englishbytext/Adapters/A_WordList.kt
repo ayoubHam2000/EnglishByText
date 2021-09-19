@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.englishbytext.Classes.schemas.FilterData
 import com.example.englishbytext.Classes.schemas.Word
 import com.example.englishbytext.Objects.DataBaseServices
 import com.example.englishbytext.Objects.WordsManagement
@@ -18,10 +19,16 @@ import com.example.englishbytext.Utilites.OpenItem
 import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
 
-class A_WordList(val context : Context, private val fgType : String, private val passedData : String, val event : (Int, String) -> Unit)
-    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class A_WordList(
+    val context : Context,
+    private val fgType : String,
+    private val passedData : String,
+    val event : (Int, String) -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //region init
+
+
     private val layout = R.layout.a_wordlist_item
     private val list = WordsManagement.wordList
     private val filterList = ArrayList<Word>()
@@ -37,16 +44,16 @@ class A_WordList(val context : Context, private val fgType : String, private val
     private var hasExampleMap = HashMap<String, Boolean>()
     private var hasDefinitionMap = HashMap<String, Boolean>()
 
-    fun changeList(){
+    fun changeList(filterData: FilterData){
         WordsManagement.updateWordList(fgType, passedData)
-        filterSearch()
-        notifyDataSetChanged()
-        getHasMedia()
+        //filterSearch()
+        //notifyDataSetChanged()
+        getHasMedia(filterData)
     }
 
-    private fun getHasMedia(){
+    private fun getHasMedia(filterData: FilterData){
         thread{
-            val t = System.currentTimeMillis()
+
             hasImagesMap = DataBaseServices.getWordsHasImages()
             hasAudiosMap = DataBaseServices.getWordsHasAudios()
 
@@ -56,36 +63,64 @@ class A_WordList(val context : Context, private val fgType : String, private val
             hasRelatedMap = DataBaseServices.getWordsHasRelated()
             hasDefinitionMap = DataBaseServices.getWordsHasDefinition()
             hasExampleMap = DataBaseServices.getWordsHasExample()
-            println("-->${(System.currentTimeMillis() - t)}")
-            Handler(context.mainLooper).post { notifyDataSetChanged() }
+
+            Handler(context.mainLooper).post {
+                filterSearch(filterData)
+                notifyDataSetChanged()
+            }
         }
     }
     //endregion
 
     //region filter
-    fun filterSearch(s : String = "", regex : Boolean = false, favorite : Boolean = false){
+    fun filterSearch(filterData : FilterData){
         filterList.clear()
-        if(regex){
-            regexSearch(s, favorite)
+        if(filterData.onRegex){
+            regexSearch(filterData)
         }else{
-            containsSearch(s, favorite)
+            containsSearch(filterData)
         }
     }
 
-    private fun regexSearch(s : String, favorite: Boolean){
+    private fun regexSearch(filterData: FilterData){
+        val s = filterData.searchWord
         val regex = s.toRegex()
         for(item in list){
-            if(regex.matches(item.name) && (item.isFavorite || !favorite))
+            if(regex.matches(item.name) && isOnCategory(item, filterData))
                 filterList.add(item)
         }
     }
 
-    private fun containsSearch(s : String, favorite: Boolean){
+    private fun containsSearch(filterData: FilterData){
+        val s = filterData.searchWord
         for(item in list){
-            if(item.name.contains(s) && (item.isFavorite || !favorite))
+            if(item.name.contains(s) && isOnCategory(item, filterData))
                 filterList.add(item)
         }
     }
+
+    private fun isOnCategory(item : Word, filterData: FilterData) : Boolean{
+        val set1 = arrayListOf(
+            filterData.isFavorite,
+            filterData.hasDefinition,
+            filterData.hasExample
+
+        )
+        val set2 = arrayListOf(
+            item.isFavorite,
+            hasDefinitionMap[item.name] == true,
+            hasExampleMap[item.name] == true
+        )
+        val set3 = ArrayList<Boolean>(3)
+        for(i in 0 until set1.count()){
+            if(set1[i]){
+                set3.add(set2[i])
+            }
+        }
+        if (set3.isEmpty()) return true
+        return false !in set3
+    }
+
     //endregion
 
     //endregion
