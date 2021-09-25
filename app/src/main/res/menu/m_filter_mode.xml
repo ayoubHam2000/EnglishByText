@@ -21,9 +21,6 @@
         <item android:title="@string/sort">
             <menu>
                 <item
-                    android:id="@+id/defaultSort"
-                    android:title="@string/theDefault"/>
-                <item
                     android:id="@+id/createdTimeSort"
                     android:title="@string/created_time"/>
                 <item

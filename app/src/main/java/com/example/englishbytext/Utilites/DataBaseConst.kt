@@ -78,7 +78,6 @@ const val A_backgroundColor = "backgroundColor"
 const val A_path = "path"
 const val A_Name = "FolderName"
 const val A_Type = "Type"
-const val A_level_order = "level_order"
 const val A_created_time = "created_time"
 const val A_isKnown = "known"
 //endregion
@@ -108,9 +107,12 @@ const val DT_wordText = "$T_wordsText ($A_textID INT, $A_word VARCHAR, $A_posSta
 
 //region table Words
 //words(*word, isFavorite)
-//create table temp_tab (word varchar not null,  favorite BIT DEFAULT 0, level_order INT DEFAULT 0, created_time BIGINT default 0, PRIMARY KEY(word))
+//create table temp_tab (word varchar not null,  favorite BIT DEFAULT 0, created_time BIGINT default 0,  known bit default 0, PRIMARY KEY(word))
+//insert into temp_tab select word, favorite,created_time, known from words
+//alter table temp_tab rename to words;
+
 const val DT_words = "$T_words ($A_word varchar not null,  $A_favorite BIT DEFAULT 0," +
-        " $A_level_order INT DEFAULT 0, $A_created_time BIGINT default 0, $A_isKnown bit default 0," +
+        " $A_created_time BIGINT default 0, $A_isKnown bit default 0," +
         " PRIMARY KEY($A_word));"
 
 //definitions(#word, definition)

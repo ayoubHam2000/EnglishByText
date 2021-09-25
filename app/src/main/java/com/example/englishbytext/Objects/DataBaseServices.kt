@@ -407,7 +407,7 @@ object DataBaseServices {
         val regexSearch = getVar(V_OnRegexSearch, false.toString())
         MainSetting.setRegexSearch(regexSearch, false)
 
-        val sortTypeWordList = getVar(V_SortTypeWordList, SORT_DEFAULT_DESC.toString())
+        val sortTypeWordList = getVar(V_SortTypeWordList, SORT_CREATED_TIME_DESC.toString())
         MainSetting.setSortTypeWordList(sortTypeWordList, false)
 
     }
@@ -493,8 +493,7 @@ object DataBaseServices {
             do{
                 val name = cursor.getString(0).fromBase64ToString()
                 val isFavorite = cursor.getInt(1) == 1
-                val isKnown = cursor.getInt(2) == 1
-                res.add(Word(name, isFavorite, isKnown))
+                res.add(Word(name, isFavorite))
             }while (cursor.moveToNext())
         }
         cursor.close()
@@ -705,13 +704,6 @@ object DataBaseServices {
         val name = n.toBase64()
         val value = v.toInt()
         dataBase.execSQL("UPDATE $T_words SET $A_favorite = $value WHERE $A_word = '$name'")
-    }
-
-    fun updateWordLevelOrder(l : ArrayList<String>){
-        val maxL = getListInt("select max($A_level_order) from words")
-        val max = (if(maxL.isNotEmpty()) maxL[0] else 0) + 1
-        val list = l.toBase64()
-        dataBase.execSQL("update $T_words set $A_level_order = $max where $A_word IN $list")
     }
 
     fun updateIsWordKnown(l : ArrayList<String>){
@@ -1159,7 +1151,7 @@ object DataBaseServices {
 
             dataBase.setTransactionSuccessful()
         }catch (e: Exception){
-            println(e.printStackTrace())
+            println(">>> ${e.printStackTrace()}")
         }finally {
             dataBase.endTransaction()
         }
@@ -1202,7 +1194,7 @@ object DataBaseServices {
     fun saveData(context: Context, uri: Uri){
         val masterPath = context.getExternalFilesDir("/")!!.absolutePath
         val path = "$masterPath/$FILES_FOLDER"
-        val tables = arrayOf(T_Sets, T_collections, T_texts, T_words, T_definitions, T_examples, T_images, T_audios,
+        val tables = arrayOf(T_Sets, T_collections, T_texts, T_words, T_words, T_definitions, T_examples, T_images, T_audios,
                 T_wordsText, T_relatedWord, T_tags, T_wordTags, T_infoVar, T_folders, T_words_Folder)
 
         File(path).mkdir()
@@ -1241,7 +1233,7 @@ object DataBaseServices {
             val masterPath = context.getExternalFilesDir("/")!!.absolutePath
             val path = "$masterPath/$FILES_FOLDER"
             val stream = FileInputStream(context.contentResolver.openFileDescriptor(uri, "r")!!.fileDescriptor)
-            val tables = arrayOf(T_Sets, T_collections, T_texts, T_words, T_definitions, T_examples, T_images, T_audios,
+            val tables = arrayOf(T_Sets, T_collections, T_texts, T_definitions, T_examples, T_images, T_audios,
             T_wordsText, T_relatedWord, T_tags, T_wordTags, T_infoVar, T_folders, T_words_Folder)
 
 
@@ -1328,6 +1320,7 @@ object DataBaseServices {
                     for(item in data)
                         res.append("'$item',")
                     val value = res.toString().replace(",$".toRegex(), "")
+                    println(">>> ${"INSERT INTO $table VALUES($value)"}")
                     dataBase.execSQL("INSERT INTO $table VALUES($value)")
                 }
             }

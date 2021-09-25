@@ -64,7 +64,6 @@ TODO : is known
         private val editWord : ImageView = view.findViewById(R.id.editWord)
         private val theWordName : TextView = view.findViewById(R.id.theWord)
         private val wordFrequencyView : TextView = view.findViewById(R.id.wordFrequencyView)
-        private val isKnownView : ImageView = view.findViewById(R.id.isKnown)
 
         fun bindView(position: Int){
             theWordName.text = list[position].name
@@ -73,12 +72,10 @@ TODO : is known
             backgroundView(position)
             progressPages(position)
             favoriteView(position)
-            isKnownView(position)
 
             //buttons
             favoriteWord.setOnClickListener { favoriteClick(position) }
             editWord.setOnClickListener {editWordClick(position)}
-            //isKnownView.setOnClickListener { isKnownClick(position) }
 
             //fun
             onSweep(position)
@@ -124,15 +121,6 @@ TODO : is known
             }
         }
 
-        private fun isKnownView(position: Int){
-            val isKnown = list[position].isKnown
-            if(isKnown){
-                isKnownView.setBackgroundResource(R.drawable.ic_resource_package)
-            }else{
-                isKnownView.setBackgroundResource(R.drawable.ic__edit)
-            }
-        }
-
         private fun backgroundView(position: Int){
             val theColor = theColors[position % theColors.count()]
 
@@ -149,13 +137,6 @@ TODO : is known
             theWord.isFavorite = f
             DataBaseServices.updateWordFavorite(theWord.name, f)
             favoriteView(position)
-        }
-
-        private fun isKnownClick(position: Int){
-            val theWord = list[position].name
-            list[position].isKnown = !list[position].isKnown
-            DataBaseServices.updateIsWordKnown(arrayListOf(theWord))
-            isKnownView(position)
         }
 
         private fun editWordClick(position: Int){

@@ -63,7 +63,6 @@ class F_WordsList : MyFragment() {
     private lateinit var makeFavorite : ImageView
     private lateinit var copyToFolder : ImageView
     private lateinit var selectAll : ImageView
-    private lateinit var updateOrderView : ImageView
     private lateinit var favoriteActiveLabel : TextView
     private lateinit var regexActiveLabel : TextView
 
@@ -86,7 +85,6 @@ class F_WordsList : MyFragment() {
         makeFavorite = activity?.findViewById(R.id.makeFavorite)!!
         copyToFolder = activity?.findViewById(R.id.copyToFolder)!!
         selectAll = activity?.findViewById(R.id.selectAll)!!
-        updateOrderView = activity?.findViewById(R.id.updateOrderView)!!
         favoriteActiveLabel = activity?.findViewById(R.id.favoriteActiveLabel)!!
         regexActiveLabel = activity?.findViewById(R.id.regexActiveLabel)!!
         practiceBtn = activity?.findViewById(R.id.practiceBtn)!!
@@ -122,7 +120,6 @@ class F_WordsList : MyFragment() {
         makeFavorite.setOnClickListener { makeItFavorite() }
         copyToFolder.setOnClickListener { copyToFolderClick() }
         selectAll.setOnClickListener { selectAllClick() }
-        updateOrderView.setOnClickListener { updateOrderViewClick() }
 
         addWordList.setOnLongClickListener {
             getFileUri()
@@ -319,11 +316,7 @@ class F_WordsList : MyFragment() {
         wordListAdapter.selectAll()
     }
 
-    private fun updateOrderViewClick(){
-        DataBaseServices.updateWordLevelOrder(wordListAdapter.getSelected())
-        deaSelectMode()
-        notifyList()
-    }
+
     //endregion
 
     //region filter
@@ -334,7 +327,6 @@ class F_WordsList : MyFragment() {
 
                 R.id.filter -> onFilterClick()
 
-                R.id.defaultSort -> onDefaultSortFilterClick()
                 R.id.createdTimeSort -> onCreatedTimeFilterClick()
                 R.id.randomSort-> onRandomFilterClick()
             }
@@ -352,16 +344,15 @@ class F_WordsList : MyFragment() {
 
     private fun filterView(){
         //sort
-        val default = popupMenu.getItemById(R.id.defaultSort)
         val createdTime = popupMenu.getItemById(R.id.createdTimeSort)
 
-        val selectedOrder = arrayListOf("Default DESC", "Default ASC", "Created Time DESC", "Created Time ASC")
-        val defaultValue = arrayListOf("Default", "Created Time")
-        val selectedSort = arrayListOf(default, createdTime)
+        val selectedOrder = arrayListOf("Created Time DESC", "Created Time ASC")
+        val defaultValue = arrayListOf("Created Time")
+        val selectedSort = arrayListOf(createdTime)
         val sortType = MainSetting.sortTypeWordList
 
         //reset items to default value
-        for(i in 0..1){
+        for(i in 0..0){
             val spanString = SpannableString(defaultValue[i])
             val color = gContext.getColor(R.color.black)
             spanString.setSpan(ForegroundColorSpan(color), 0, spanString.length, 0)
@@ -392,17 +383,6 @@ class F_WordsList : MyFragment() {
     }
 
     //---------------------------
-    private fun onDefaultSortFilterClick(){
-        val newSortType = when(MainSetting.sortTypeWordList){
-            SORT_DEFAULT_ASC -> SORT_DEFAULT_DESC
-            SORT_DEFAULT_DESC -> SORT_DEFAULT_ASC
-            else -> SORT_DEFAULT_DESC
-        }
-        MainSetting.setSortTypeWordList(newSortType.toString())
-        filterView()
-        notifyList()
-    }
-
     private fun onCreatedTimeFilterClick(){
         val newSortType = when(MainSetting.sortTypeWordList){
             SORT_CREATED_TIME_ASC -> SORT_CREATED_TIME_DESC
@@ -542,7 +522,6 @@ class F_WordsList : MyFragment() {
         deleteWords.visibility = if(on) View.VISIBLE else View.GONE
         makeFavorite.visibility = if(on) View.VISIBLE else View.GONE
         selectAll.visibility = if(on) View.VISIBLE else View.GONE
-        updateOrderView.visibility = if(on) View.VISIBLE else View.GONE
 
         copyToFolder.visibility = if(on) View.VISIBLE else View.GONE
         Lib.hideKeyboardFrom(gContext, wordListSearch)

@@ -12,7 +12,7 @@ object MainSetting {
     var selectedTextFont = 0
     var selectedTextFontType = 0
     var onRegexSearch = false
-    var sortTypeWordList = SORT_DEFAULT_DESC
+    var sortTypeWordList = SORT_CREATED_TIME_DESC
 
     //not save in the data base
     var isRandomSortIsActive = false
