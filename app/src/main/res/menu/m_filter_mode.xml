@@ -11,35 +11,10 @@
 
         />
 
-    <group
-        android:id="@+id/filter_group">
-        <item android:title="@string/Filter">
-            <menu>
-
-                <item
-                    android:id="@+id/isFavorite"
-                    android:title="Favorite"
-                    android:checkable="true"
-                    />
-
-                <item
-                    android:id="@+id/hasDefinition"
-                    android:title="hasDefinition"
-                    android:checkable="true"
-                    />
-
-                <item
-                    android:id="@+id/hasExample"
-                    android:title="@string/theDefault"
-                    android:checkable="true"
-                    />
-
-            </menu>
-
-
-        </item>
-
-    </group>
+    <item
+        android:id="@+id/filter"
+        android:title="@string/Filter"
+        />
 
     <group
         android:id="@+id/sort_group">

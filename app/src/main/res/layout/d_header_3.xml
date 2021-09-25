@@ -23,11 +23,10 @@
         android:id="@+id/d_add"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginEnd="25dp"
         android:layout_alignParentEnd="true"
+        android:layout_marginEnd="25dp"
         android:src="@drawable/ic_check"
-        app:tint="@color/abs_white"
-        />
+        app:tint="@color/abs_white" />
 
 </RelativeLayout>
 

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.englishbytext.Adapters.A_WordList
 import com.example.englishbytext.Classes.Objects.D_ask
 import com.example.englishbytext.Classes.Objects.D_copy_to_folder
+import com.example.englishbytext.Classes.Objects.D_filter_word_list
 import com.example.englishbytext.Classes.Objects.M_FilterPopUpMenu
 import com.example.englishbytext.Classes.schemas.FilterData
 import com.example.englishbytext.Dialogs.D_editItem
@@ -125,6 +126,10 @@ class F_WordsList : MyFragment() {
 
         addWordList.setOnLongClickListener {
             getFileUri()
+            true
+        }
+        practiceBtn.setOnLongClickListener {
+            practiceBtnLongClick()
             true
         }
     }
@@ -285,6 +290,11 @@ class F_WordsList : MyFragment() {
 
     //region buttons
     private fun practiceBtnClick(){
+        WordsManagement.practiceList = wordListAdapter.filterList
+        navController.navigate(R.id.action_f_WordsList_to_f_CardsPractice)
+    }
+    private fun practiceBtnLongClick(){
+        WordsManagement.practiceList = WordsManagement.wordList
         navController.navigate(R.id.action_f_WordsList_to_f_CardsPractice)
     }
 
@@ -322,9 +332,7 @@ class F_WordsList : MyFragment() {
             when(it.itemId){
                 R.id.isOnRegex -> onRegexFilterClick()
 
-                R.id.isFavorite -> onFavoriteFilterClick()
-                R.id.hasDefinition -> onHasDefinitionClick()
-                R.id.hasExample -> onHasExampleClick()
+                R.id.filter -> onFilterClick()
 
                 R.id.defaultSort -> onDefaultSortFilterClick()
                 R.id.createdTimeSort -> onCreatedTimeFilterClick()
@@ -336,9 +344,7 @@ class F_WordsList : MyFragment() {
     }
 
     private fun initPopUpMenu(){
-        popupMenu.getItemById(R.id.isFavorite).isChecked = filterData.isFavorite
-        popupMenu.getItemById(R.id.hasDefinition).isChecked = filterData.hasDefinition
-        popupMenu.getItemById(R.id.hasExample).isChecked = filterData.hasExample
+
 
         regexActiveLabel.visibility = if(MainSetting.onRegexSearch) View.VISIBLE else View.GONE
         filterView()
@@ -376,28 +382,14 @@ class F_WordsList : MyFragment() {
         notifyList()
     }
 
-    //-------------------------
-    private fun onFavoriteFilterClick(){
-        val item = popupMenu.getItemById(R.id.isFavorite)
-        item.isChecked = !filterData.isFavorite
-        filterData.isFavorite = !filterData.isFavorite
-        notifyList()
+    //---------------------------
+    private fun onFilterClick(){
+        val dialog = D_filter_word_list(gContext, filterData){
+            notifyList()
+            wordListAdapter.displayListCount()
+        }
+        dialog.buildAndDisplay()
     }
-
-    private fun onHasDefinitionClick(){
-        val item = popupMenu.getItemById(R.id.hasDefinition)
-        item.isChecked = !filterData.hasDefinition
-        filterData.hasDefinition = !filterData.hasDefinition
-        notifyList()
-    }
-
-    private fun onHasExampleClick(){
-        val item = popupMenu.getItemById(R.id.hasExample)
-        item.isChecked = !filterData.hasExample
-        filterData.hasExample = !filterData.hasExample
-        notifyList()
-    }
-
 
     //---------------------------
     private fun onDefaultSortFilterClick(){
@@ -441,9 +433,7 @@ class F_WordsList : MyFragment() {
     private fun actionDone() : TextView.OnEditorActionListener{
         return TextView.OnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                val countList = wordListAdapter.itemCount
-                val message = gContext.getString(R.string.elements_found)
-                Lib.showMessage(gContext, "$countList $message")
+                wordListAdapter.displayListCount()
             }
             false
         }

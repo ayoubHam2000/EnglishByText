@@ -12,11 +12,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.englishbytext.Classes.schemas.FilterData
 import com.example.englishbytext.Classes.schemas.Word
 import com.example.englishbytext.Objects.DataBaseServices
+import com.example.englishbytext.Objects.Lib
 import com.example.englishbytext.Objects.WordsManagement
 import com.example.englishbytext.R
+import com.example.englishbytext.Utilites.END
 import com.example.englishbytext.Utilites.OnSelectMode
 import com.example.englishbytext.Utilites.OpenItem
+import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.concurrent.thread
 
 class A_WordList(
@@ -29,9 +33,9 @@ class A_WordList(
     //region init
 
 
+    val filterList = ArrayList<Word>()
     private val layout = R.layout.a_wordlist_item
     private val list = WordsManagement.wordList
-    private val filterList = ArrayList<Word>()
     private var onSelectMode = false
     private val selectedHashMap = HashMap<String, Boolean>()
 
@@ -44,6 +48,10 @@ class A_WordList(
     private var hasExampleMap = HashMap<String, Boolean>()
     private var hasDefinitionMap = HashMap<String, Boolean>()
 
+    //execute task after getHasMedia complete
+    private var isThreadBusy = false
+    private val pendingThread = LinkedList<Thread>()
+
     fun changeList(filterData: FilterData){
         WordsManagement.updateWordList(fgType, passedData)
         //filterSearch()
@@ -52,8 +60,8 @@ class A_WordList(
     }
 
     private fun getHasMedia(filterData: FilterData){
+        isThreadBusy = true
         thread{
-
             hasImagesMap = DataBaseServices.getWordsHasImages()
             hasAudiosMap = DataBaseServices.getWordsHasAudios()
 
@@ -67,13 +75,15 @@ class A_WordList(
             Handler(context.mainLooper).post {
                 filterSearch(filterData)
                 notifyDataSetChanged()
+                isThreadBusy = false
+                if(pendingThread.isNotEmpty()) pendingThread.pop().start()
             }
         }
     }
     //endregion
 
     //region filter
-    fun filterSearch(filterData : FilterData){
+    private fun filterSearch(filterData : FilterData){
         filterList.clear()
         if(filterData.onRegex){
             regexSearch(filterData)
@@ -100,25 +110,32 @@ class A_WordList(
     }
 
     private fun isOnCategory(item : Word, filterData: FilterData) : Boolean{
-        val set1 = arrayListOf(
-            filterData.isFavorite,
-            filterData.hasDefinition,
-            filterData.hasExample
+        if(
+            (filterData.isFavorite == FilterData.Options.ON && !item.isFavorite) ||
+            (filterData.isFavorite == FilterData.Options.OFF && item.isFavorite) ||
 
-        )
-        val set2 = arrayListOf(
-            item.isFavorite,
-            hasDefinitionMap[item.name] == true,
-            hasExampleMap[item.name] == true
-        )
-        val set3 = ArrayList<Boolean>(3)
-        for(i in 0 until set1.count()){
-            if(set1[i]){
-                set3.add(set2[i])
-            }
-        }
-        if (set3.isEmpty()) return true
-        return false !in set3
+            (filterData.hasDefinition == FilterData.Options.ON && hasDefinitionMap[item.name] != true) ||
+            (filterData.hasDefinition == FilterData.Options.OFF && hasDefinitionMap[item.name] == true) ||
+
+            (filterData.hasExample == FilterData.Options.ON && hasExampleMap[item.name] != true) ||
+            (filterData.hasExample == FilterData.Options.OFF && hasExampleMap[item.name] == true) ||
+
+            (filterData.hasImage == FilterData.Options.ON && hasImagesMap[item.name] != true) ||
+            (filterData.hasImage == FilterData.Options.OFF && hasImagesMap[item.name] == true) ||
+
+            (filterData.hasAudio == FilterData.Options.ON && hasAudiosMap[item.name] != true) ||
+            (filterData.hasAudio == FilterData.Options.OFF && hasAudiosMap[item.name] == true) ||
+
+            (filterData.hasTag == FilterData.Options.ON && hasTagMap[item.name] != true) ||
+            (filterData.hasTag == FilterData.Options.OFF && hasTagMap[item.name] == true) ||
+
+            (filterData.hasFolder == FilterData.Options.ON && hasFolderMap[item.name] != true) ||
+            (filterData.hasFolder == FilterData.Options.OFF && hasFolderMap[item.name] == true) ||
+
+            (filterData.hasText == FilterData.Options.ON && hasTextMap[item.name] != true) ||
+            (filterData.hasText == FilterData.Options.OFF && hasTextMap[item.name] == true)
+        ) return false
+        return true
     }
 
     //endregion
@@ -251,6 +268,23 @@ class A_WordList(
             selectedHashMap[n] = true
         }
         notifyDataSetChanged()
+    }
+
+    fun displayListCount(){
+        val a = Thread{
+            Handler(context.mainLooper).post{
+                val countList = filterList.count()
+                val message = context.getString(R.string.elements_found)
+                Lib.showMessage(context, "$countList $message")
+            }
+        }
+        a.name = "Message"
+        println("-->${isThreadBusy}")
+        if(!isThreadBusy){
+            a.start()
+        }else{
+            pendingThread.add(a)
+        }
     }
 
     //endregion

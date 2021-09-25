@@ -51,6 +51,7 @@ const val AddImage = 15
 const val OpenFolderContent = 16
 const val SelectModeClick = 17
 const val NextPage = 18
+const val END = 19
 
 //section
 const val NormalSection = -1

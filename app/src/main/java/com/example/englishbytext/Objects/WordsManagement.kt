@@ -12,6 +12,7 @@ import kotlin.concurrent.thread
 object WordsManagement {
 
     val wordList = ArrayList<Word>()
+    var practiceList = ArrayList<Word>()
     var selectedWordName : String = ""
     val wordsFrequency = HashMap<String, Int>(25285)
 

@@ -31,7 +31,7 @@ TODO : is known
     //====================================
     //++++++++++++++++++++++  vars
     //====================================
-    var list = WordsManagement.wordList
+    var list = WordsManagement.practiceList
     private val layout = R.layout.a_cards_practice_item
     private val theColors = getColorsFromResources()
 
