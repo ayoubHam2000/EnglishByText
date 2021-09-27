@@ -305,7 +305,7 @@ class F_WordsList : MyFragment() {
     }
 
     private fun copyToFolderClick(){
-        val copyToFolderDialog = D_copy_to_folder(gContext){ path->
+        val copyToFolderDialog = D_copy_to_folder(gContext, fgType){ path->
             DataBaseServices.copyWordsToFolder(path, wordListAdapter.getSelected())
             Lib.showMessage(gContext, "Copy Done")
         }
@@ -504,6 +504,7 @@ class F_WordsList : MyFragment() {
         when(event){
             OpenItem -> openItem(word)
             OnSelectMode -> onSelectMode(true)
+            END -> onListSearchEnd()
         }
     }
 
@@ -525,6 +526,11 @@ class F_WordsList : MyFragment() {
 
         copyToFolder.visibility = if(on) View.VISIBLE else View.GONE
         Lib.hideKeyboardFrom(gContext, wordListSearch)
+    }
+
+    private fun onListSearchEnd(){
+        if(saveStatesMap["View1"] != null)
+        wordListRV.layoutManager?.onRestoreInstanceState(saveStatesMap["View1"])
     }
 
     //endregion
@@ -613,7 +619,8 @@ class F_WordsList : MyFragment() {
 
     override fun onResume() {
         super.onResume()
-        wordListRV.layoutManager?.onRestoreInstanceState(saveStatesMap["View1"])
+        //onListSearchEnd() -> View1
+        //wordListRV.layoutManager?.onRestoreInstanceState(saveStatesMap["View1"])
     }
 
     //endregion

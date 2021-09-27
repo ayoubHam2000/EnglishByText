@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <include
-        layout="@layout/d_header_1"
+        layout="@layout/d_header_3"
         />
 
     <TextView

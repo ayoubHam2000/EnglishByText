@@ -77,6 +77,7 @@ class A_WordList(
                 notifyDataSetChanged()
                 isThreadBusy = false
                 if(pendingThread.isNotEmpty()) pendingThread.pop().start()
+                event(END, "")
             }
         }
     }

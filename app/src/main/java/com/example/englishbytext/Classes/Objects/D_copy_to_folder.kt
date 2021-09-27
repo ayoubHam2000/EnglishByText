@@ -10,13 +10,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.englishbytext.Adapters.Dialog.A_copy_to_folder
 import com.example.englishbytext.Dialogs.MyDialogBuilder
+import com.example.englishbytext.Objects.FoldersManagement
 import com.example.englishbytext.Objects.Lib
 import com.example.englishbytext.R
 
-class D_copy_to_folder(context : Context, val event : (String) -> Unit) : MyDialogBuilder(context, R.layout.d_copy_to_folder) {
+class D_copy_to_folder(
+    context : Context,
+    private val fgType : String,
+    private val event : (String) -> Unit
+) : MyDialogBuilder(context, R.layout.d_copy_to_folder) {
 
     lateinit var copyToFolderAdapter : A_copy_to_folder
     lateinit var approve : ImageView
+    lateinit var dismissView : ImageView
     lateinit var pathText : TextView
     lateinit var foldersRv : RecyclerView
 
@@ -24,14 +30,19 @@ class D_copy_to_folder(context : Context, val event : (String) -> Unit) : MyDial
     override fun initView(builderView: View) {
         //view
         approve = builderView.findViewById(R.id.d_add)
+        dismissView = builderView.findViewById(R.id.d_dismiss)
         pathText = builderView.findViewById(R.id.pathText)
         foldersRv = builderView.findViewById(R.id.foldersRv)
 
         //init view
-        pathText.text = "Copy To ./"
+        if(fgType == "Folders")
+            pathText.text = FoldersManagement.getPath()
+        else
+            pathText.text = "Copy To ./"
 
         //btn
         approve.setOnClickListener { copyToFolderClick() }
+        dismissView.setOnClickListener { dismiss() }
 
         //fun
         dialogCustomize()
@@ -59,7 +70,10 @@ class D_copy_to_folder(context : Context, val event : (String) -> Unit) : MyDial
             //when back press or opening folder
             pathText.text = "Copy To " + copyToFolderAdapter.getPath()
         }
-        copyToFolderAdapter.changeList()
+        if(fgType == "Folders")
+            copyToFolderAdapter.setNewPath(FoldersManagement.getPath())
+        else
+            copyToFolderAdapter.changeList()
 
         foldersRv.adapter = copyToFolderAdapter
         foldersRv.layoutManager = layoutManger

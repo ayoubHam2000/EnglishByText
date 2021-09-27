@@ -19,6 +19,7 @@ class A_copy_to_folder(val context : Context, val event : ()->Unit) : RecyclerVi
     private val path = LinkedList<String>()
     private val layout = R.layout.a_copy_to_folder_item
 
+
     fun changeList(){
         list.clear()
         getList()
@@ -68,6 +69,16 @@ class A_copy_to_folder(val context : Context, val event : ()->Unit) : RecyclerVi
             return true
         }
         return false
+    }
+
+    fun setNewPath(newPath : String){
+        val a = newPath.split("/")
+        for(item in a){
+            if(item != "."){
+                path.add(item)
+            }
+        }
+        changeList()
     }
 
     //region override

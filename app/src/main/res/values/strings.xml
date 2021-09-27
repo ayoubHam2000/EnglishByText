@@ -89,6 +89,7 @@
     <string name="created_time">Created Time</string>
     <string name="random">Random</string>
     <string name="undo_action">OK</string>
+    <string name="regex_search">Regex Search</string>
 
     <!--    endregion-->
 
