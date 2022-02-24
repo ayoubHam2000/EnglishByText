@@ -1194,7 +1194,7 @@ object DataBaseServices {
     fun saveData(context: Context, uri: Uri){
         val masterPath = context.getExternalFilesDir("/")!!.absolutePath
         val path = "$masterPath/$FILES_FOLDER"
-        val tables = arrayOf(T_Sets, T_collections, T_texts, T_words, T_words, T_definitions, T_examples, T_images, T_audios,
+        val tables = arrayOf(T_Sets, T_collections, T_texts, T_words, T_definitions, T_examples, T_images, T_audios,
                 T_wordsText, T_relatedWord, T_tags, T_wordTags, T_infoVar, T_folders, T_words_Folder)
 
         File(path).mkdir()
@@ -1233,7 +1233,7 @@ object DataBaseServices {
             val masterPath = context.getExternalFilesDir("/")!!.absolutePath
             val path = "$masterPath/$FILES_FOLDER"
             val stream = FileInputStream(context.contentResolver.openFileDescriptor(uri, "r")!!.fileDescriptor)
-            val tables = arrayOf(T_Sets, T_collections, T_texts, T_definitions, T_examples, T_images, T_audios,
+            val tables = arrayOf(T_Sets, T_collections, T_texts, T_words, T_definitions, T_examples, T_images, T_audios,
             T_wordsText, T_relatedWord, T_tags, T_wordTags, T_infoVar, T_folders, T_words_Folder)
 
 

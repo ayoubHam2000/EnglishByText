@@ -122,7 +122,7 @@ object FileManagement {
 
     private fun findFileExtension(fileUri : Uri) : String{
         val arr = fileUri.path!!.split(".")
-        return arr[arr.count() - 1].toLowerCase(Locale.ROOT)
+        return arr[arr.count() - 1].lowercase()
     }
 
 }
