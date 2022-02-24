@@ -77,8 +77,6 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
         WordsManagement.addWordFrequency(this)
         initSlideBar()
         initDarkMode()
-
-
     }
 
     private fun initView(){

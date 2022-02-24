@@ -74,11 +74,11 @@ object FileManagement {
     }
 
     private fun getListOfWords(text : String) : ArrayList<WordFile>{
-        val data = text.replace("\r\n", "||")
-        print("-->${data}")
+        val breakLine = if (text.indexOf("\n\r") == -1) "\n" else "\n\r"
+        val data = text.replace(breakLine, "||")
         val units = "\\+.*?\\+".toRegex().findAll(data)
         val words = ArrayList<WordFile>()
-
+        println(">>>- ${units.count()}")
         for(unit in units){
             //println("-->${unit.value}")
             val items = unit.value.replace("(^[+]|[+]$)".toRegex(), "") .split("||")
@@ -101,14 +101,17 @@ object FileManagement {
                         }
                         case == 1 -> {
                             val last = word.definitions.count() - 1
-                            word.definitions[last] =  word.definitions[last] + " $item"
+                            if (last >= 0)
+                                word.definitions[last] =  word.definitions[last] + " $item"
                         }
                         case > 1 -> {
-                            val last = word.definitions.count() - 1
-                            word.examples[last] =  word.examples[last] + " $item"
+                            val last = word.examples.count() - 1
+                            if (last >= 0)
+                                word.examples[last] =  word.examples[last] + " $item"
                         }
                     }
                 }
+                //println("--> item $items")
             }
             if(word.word.isNotEmpty()){
                 words.add(word)
