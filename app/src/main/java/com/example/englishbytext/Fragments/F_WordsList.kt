@@ -287,11 +287,11 @@ class F_WordsList : MyFragment() {
 
     //region buttons
     private fun practiceBtnClick(){
-        WordsManagement.practiceList = wordListAdapter.filterList
+        WordsManagement.setPracticeWordList(wordListAdapter.filterList)
         navController.navigate(R.id.action_f_WordsList_to_f_CardsPractice)
     }
     private fun practiceBtnLongClick(){
-        WordsManagement.practiceList = WordsManagement.wordList
+        WordsManagement.setPracticeWordList(WordsManagement.wordList)
         navController.navigate(R.id.action_f_WordsList_to_f_CardsPractice)
     }
 
@@ -323,6 +323,7 @@ class F_WordsList : MyFragment() {
     private fun filterModeSetUp(){
         popupMenu.setOnMenuItemClickListener {
             when(it.itemId){
+                R.id.isSortPractice -> isSortPracticeClick()
                 R.id.isOnRegex -> onRegexFilterClick()
 
                 R.id.filter -> onFilterClick()
@@ -364,6 +365,13 @@ class F_WordsList : MyFragment() {
         selectedSort[sortType/2].title = spanString
     }
 
+    private fun isSortPracticeClick()
+    {
+        val item = popupMenu.getItemById(R.id.isSortPractice)
+        item.isChecked = !item.isChecked
+        MainSetting.setPracticeSort(item.isChecked.toString())
+    }
+    
     private fun onRegexFilterClick(){
         val item = popupMenu.getItemById(R.id.isOnRegex)
         item.isChecked = !item.isChecked

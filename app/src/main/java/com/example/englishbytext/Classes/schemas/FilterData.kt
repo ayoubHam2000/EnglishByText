@@ -9,6 +9,7 @@ class FilterData {
     }
 
     var isFavorite = Options.ALL
+    var isMastered = Options.ALL
     var hasDefinition = Options.ALL
     var hasExample = Options.ALL
     var hasImage = Options.ALL

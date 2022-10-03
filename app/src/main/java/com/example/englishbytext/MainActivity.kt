@@ -156,6 +156,12 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
             dialog.display()
             drawerLayout.closeDrawer(GravityCompat.START)
         }
+
+        searchFrequency.setOnLongClickListener {
+            navigateToFg(R.id.f_frequencies)
+            drawerLayout.closeDrawer(GravityCompat.START)
+            true
+        }
     }
 
     private fun openAllWords(){
@@ -431,6 +437,7 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
             OpenWordEdit -> openWordEditFrag()
             OpenSettings -> openSettingsFrag()
             OpenStatisticFrag -> openStatisticFrag()
+            OpenFrequencyFrag -> openFrequenciesFrag()
             OpenWordList -> openWordList()
             OpenTagFg -> openTagFg()
             OpenAllFoldersFrag -> openFolderFg()
@@ -486,6 +493,10 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
     }
 
     private fun openStatisticFrag(){
+        hideActionBar()
+    }
+
+    private fun openFrequenciesFrag(){
         hideActionBar()
     }
 

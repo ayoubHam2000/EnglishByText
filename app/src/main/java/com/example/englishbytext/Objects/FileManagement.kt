@@ -15,13 +15,23 @@ object FileManagement {
     var fgType = ""
     var passedData = ""
 
+/*
+ the pattern of the defined text
+ word_name
+ -definition_1
+ -definition_2
+ ....
+ --example_1
+ --example_2
+ ....
+*/
 
     fun startWorking(context : Context, fileUri: Uri, complete: () -> Unit){
         Lib.showMessage(context, "Start Working")
         thread {
             val data = getText(context, fileUri)
             val words = getListOfWords(data)
-            DataBaseServices.insertWordsFromPdf(words)
+            DataBaseServices.insertWordsFromDefinedText(words)
             complete()
         }
     }

@@ -6,6 +6,8 @@ import com.example.englishbytext.Classes.schemas.Word
 import com.example.englishbytext.Classes.schemas.WordFrequency
 import com.example.englishbytext.Objects.DataBaseServices.toBase64
 import com.example.englishbytext.Utilites.*
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import kotlin.concurrent.thread
 
 
@@ -22,6 +24,19 @@ object WordsManagement {
         var tableType = -1
     }
 
+    private fun sortPracticeList()
+    {
+        practiceList.sortByDescending { getWordFrequency(it.name) }
+        practiceList.sortBy { it.isKnown }
+    }
+
+    fun setPracticeWordList(listWord: ArrayList<Word>)
+    {
+        practiceList = listWord
+        if (MainSetting.onSortPractice)
+            sortPracticeList()
+    }
+
     fun updateWordList(fgType : String, passedData : String){
         wordList.clear()
 
@@ -36,7 +51,7 @@ object WordsManagement {
     }
 
     private fun getWordQuery(fgType : String, passedData : String) : String{
-        val q1 = "SELECT $A_word, $A_favorite FROM $T_words ?1"
+        val q1 = "SELECT $A_word, $A_favorite, $A_isKnown FROM $T_words ?1"
         val q2 = " WHERE $A_word IN (?1) ?2"
 
         val p = passedData.toBase64()
@@ -68,24 +83,17 @@ object WordsManagement {
         return wordsFrequency[word] ?: 0
     }
 
-    private fun getText(context : Context) : String{
-        val file = context.assets.open("dic.txt")
-        val size = file.available()
-        val buffer = ByteArray(size)
-        file.read(buffer)
-        file.close()
-        return String(buffer)
-    }
-
     fun addWordFrequency(context: Context){
+        println(">>> Start Load Word Frequency")
         if(wordsFrequency.isNotEmpty()) return
         thread {
-            val text = getText(context)
-            val words = text.split("\r\n")
-            for(item in words){
-                val s = item.split(" : ")
-                if(item.isNotEmpty() && s.count() == 2){
-                    wordsFrequency[s[0]] = (s[1]).toInt()
+            val file = context.assets.open("dic.txt")
+            val bufferReader = BufferedReader(InputStreamReader(file))
+            while (bufferReader.ready()){
+                val line = bufferReader.readLine()
+                val item = line.split(" : ")
+                if(item.isNotEmpty() && item.count() == 2){
+                    wordsFrequency[item[0]] = (item[1]).toInt()
                 }
             }
             println(">>> Done Load Word Frequency")

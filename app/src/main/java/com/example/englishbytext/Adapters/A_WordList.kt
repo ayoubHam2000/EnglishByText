@@ -115,6 +115,9 @@ class A_WordList(
             (filterData.isFavorite == FilterData.Options.ON && !item.isFavorite) ||
             (filterData.isFavorite == FilterData.Options.OFF && item.isFavorite) ||
 
+            (filterData.isMastered == FilterData.Options.ON && !item.isKnown) ||
+            (filterData.isMastered == FilterData.Options.OFF && item.isKnown) ||
+
             (filterData.hasDefinition == FilterData.Options.ON && hasDefinitionMap[item.name] != true) ||
             (filterData.hasDefinition == FilterData.Options.OFF && hasDefinitionMap[item.name] == true) ||
 
@@ -160,6 +163,7 @@ class A_WordList(
         private val hasRelated : ImageView = itemView.findViewById(R.id.hasRelated)
         private val hasDefinition : TextView = itemView.findViewById(R.id.hasDefinition)
         private val hasExample : TextView = itemView.findViewById(R.id.hasExample)
+        private val isMastered : ImageView = itemView.findViewById(R.id.isMastered)
 
         fun bindView(position: Int){
             wordNbr.text = (position + 1).toString()
@@ -187,6 +191,7 @@ class A_WordList(
             hasRelated.visibility = if(hasRelatedMap[filterList[position].name] != null) View.VISIBLE else View.GONE
             hasDefinition.visibility = if(hasDefinitionMap[filterList[position].name] != null) View.VISIBLE else View.GONE
             hasExample.visibility = if(hasExampleMap[filterList[position].name] != null) View.VISIBLE else View.GONE
+            isMastered.visibility = if(filterList[position].isKnown) View.VISIBLE else View.GONE
         }
 
         private fun setFavoriteView(position: Int){

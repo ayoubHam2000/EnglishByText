@@ -76,6 +76,8 @@
     <color name="transparent2">#00000000</color>
     <color name="green1">#FF018786</color>
     <color name="abs_white">#FFFFFF</color>
+    <color name="master_word_active">#FFC100</color>
+    <color name="master_word">#FFFFFF</color>
 
     <color name="transparentForWordInfo">#74000000</color>
 

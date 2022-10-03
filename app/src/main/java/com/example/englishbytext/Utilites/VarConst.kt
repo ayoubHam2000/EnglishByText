@@ -10,3 +10,4 @@ const val V_TextStyle = 5
 const val V_TextFont = 6
 const val V_OnRegexSearch = 7
 const val V_SortTypeWordList = 9
+const val V_sortPractice = 10

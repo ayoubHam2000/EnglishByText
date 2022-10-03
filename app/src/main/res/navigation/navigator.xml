@@ -113,4 +113,9 @@
         android:name="com.example.englishbytext.Fragments.F_Statistic"
         android:label="f_statistic"
         tools:layout="@layout/f_statistic" />
+    <fragment
+        android:id="@+id/f_frequencies"
+        android:name="com.example.englishbytext.Fragments.F_frequencies"
+        android:label="f_frequencies"
+        tools:layout="@layout/f_frequencies" />
 </navigation>

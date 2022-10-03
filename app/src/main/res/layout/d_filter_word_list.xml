@@ -91,6 +91,63 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="Mastred"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    />
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="10dp"
+                    >
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:layout_marginHorizontal="3dp"
+                        android:text="ON"
+                        />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:layout_marginHorizontal="3dp"
+                        android:text="OFF"
+                        />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:layout_marginHorizontal="3dp"
+                        android:text="ALL"
+                        />
+
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="10dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="Has Definition"
                     android:layout_weight="1"
                     android:layout_marginStart="5dp"

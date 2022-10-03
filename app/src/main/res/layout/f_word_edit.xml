@@ -58,6 +58,15 @@
                     />
 
                 <ImageView
+                    android:id="@+id/masteredBtn"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/ic_master_word"
+                    android:backgroundTint="@color/black"
+                    android:layout_marginStart="15dp"
+                    />
+
+                <ImageView
                     android:id="@+id/favoriteBtn"
                     android:layout_width="25dp"
                     android:layout_height="25dp"

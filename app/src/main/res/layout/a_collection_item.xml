@@ -65,11 +65,10 @@
 
     <ImageView
         android:id="@+id/collectionTagColor"
+        style="@style/collection_backgroundTint_Tile"
         android:layout_width="5dp"
         android:layout_height="match_parent"
-        android:background="@drawable/my_box_radius_item_tag"
-        style="@style/collection_backgroundTint_Tile"
-        />
+        android:background="@drawable/my_box_radius_item_tag" />
 
     <ImageView
         android:layout_width="match_parent"

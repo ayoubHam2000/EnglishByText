@@ -404,6 +404,9 @@ object DataBaseServices {
         val textFont = getVar(V_TextFont, 0.toString())
         MainSetting.setTextFont(textFont, false)
 
+        val isPracticeSort = getVar(V_sortPractice, true.toString())
+        MainSetting.setPracticeSort(isPracticeSort, false)
+
         val regexSearch = getVar(V_OnRegexSearch, false.toString())
         MainSetting.setRegexSearch(regexSearch, false)
 
@@ -447,10 +450,16 @@ object DataBaseServices {
         dataBase.execSQL("INSERT OR IGNORE INTO $T_words($A_word, $A_favorite, $A_created_time) VALUES('$name', '0', $currentTime)")
     }
 
-    fun insertWordsFromPdf(list : ArrayList<WordFile>){
+    fun insertWordsFromDefinedText(list : ArrayList<WordFile>){
         transaction {
+            //number of examples of an existing word should not excited EXAMPLES_MAX
+            //val wordExpNbrQuery = "select $A_word, COUNT(*) from $T_examples group by $A_word;"
+            //val wordExpNbrMap = getWordsDefExpNbr(wordExpNbrQuery)
+
             for(item in list){
+                //val examplesNbr = wordExpNbrMap[item.word] ?: 0
                 insertWord(item.word)
+
                 for(def in item.definitions){
                     insertDefinition(item.word, def)
                 }
@@ -493,7 +502,8 @@ object DataBaseServices {
             do{
                 val name = cursor.getString(0).fromBase64ToString()
                 val isFavorite = cursor.getInt(1) == 1
-                res.add(Word(name, isFavorite))
+                val isKnown = cursor.getInt(2) == 1
+                res.add(Word(name, isFavorite, isKnown))
             }while (cursor.moveToNext())
         }
         cursor.close()
@@ -553,6 +563,20 @@ object DataBaseServices {
         return res
     }
 
+    private fun getWordsDefExpNbr(q : String) : HashMap<String, Int>{
+        val res = HashMap<String, Int>()
+        val cursor = dataBase.rawQuery(q, null)
+        if(cursor.moveToFirst()){
+            do{
+                val name = cursor.getString(0).fromBase64ToString()
+                val nbr = cursor.getInt(1)
+                res[name] = nbr
+            }while (cursor.moveToNext())
+        }
+        cursor.close()
+        return res
+    }
+
     fun deleteWords(path: String, w: ArrayList<String>){
         val words = w.toBase64()
         val images = getListString("SELECT $A_imageName FROM $T_images WHERE $A_word IN $words")
@@ -573,6 +597,15 @@ object DataBaseServices {
     fun getWordFavorite(n: String) : Boolean{
         val name = n.toBase64()
         val q = "SELECT $A_favorite FROM $T_words WHERE $A_word = '$name'"
+        val cursor = dataBase.rawQuery(q, null)
+        val isFavorite = if(cursor.moveToFirst()) cursor.getInt(0) == 1 else false
+        cursor.close()
+        return isFavorite
+    }
+
+    fun getWordIsKnown(n: String) : Boolean{
+        val name = n.toBase64()
+        val q = "SELECT $A_isKnown FROM $T_words WHERE $A_word = '$name'"
         val cursor = dataBase.rawQuery(q, null)
         val isFavorite = if(cursor.moveToFirst()) cursor.getInt(0) == 1 else false
         cursor.close()
@@ -711,7 +744,8 @@ object DataBaseServices {
         val q = "SELECT $A_word FROM $T_words WHERE $A_word IN $list AND $A_isKnown = 1"
         val alreadyKnown = getListString(q).toBase64()
 
-        println("UPDATE $T_words SET $A_isKnown = 1 WHERE $A_word IN $list")
+        //println("UPDATE $T_words SET $A_isKnown = 1 WHERE $A_word IN $list")
+        //println("UPDATE $T_words SET $A_isKnown = 0 WHERE $A_word IN $alreadyKnown")
         dataBase.execSQL("UPDATE $T_words SET $A_isKnown = 1 WHERE $A_word IN $list")
         dataBase.execSQL("UPDATE $T_words SET $A_isKnown = 0 WHERE $A_word IN $alreadyKnown")
     }

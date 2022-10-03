@@ -27,6 +27,25 @@
         <entry key="..\:/projects/working.on/EnglishByText/app/src/main/res/layout/f_cards_practice.xml" value="0.25025641025641027" />
         <entry key="..\:/projects/working.on/EnglishByText/app/src/main/res/layout/l_progress_layout.xml" value="0.25416666666666665" />
         <entry key="..\:/projects/working.on/EnglishByText/app/src/main/res/menu/m_filter_mode.xml" value="0.24259259259259258" />
+        <entry key="app/src/main/res/drawable/ic_master_word.xml" value="0.6359375" />
+        <entry key="app/src/main/res/drawable/ic_master_word_active.xml" value="0.6359375" />
+        <entry key="app/src/main/res/layout/a_add_item.xml" value="0.6197916666666666" />
+        <entry key="app/src/main/res/layout/a_cards_practice_item.xml" value="0.6197916666666666" />
+        <entry key="app/src/main/res/layout/a_collection_item.xml" value="0.6197916666666666" />
+        <entry key="app/src/main/res/layout/a_related_item.xml" value="0.6197916666666666" />
+        <entry key="app/src/main/res/layout/a_wordlist_item.xml" value="0.41354166666666664" />
+        <entry key="app/src/main/res/layout/d_ask_layout.xml" value="0.6197916666666666" />
+        <entry key="app/src/main/res/layout/d_filter_word_list.xml" value="0.41354166666666664" />
+        <entry key="app/src/main/res/layout/d_header_2.xml" value="0.6197916666666666" />
+        <entry key="app/src/main/res/layout/d_word_frequency.xml" value="0.6197916666666666" />
+        <entry key="app/src/main/res/layout/f_cards_practice.xml" value="0.6197916666666666" />
+        <entry key="app/src/main/res/layout/f_collection.xml" value="0.6197916666666666" />
+        <entry key="app/src/main/res/layout/f_folders.xml" value="0.6197916666666666" />
+        <entry key="app/src/main/res/layout/f_frequencies.xml" value="0.6197916666666666" />
+        <entry key="app/src/main/res/layout/f_statistic.xml" value="0.6197916666666666" />
+        <entry key="app/src/main/res/layout/f_word_def_exp_rv.xml" value="0.6197916666666666" />
+        <entry key="app/src/main/res/layout/f_word_edit.xml" value="0.41354166666666664" />
+        <entry key="app/src/main/res/menu/m_filter_mode.xml" value="0.41354166666666664" />
       </map>
     </option>
   </component>

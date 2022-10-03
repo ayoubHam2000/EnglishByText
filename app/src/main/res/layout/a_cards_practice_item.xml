@@ -70,13 +70,12 @@
             android:textColor="@color/abs_white"
             android:textStyle="bold" />
 
-
         <ImageView
             android:id="@+id/editWord"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:background="@drawable/ic__edit"
             android:backgroundTint="@color/abs_white" />
 
@@ -93,6 +92,16 @@
             android:textSize="19sp"
             android:textStyle="bold"
             tools:text="50" />
+
+        <ImageView
+            android:id="@+id/masterWord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/ic_master_word"
+            android:backgroundTint="@color/master_word_active" />
 
 
     </RelativeLayout>

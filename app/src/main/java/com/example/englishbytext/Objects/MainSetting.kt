@@ -12,6 +12,7 @@ object MainSetting {
     var selectedTextFont = 0
     var selectedTextFontType = 0
     var onRegexSearch = false
+    var onSortPractice = true
     var sortTypeWordList = SORT_CREATED_TIME_DESC
 
     //not save in the data base
@@ -65,12 +66,17 @@ object MainSetting {
         selectedTextFontType = value.toInt()
     }
 
+    fun setPracticeSort(value: String, update: Boolean = true){
+        if(update)
+            DataBaseServices.updateVar(V_sortPractice, value)
+        onSortPractice = value.toBoolean()
+    }
+
     fun setRegexSearch(value: String, update: Boolean = true){
         if(update)
             DataBaseServices.updateVar(V_OnRegexSearch, value)
         onRegexSearch = value.toBoolean()
     }
-
 
     //endregion
 

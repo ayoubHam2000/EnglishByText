@@ -63,6 +63,7 @@ class F_WordEdit : MyFragment() {
     private lateinit var parentLayout : RelativeLayout
     private lateinit var wordNameTextView : TextView
     private lateinit var favoriteBtn : ImageView
+    private lateinit var masteredWordBtn : ImageView
     private lateinit var defRV : RecyclerView
     private lateinit var expRV : RecyclerView
     private lateinit var imgRV : RecyclerView
@@ -112,6 +113,7 @@ class F_WordEdit : MyFragment() {
         sayIt = view.findViewById(R.id.sayIt)
         copyWord = view.findViewById(R.id.copyWord)
         deleteWord = view.findViewById(R.id.deleteWord)
+        masteredWordBtn = view.findViewById(R.id.masteredBtn)
     }
 
     override fun initFun() {
@@ -119,6 +121,7 @@ class F_WordEdit : MyFragment() {
         parentLayout.setBackgroundColor(gContext.getColor(R.color.transparent2))
 
         setFavorite()
+        setMasterIcon()
         initDefinitionRv()
         initExampleRv()
         initImagesRV()
@@ -146,6 +149,7 @@ class F_WordEdit : MyFragment() {
         }
 
         favoriteBtn.setOnClickListener { setWordFavorite() }
+        masteredWordBtn.setOnClickListener { setMasteredWordBtn() }
     }
 
     //endregion
@@ -158,11 +162,24 @@ class F_WordEdit : MyFragment() {
         favoriteBtn.setBackgroundResource(iconId)
     }
 
+    private fun setMasterIcon(){
+        val isKnown = DataBaseServices.getWordIsKnown(wordName)
+        if(isKnown)
+            Lib.changeBackgroundTint(gContext.getColor(R.color.master_word_active), masteredWordBtn)
+        else
+            Lib.changeBackgroundTint(gContext.getColor(R.color.master_word), masteredWordBtn)
+    }
+
     private fun setWordFavorite(){
         val isFavorite = DataBaseServices.getWordFavorite(wordName)
         DataBaseServices.updateWordFavorite(wordName, !isFavorite)
         val iconId = if(!isFavorite) R.drawable.ic_favorite_active else R.drawable.ic_favorite
         favoriteBtn.setBackgroundResource(iconId)
+    }
+
+    private fun setMasteredWordBtn(){
+        DataBaseServices.updateIsWordKnown(arrayListOf(wordName))
+        setMasterIcon()
     }
 
     private fun sayItClick(){

@@ -1,6 +1,7 @@
 package com.example.englishbytext.Utilites
 
 import com.example.englishbytext.A_created_time
+import com.example.englishbytext.A_isKnown
 
 //$s,$e|
 /*
@@ -70,6 +71,7 @@ const val RefreshData = 10
 const val OpenAllFoldersFrag = 11
 const val OpenCardsPractice = 12
 const val OpenStatisticFrag = 13
+const val OpenFrequencyFrag = 14
 
 //arg
 const val ARG_CollectionName = "ARG_CollectionName"
@@ -90,4 +92,6 @@ const val SELECTED_TAG = "SELECTED_TAG"
 const val SORT_CREATED_TIME_ASC = 0
 const val SORT_CREATED_TIME_DESC = 1
 
-val SORT_WORD_LIST_BY = arrayListOf(A_created_time, A_created_time)
+val SORT_WORD_LIST_BY = arrayListOf(A_created_time, A_isKnown)
+
+const val EXAMPLES_MAX = 3
