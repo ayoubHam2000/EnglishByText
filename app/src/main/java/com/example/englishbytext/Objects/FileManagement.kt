@@ -2,6 +2,7 @@ package com.example.englishbytext.Objects
 
 import android.content.Context
 import android.net.Uri
+import com.example.englishbytext.Adapters.A_WordList
 import com.example.englishbytext.Classes.schemas.WordFile
 import com.itextpdf.text.pdf.PdfReader
 import com.itextpdf.text.pdf.parser.PdfTextExtractor
@@ -84,8 +85,7 @@ object FileManagement {
     }
 
     private fun getListOfWords(text : String) : ArrayList<WordFile>{
-        val breakLine = if (text.indexOf("\n\r") == -1) "\n" else "\n\r"
-        val data = text.replace(breakLine, "||")
+        val data = text.replace("\r?\n|\r".toRegex(), "||")
         val units = "\\+.*?\\+".toRegex().findAll(data)
         val words = ArrayList<WordFile>()
         println(">>>- ${units.count()}")

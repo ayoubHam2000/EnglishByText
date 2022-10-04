@@ -453,18 +453,20 @@ object DataBaseServices {
     fun insertWordsFromDefinedText(list : ArrayList<WordFile>){
         transaction {
             //number of examples of an existing word should not excited EXAMPLES_MAX
-            //val wordExpNbrQuery = "select $A_word, COUNT(*) from $T_examples group by $A_word;"
-            //val wordExpNbrMap = getWordsDefExpNbr(wordExpNbrQuery)
+            val wordExpNbrQuery = "select $A_word, COUNT(*) from $T_examples group by $A_word;"
+            val wordExpNbrMap = getWordsDefExpNbr(wordExpNbrQuery)
 
             for(item in list){
-                //val examplesNbr = wordExpNbrMap[item.word] ?: 0
+                val examplesNbr = wordExpNbrMap[item.word] ?: 0
                 insertWord(item.word)
 
                 for(def in item.definitions){
                     insertDefinition(item.word, def)
                 }
-                for(exp in item.examples){
-                    insertExamples(item.word, exp)
+                if (examplesNbr < EXAMPLES_MAX) {
+                    for(exp in item.examples){
+                        insertExamples(item.word, exp)
+                    }
                 }
             }
             when(FileManagement.fgType){

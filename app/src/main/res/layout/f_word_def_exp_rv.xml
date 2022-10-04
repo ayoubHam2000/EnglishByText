@@ -26,9 +26,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/defRV"
-        android:layout_below="@+id/addDef"
         style="@style/EditWord_RV"
-        />
+        android:layout_below="@+id/addDef" />
 
     <TextView
         android:id="@+id/exampleTitle"
@@ -53,8 +52,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/expRV"
-        android:layout_below="@+id/addExample"
         style="@style/EditWord_RV"
-        />
+        android:layout_below="@+id/addExample" />
 
 </RelativeLayout>

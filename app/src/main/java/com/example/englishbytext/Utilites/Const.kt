@@ -94,4 +94,4 @@ const val SORT_CREATED_TIME_DESC = 1
 
 val SORT_WORD_LIST_BY = arrayListOf(A_created_time, A_isKnown)
 
-const val EXAMPLES_MAX = 3
+const val EXAMPLES_MAX = 14

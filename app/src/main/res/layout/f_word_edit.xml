@@ -88,11 +88,10 @@
 
             <include
                 android:id="@+id/information"
+                layout="@layout/f_word_def_exp_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                layout="@layout/f_word_def_exp_rv"
-                android:layout_below="@id/wordName"
-                />
+                android:layout_below="@id/wordName" />
 
 
             <include
