@@ -8,6 +8,7 @@
     <color name="practiceColor">#FF03DAC5</color>
     <color name="wordEdit_item_back">#2E2F32</color>
     <color name="relatedWord">#4CAF50</color>
+    <color name="exampleWord">#4C9BAF</color>
     <color name="spanWords">#00FF48</color>
     <color name="wordListItem">#1F2760</color>
     <!--    392F75BF-->

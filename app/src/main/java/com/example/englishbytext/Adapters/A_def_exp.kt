@@ -46,16 +46,29 @@ class A_def_exp(val context : Context, val wordName : String, val type : Int) :
 
         fun bindView(position : Int){
             val relatedWord = list[position].word
+            val theSpanRelated = ForegroundColorSpan(context.getColor(R.color.relatedWord))
+            val theSpanExample = ForegroundColorSpan(context.getColor(R.color.exampleWord))
 
             if(list[position].word != wordName){
                 item.movementMethod = LinkMovementMethod.getInstance()
+
                 val text = list[position].word + ": " + list[position].value
                 item.setText(text, TextView.BufferType.SPANNABLE)
                 val spans = item.text as Spannable
-                val theSpan = ForegroundColorSpan(context.getColor(R.color.relatedWord))
-                spans.setSpan(theSpan, 0, relatedWord.length + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+
+                spans.setSpan(theSpanRelated, 0, relatedWord.length + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             } else{
-                item.text = list[position].value
+                item.setText(list[position].value, TextView.BufferType.SPANNABLE)
+                val spans = item.text as Spannable
+
+                val theWord = list[position].word
+                var pos = item.text.indexOf(theWord)
+                while (pos != -1)
+                {
+                    spans.setSpan(theSpanExample, pos, pos + theWord.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    pos = item.text.indexOf(theWord, pos + theWord.length)
+                }
             }
 
             item?.setOnClickListener {

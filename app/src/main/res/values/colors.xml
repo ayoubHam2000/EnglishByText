@@ -9,6 +9,7 @@
     <color name="textDisBGColor">#DEE4DB</color>
     <color name="practiceColor">#5C24DD</color>
     <color name="relatedWord">#FFDC00</color>
+    <color name="exampleWord">#FF0000</color>
     <color name="spanWords">#001AFF</color>
 
     <color name="purple_200">#FFBB86FC</color>
