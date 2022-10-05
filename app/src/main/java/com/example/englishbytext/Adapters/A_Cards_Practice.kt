@@ -126,7 +126,6 @@ TODO : is known
 
         private fun masterWordView(position: Int){
             val isKnown = list[position].isKnown
-            println("==+> ${isKnown}")
             if(isKnown){
                 Lib.changeBackgroundTint(context.getColor(R.color.master_word_active), wordMaster)
             }else{
@@ -163,6 +162,8 @@ TODO : is known
             theWord.isKnown = !theWord.isKnown
             DataBaseServices.updateIsWordKnown(arrayListOf(theWord.name))
             masterWordView(position)
+            if (theWord.isKnown)
+                event(NextPage, position + 1)
         }
 
     }

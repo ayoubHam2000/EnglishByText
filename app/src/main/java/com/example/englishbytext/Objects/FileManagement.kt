@@ -123,7 +123,7 @@ object FileManagement {
                 }
                 //println("--> item $items")
             }
-            if(word.word.isNotEmpty()){
+            if(word.word.isNotEmpty() && word.word.length > 1){
                 words.add(word)
             }
         }
