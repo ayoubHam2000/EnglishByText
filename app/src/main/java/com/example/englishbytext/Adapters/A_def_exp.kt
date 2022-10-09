@@ -63,11 +63,11 @@ class A_def_exp(val context : Context, val wordName : String, val type : Int) :
                 val spans = item.text as Spannable
 
                 val theWord = list[position].word
-                var pos = item.text.indexOf(theWord)
+                var pos = item.text.indexOf(theWord, ignoreCase=true)
                 while (pos != -1)
                 {
                     spans.setSpan(theSpanExample, pos, pos + theWord.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    pos = item.text.indexOf(theWord, pos + theWord.length)
+                    pos = item.text.indexOf(theWord, pos + theWord.length, ignoreCase=true)
                 }
             }
 

@@ -55,6 +55,8 @@
     <string name="changes_done_successfully">Changes Done Successfully</string>
     <string name="microphone_permission_granted">Microphone permission granted</string>
     <string name="microphone_permission_denied">Microphone permission denied</string>
+    <string name="practice_list_empty">"List is empty"</string>
+    <string name="word_deleted">"Word deleted"</string>
     <string name="Working">Working …</string>
     <string name="elements_found">Elements Found</string>
     <string name="invalid_regex">Invalid Regex</string>
@@ -87,6 +89,7 @@
     <string name="hasExample">has Example</string>
     <string name="hasDefinition">has Definition</string>
     <string name="created_time">Created Time</string>
+    <string name="master_sort">Mastered Sort</string>
     <string name="random">Random</string>
     <string name="undo_action">OK</string>
     <string name="regex_search">Regex Search</string>

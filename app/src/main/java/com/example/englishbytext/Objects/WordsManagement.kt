@@ -41,12 +41,23 @@ object WordsManagement {
         wordList.clear()
 
         val query = getWordQuery(fgType, passedData)
-        println(">>> $query ,Random = ${MainSetting.isRandomSortIsActive}")
+        println(">>> $query ,Random = ${MainSetting.isRandomSortIsActive}, SortType = ${MainSetting.sortTypeWordList}")
 
         when {
             MainSetting.isRandomSortIsActive -> wordList.addAll(DataBaseServices.getWords(query).shuffled())
-            MainSetting.sortTypeWordList % 2 == 1 -> wordList.addAll(DataBaseServices.getWords(query).reversed())
-            else -> wordList.addAll(DataBaseServices.getWords(query))
+            else ->
+            {
+                wordList.addAll(DataBaseServices.getWords(query))
+                if (MainSetting.sortTypeWordList / 2 == SORT_MASTERED_ASC / 2) {
+                    wordList.sortByDescending { getWordFrequency(it.name) }
+                    if (MainSetting.sortTypeWordList % 2 == 1)
+                        wordList.sortBy { it.isKnown }
+                    else
+                        wordList.sortBy { !it.isKnown }
+                }
+                else if (MainSetting.sortTypeWordList / 2 == SORT_CREATED_TIME_ASC / 2 && MainSetting.sortTypeWordList % 2 == 1)
+                    wordList.reverse()
+            }
         }
     }
 
@@ -71,7 +82,7 @@ object WordsManagement {
     }
 
     private fun getSortType() : String{
-        val sortType = MainSetting.sortTypeWordList
+        val sortType = MainSetting.sortTypeWordList / 2
         //no DESC
         return "Order By " + SORT_WORD_LIST_BY[sortType]
     }

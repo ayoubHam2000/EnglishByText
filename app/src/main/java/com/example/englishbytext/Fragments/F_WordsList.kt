@@ -288,7 +288,10 @@ class F_WordsList : MyFragment() {
     //region buttons
     private fun practiceBtnClick(){
         WordsManagement.setPracticeWordList(wordListAdapter.filterList)
-        navController.navigate(R.id.action_f_WordsList_to_f_CardsPractice)
+        if (wordListAdapter.filterList.size == 0)
+            Lib.showMessage(gContext, R.string.practice_list_empty)
+        else
+            navController.navigate(R.id.action_f_WordsList_to_f_CardsPractice)
     }
     private fun practiceBtnLongClick(){
         WordsManagement.setPracticeWordList(WordsManagement.wordList)
@@ -328,7 +331,8 @@ class F_WordsList : MyFragment() {
 
                 R.id.filter -> onFilterClick()
 
-                R.id.createdTimeSort -> onCreatedTimeFilterClick()
+                R.id.createdTimeSort -> onCreatedTimeFilterClick(SORT_CREATED_TIME_ASC)
+                R.id.masteredSort -> onCreatedTimeFilterClick(SORT_MASTERED_ASC)
                 R.id.randomSort-> onRandomFilterClick()
             }
             true
@@ -346,23 +350,24 @@ class F_WordsList : MyFragment() {
     private fun filterView(){
         //sort
         val createdTime = popupMenu.getItemById(R.id.createdTimeSort)
+        val masterSort = popupMenu.getItemById(R.id.masteredSort)
 
-        val selectedOrder = arrayListOf("Created Time DESC", "Created Time ASC")
-        val defaultValue = arrayListOf("Created Time")
-        val selectedSort = arrayListOf(createdTime)
+        val selectedOrder = arrayListOf("Created Time DESC", "Created Time ASC", "Mastered DESC", "Mastered ASC")
+        val defaultValue = arrayListOf(gContext.getString(R.string.created_time), gContext.getString(R.string.master_sort))
+        val sortItemView = arrayListOf(createdTime, masterSort)
         val sortType = MainSetting.sortTypeWordList
 
         //reset items to default value
-        for(i in 0..0){
+        for(i in 0..1){
             val spanString = SpannableString(defaultValue[i])
             val color = gContext.getColor(R.color.black)
             spanString.setSpan(ForegroundColorSpan(color), 0, spanString.length, 0)
-            selectedSort[i].title = spanString
+            sortItemView[i].title = spanString
         }
         //change the selected one
         val spanString = SpannableString(selectedOrder[sortType])
         spanString.setSpan(ForegroundColorSpan(Color.GREEN), 0, spanString.length, 0)
-        selectedSort[sortType/2].title = spanString
+        sortItemView[sortType/2].title = spanString
     }
 
     private fun isSortPracticeClick()
@@ -391,12 +396,11 @@ class F_WordsList : MyFragment() {
     }
 
     //---------------------------
-    private fun onCreatedTimeFilterClick(){
-        val newSortType = when(MainSetting.sortTypeWordList){
-            SORT_CREATED_TIME_ASC -> SORT_CREATED_TIME_DESC
-            SORT_CREATED_TIME_DESC -> SORT_CREATED_TIME_ASC
-            else -> SORT_CREATED_TIME_DESC
-        }
+    private fun onCreatedTimeFilterClick(clickedItem : Int){
+        val newSortType = if (clickedItem == MainSetting.sortTypeWordList)
+            (MainSetting.sortTypeWordList + 1) % 2 + clickedItem
+        else
+            clickedItem
         MainSetting.setSortTypeWordList(newSortType.toString())
         filterView()
         notifyList()

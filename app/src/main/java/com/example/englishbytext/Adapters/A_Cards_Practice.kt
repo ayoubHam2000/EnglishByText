@@ -23,9 +23,6 @@ import com.example.englishbytext.Utilites.NextPage
 
 class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : PagerAdapter(){
 
-/*
-TODO : is known
- */
     //region init
 
     //====================================

@@ -609,9 +609,9 @@ object DataBaseServices {
         val name = n.toBase64()
         val q = "SELECT $A_isKnown FROM $T_words WHERE $A_word = '$name'"
         val cursor = dataBase.rawQuery(q, null)
-        val isFavorite = if(cursor.moveToFirst()) cursor.getInt(0) == 1 else false
+        val isKnown = if(cursor.moveToFirst()) cursor.getInt(0) == 1 else false
         cursor.close()
-        return isFavorite
+        return isKnown
     }
 
     fun getWordExamples(n: String) : ArrayList<WordInfoId>{

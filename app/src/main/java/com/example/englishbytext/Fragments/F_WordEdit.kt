@@ -203,6 +203,7 @@ class F_WordEdit : MyFragment() {
         val mainPath = gContext.getExternalFilesDir("/")!!.absolutePath
         DataBaseServices.deleteWords(mainPath, arrayListOf(wordName))
         navController.popBackStack()
+        Lib.showMessage(gContext, R.string.word_deleted)
         for(item in WordsManagement.wordList){
             if(item.name == wordName){
                 WordsManagement.wordList.remove(item)

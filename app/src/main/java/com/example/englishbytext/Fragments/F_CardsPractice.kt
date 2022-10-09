@@ -1,17 +1,15 @@
 package com.example.englishbytext.Fragments
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.View
-import android.view.ViewGroup
 import androidx.viewpager.widget.ViewPager
 import com.example.englishbytext.Adapters.A_Cards_Practice
+import com.example.englishbytext.Objects.DataBaseServices
 import com.example.englishbytext.Objects.Lib
 import com.example.englishbytext.R
 import com.example.englishbytext.Utilites.Edit
 import com.example.englishbytext.Utilites.NextPage
 import com.example.englishbytext.Utilites.OpenCardsPractice
-import kotlin.reflect.KClass
 
 class F_CardsPractice : MyFragment() {
 
@@ -20,6 +18,7 @@ class F_CardsPractice : MyFragment() {
     //++++++++++++++++++++++  vars
     //====================================
     lateinit var cardsAdapter : A_Cards_Practice
+    var wordNameEditIndex = -1
 
     //====================================
     //++++++++++++++++++++++  Views
@@ -74,6 +73,7 @@ class F_CardsPractice : MyFragment() {
 
     private fun openEditWord(position : Int){
         val bundle = Bundle()
+        wordNameEditIndex = position
         bundle.putString("WORD_NAME", cardsAdapter.list[position].name)
         navController.navigate(R.id.action_f_CardsPractice_to_f_WordEdit, bundle)
     }
@@ -84,11 +84,35 @@ class F_CardsPractice : MyFragment() {
 
     override fun onPause() {
         super.onPause()
+        println(">>> onPause")
         saveStatesMap["Pager"] = practiceViewPage.onSaveInstanceState()
     }
 
     override fun onResume() {
         super.onResume()
+        if (wordNameEditIndex >= 0)
+        {
+            val wordName = cardsAdapter.list[wordNameEditIndex].name
+            val isWordNotExist = DataBaseServices.isWordNotExist(wordName)
+            if (isWordNotExist)
+            {
+                cardsAdapter.list.removeAt(wordNameEditIndex)
+                cardsAdapter.notifyDataSetChanged()
+                if (cardsAdapter.list.size == 0)
+                {
+                    //return to word list when all words all deleted
+                    activity?.onBackPressed()
+                }
+            }
+            else
+            {
+                val isFavorite = DataBaseServices.getWordFavorite(wordName)
+                val isKnown = DataBaseServices.getWordIsKnown(wordName)
+                cardsAdapter.list[wordNameEditIndex].isFavorite = isFavorite
+                cardsAdapter.list[wordNameEditIndex].isKnown = isKnown
+            }
+            //println(">>> onResume $wordName")
+        }
         practiceViewPage.onRestoreInstanceState(saveStatesMap["Pager"])
     }
 

@@ -91,6 +91,8 @@ const val SELECTED_TAG = "SELECTED_TAG"
 //always type1 ASC, type1 DESC, type2 ASC, type2 DESC ...
 const val SORT_CREATED_TIME_ASC = 0
 const val SORT_CREATED_TIME_DESC = 1
+const val   SORT_MASTERED_ASC = 2
+const val SORT_MASTERED_DESC = 3
 
 val SORT_WORD_LIST_BY = arrayListOf(A_created_time, A_isKnown)
 
