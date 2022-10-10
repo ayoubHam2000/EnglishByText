@@ -14,6 +14,7 @@ object MainSetting {
     var onRegexSearch = false
     var onSortPractice = true
     var sortTypeWordList = SORT_CREATED_TIME_DESC
+    var selectedExamplesCollection = DEFAULT_EXAMPLE_COLLECTION //0 is All 1 is Default n is col
 
     //not save in the data base
     var isRandomSortIsActive = false

@@ -23,6 +23,7 @@ class A_def_exp(val context : Context, val wordName : String, val type : Int) :
 
     private val layout = R.layout.a_wordedit_info_item
     val list = ArrayList<WordInfoId>()
+    var selectedCollection = 0
 
     fun changeList(){
         list.clear()
@@ -33,7 +34,7 @@ class A_def_exp(val context : Context, val wordName : String, val type : Int) :
                 list.addAll(l)
             }
             OpenExample->{
-                val l = DataBaseServices.getWordExamples(wordName)
+                val l = DataBaseServices.getWordExamples(wordName, selectedCollection)
                 l.sortBy{it.value}
                 list.addAll(l)
             }

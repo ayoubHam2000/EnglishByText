@@ -37,6 +37,7 @@ const val T_collections = "collections"
 const val T_texts = "texts"
 const val T_words = "words"
 const val T_definitions = "definitions"
+const val T_examples_collection = "examples_collection"
 const val T_examples = "examples"
 const val T_details = "details"
 const val T_images = "images"
@@ -80,6 +81,8 @@ const val A_Name = "FolderName"
 const val A_Type = "Type"
 const val A_created_time = "created_time"
 const val A_isKnown = "known"
+const val A_example_col = "example_collection_name"
+const val A_example_col_id = "example_collection_id"
 //endregion
 
 //region defTables
@@ -111,6 +114,12 @@ const val DT_wordText = "$T_wordsText ($A_textID INT, $A_word VARCHAR, $A_posSta
 //insert into temp_tab select word, favorite,created_time, known from words
 //alter table temp_tab rename to words;
 
+/*
+create table example_tmp (word VARCHAR NOT NULL, example VARCHAR NOT NULL, example_collection_id INT NOT NULL, PRIMARY KEY(word, example, example_collection_id),
+ FOREIGN KEY(word) REFERENCES words (word) ON DELETE CASCADE ON UPDATE CASCADE,
+ FOREIGN KEY(example_collection_id) REFERENCES examples_collection (example_collection_id) ON DELETE CASCADE);
+*/
+
 const val DT_words = "$T_words ($A_word varchar not null,  $A_favorite BIT DEFAULT 0," +
         " $A_created_time BIGINT default 0, $A_isKnown bit default 0," +
         " PRIMARY KEY($A_word));"
@@ -120,10 +129,17 @@ const val DT_definitions = "$T_definitions ($A_word VARCHAR NOT NULL, $A_definit
         " PRIMARY KEY($A_word, $A_definition)," +
         " FOREIGN KEY($A_word) REFERENCES $T_words ($A_word) ON DELETE CASCADE ON UPDATE CASCADE);"
 
-//examples(#word, example)
+//create table tmp_tab (example_collection_id INTEGER PRIMARY KEY AUTOINCREMENT, example_collection_name VARCHAR NOT NULL, UNIQUE(example_collection_name))
+//examples_collection(#example_collection_id, example_collection_name)
+const val DT_examples_collection = "$T_examples_collection ($A_example_col_id INTEGER PRIMARY KEY AUTOINCREMENT, $A_example_col VARCHAR NOT NULL," +
+        "UNIQUE($A_example_col));"
+
+//examples(#word, example, example_collection_id)
 const val DT_examples = "$T_examples ($A_word VARCHAR NOT NULL, $A_example VARCHAR NOT NULL," +
-        " PRIMARY KEY($A_word, $A_example)," +
-        " FOREIGN KEY($A_word) REFERENCES $T_words ($A_word) ON DELETE CASCADE ON UPDATE CASCADE);"
+        " $A_example_col_id INT NOT NULL," +
+        " PRIMARY KEY($A_word, $A_example, $A_example_col_id)," +
+        " FOREIGN KEY($A_word) REFERENCES $T_words ($A_word) ON DELETE CASCADE ON UPDATE CASCADE, " +
+        " FOREIGN KEY($A_example_col_id) REFERENCES $T_examples_collection ($A_example_col_id) ON DELETE CASCADE);"
 
 //images(*name, #word)
 //on delete word delete images files

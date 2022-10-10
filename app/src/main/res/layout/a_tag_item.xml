@@ -25,16 +25,15 @@
         android:id="@+id/item_name"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:autoSizeMaxTextSize="20sp"
+        android:autoSizeTextType="uniform"
         android:fontFamily="sans-serif-condensed"
-        android:text="Harry Potter"
         android:gravity="center"
-        android:textColor="@color/black"
-        android:textSize="20sp"
         android:paddingHorizontal="15dp"
         android:paddingVertical="5dp"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMaxTextSize="20sp"
-        />
+        android:text="Harry Potter"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/countWords"

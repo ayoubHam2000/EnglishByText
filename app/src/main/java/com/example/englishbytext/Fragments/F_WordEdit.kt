@@ -13,9 +13,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
 import android.view.View
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,9 +23,11 @@ import com.example.englishbytext.Classes.Objects.D_Ask_Bottom
 import com.example.englishbytext.Classes.Objects.D_ask
 import com.example.englishbytext.Classes.Objects.D_lastImages
 import com.example.englishbytext.Classes.Objects.D_recordDialog
+import com.example.englishbytext.Classes.schemas.StringId
 import com.example.englishbytext.Dialogs.D_editItem
 import com.example.englishbytext.Objects.DataBaseServices
 import com.example.englishbytext.Objects.Lib
+import com.example.englishbytext.Objects.MainSetting
 import com.example.englishbytext.Objects.WordsManagement
 import com.example.englishbytext.R
 import com.example.englishbytext.Utilites.*
@@ -58,6 +59,7 @@ class F_WordEdit : MyFragment() {
     private lateinit var audiosAdapter : A_audioMedia
     private lateinit var relatedAdapter : A_RelatedWordItem
     private lateinit var tagsAdapter : A_TagsWordsItem
+    private var popPupList: ListPopupWindow? = null
     private var audioRecorder : D_recordDialog? = null
 
     private lateinit var parentLayout : RelativeLayout
@@ -72,6 +74,7 @@ class F_WordEdit : MyFragment() {
     private lateinit var tagRV : RecyclerView
     private lateinit var addDef : ImageView
     private lateinit var addExp : ImageView
+    private lateinit var examplesCollection : TextView
     private lateinit var addImg : ImageView
     private lateinit var addImageFromGallery : ImageView
     private lateinit var addAud : ImageView
@@ -105,6 +108,7 @@ class F_WordEdit : MyFragment() {
 
         addDef = view.findViewById(R.id.addDef)
         addExp = view.findViewById(R.id.addExample)
+        examplesCollection = view.findViewById(R.id.exampleCollectionSelect)
         addImg = view.findViewById(R.id.addImage)
         addImageFromGallery = view.findViewById(R.id.addImageFromGallery)
         addAud = view.findViewById(R.id.addAudio)
@@ -128,6 +132,7 @@ class F_WordEdit : MyFragment() {
         initAudioRV()
         initRelatedRv()
         initTagsRv()
+        initExampleCollection()
         addDef.setOnClickListener { addDef() }
         addExp.setOnClickListener { addExp() }
         addImg.setOnClickListener { addImage() }
@@ -258,8 +263,30 @@ class F_WordEdit : MyFragment() {
 
     //region example RV
 
+    private fun initExampleCollection(){
+        val list = DataBaseServices.getExpCollection()
+        list.add(0, StringId(0, "All"))
+        val index = list.indexOf(list.find { it.id == MainSetting.selectedExamplesCollection })
+        examplesCollection.text = list[index].value
+
+        popPupList = ListPopupWindow(gContext)
+        val adapter = ArrayAdapter(gContext, R.layout.support_simple_spinner_dropdown_item, list)
+        popPupList?.anchorView = examplesCollection
+        popPupList?.setAdapter(adapter)
+        popPupList?.setOnItemClickListener { _, _, i, _ ->
+            exampleAdapter.selectedCollection = list[i].id
+            examplesCollection.text = list[i].value
+            exampleAdapter.changeList()
+            popPupList?.dismiss()
+        }
+        examplesCollection.setOnClickListener {
+            popPupList?.show()
+        }
+    }
+
     private fun initExampleRv(){
         exampleAdapter = A_def_exp(gContext, wordName, OpenExample)
+        exampleAdapter.selectedCollection = MainSetting.selectedExamplesCollection
 
         val layout = LinearLayoutManager(context)
         exampleAdapter.changeList()
@@ -271,7 +298,7 @@ class F_WordEdit : MyFragment() {
     }
 
     private fun insertExp(new: String){
-        DataBaseServices.insertExamples(wordName, new)
+        DataBaseServices.insertExamples(wordName, new, exampleAdapter.selectedCollection)
         exampleAdapter.changeList()
     }
 
@@ -710,6 +737,7 @@ class F_WordEdit : MyFragment() {
         if (deaSelectAudioMode()) return true
         if (deaSelectRelated()) return true
         if (deaSelectTag()) return true
+        if (popPupList != null && popPupList!!.isShowing) return true
         deaAudioMedia()
         return false
     }

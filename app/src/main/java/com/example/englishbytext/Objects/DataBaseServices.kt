@@ -40,6 +40,7 @@ object DataBaseServices {
         dataBase.execSQL("CREATE TABLE IF NOT EXISTS $DT_collections")
         dataBase.execSQL("CREATE TABLE IF NOT EXISTS $DT_texts")
         dataBase.execSQL("CREATE TABLE IF NOT EXISTS $DT_words")
+        dataBase.execSQL("CREATE TABLE IF NOT EXISTS $DT_examples_collection")
         dataBase.execSQL("CREATE TABLE IF NOT EXISTS $DT_definitions")
         dataBase.execSQL("CREATE TABLE IF NOT EXISTS $DT_examples")
         dataBase.execSQL("CREATE TABLE IF NOT EXISTS $DT_images")
@@ -58,8 +59,10 @@ object DataBaseServices {
 
     private fun initInsert(){
         val q1 = "INSERT OR IGNORE INTO $T_Sets($A_setName) VALUES('${AllSet.toBase64()}');"
+        val q2 = "INSERT OR IGNORE INTO $T_examples_collection VALUES('1', '${Default.toBase64()}')"
 
         dataBase.execSQL(q1)
+        dataBase.execSQL(q2)
     }
 
     //endregion
@@ -453,7 +456,8 @@ object DataBaseServices {
     fun insertWordsFromDefinedText(list : ArrayList<WordFile>){
         transaction {
             //number of examples of an existing word should not excited EXAMPLES_MAX
-            val wordExpNbrQuery = "select $A_word, COUNT(*) from $T_examples group by $A_word;"
+            val collectionExp = if (MainSetting.selectedExamplesCollection > 0) MainSetting.selectedExamplesCollection else DEFAULT_EXAMPLE_COLLECTION
+            val wordExpNbrQuery = "select $A_word, COUNT(*) from $T_examples where $A_example_col_id = '$collectionExp' group by $A_word;"
             val wordExpNbrMap = getWordsDefExpNbr(wordExpNbrQuery)
 
             for(item in list){
@@ -465,7 +469,7 @@ object DataBaseServices {
                 }
                 if (examplesNbr < EXAMPLES_MAX) {
                     for(exp in item.examples){
-                        insertExamples(item.word, exp)
+                        insertExamples(item.word, exp, collectionExp)
                     }
                 }
             }
@@ -614,14 +618,16 @@ object DataBaseServices {
         return isKnown
     }
 
-    fun getWordExamples(n: String) : ArrayList<WordInfoId>{
+    fun getWordExamples(n: String, collectionId : Int) : ArrayList<WordInfoId>{
         val name = n.toBase64()
 
         val q1 = "Select $A_related FROM $T_relatedWord WHERE $A_word = '$name'"
         val q2 = "Select $A_word FROM $T_relatedWord WHERE $A_related = '$name' UNION SELECT '$name'"
         //val q1 = "SELECT $A_related FROM $T_relatedWord WHERE $A_word = '$name' UNION SELECT '$name'"
-        val q = "SELECT rowId, $A_example, $A_word FROM $T_examples WHERE $A_word IN ($q1 UNION $q2)"
-
+        var q = "SELECT rowId, $A_example, $A_word FROM $T_examples WHERE $A_word IN ($q1 UNION $q2)"
+        if (collectionId > 0)
+            q += " and $A_example_col_id = '$collectionId';"
+        println(">>> $q")
         return getListWordInfoId(q)
     }
 
@@ -682,10 +688,10 @@ object DataBaseServices {
 
     //region insertMedia
 
-    fun insertExamples(w: String, e: String){
+    fun insertExamples(w: String, e: String, selectedCollection: Int){
         val word = w.toBase64()
         val example = e.toBase64()
-        dataBase.execSQL("INSERT OR IGNORE INTO $T_examples ($A_word, $A_example) VALUES ('$word', '$example')")
+        dataBase.execSQL("INSERT OR IGNORE INTO $T_examples ($A_word, $A_example, $A_example_col_id) VALUES ('$word', '$example', '$selectedCollection')")
     }
 
     fun insertDefinition(w: String, d: String){
@@ -807,6 +813,11 @@ object DataBaseServices {
         return getListStringId(q)
     }
 
+    fun getExpCollection() : ArrayList<StringId>{
+        val q = "SELECT $A_example_col_id, $A_example_col FROM $T_examples_collection"
+        return getListStringId(q)
+    }
+
     fun getTagSuggestionList(w: String) : ArrayList<String>{
         val word = w.toBase64()
         val q = "SELECT $A_tag FROM $T_tags WHERE $A_tag NOT IN (SELECT $A_tag FROM $T_wordTags WHERE $A_word = '$word')"
@@ -824,6 +835,17 @@ object DataBaseServices {
         return tags
     }
 
+    fun getExpCollectionCount() : HashMap<Int, Int>{
+        val res = HashMap<Int, Int>()
+        val q = "SELECT $A_example_col_id, count(*) FROM $T_examples GROUP BY $A_example_col_id;"
+        iterationCursor(q){
+            val tag = it.getInt(0)
+            val count = it.getInt(1)
+            res[tag] = count
+        }
+        return res
+    }
+
     fun getWordTags(w: String) : ArrayList<WordInfoId>{
         val word = w.toBase64()
 
@@ -836,6 +858,12 @@ object DataBaseServices {
     fun insertTag(t: String){
         val tag = t.toBase64()
         val q = "INSERT OR IGNORE INTO $T_tags VALUES('$tag')"
+        dataBase.execSQL(q)
+    }
+
+    fun insertExampleCollection(t: String){
+        val name = t.toBase64()
+        val q = "INSERT OR IGNORE INTO $T_examples_collection($A_example_col) VALUES('$name')"
         dataBase.execSQL(q)
     }
 
@@ -853,6 +881,12 @@ object DataBaseServices {
         return tableCountByQuery(q) == 0
     }
 
+    fun isExampleCollectionExist(t: String) : Boolean{
+        val tag = t.toBase64()
+        val q = "SELECT * FROM $T_examples_collection WHERE $A_example_col = '$tag';"
+        return tableCountByQuery(q) == 0
+    }
+
     fun isWordTagNotExist(w: String, t: String) : Boolean{
         val word = w.toBase64()
         val tag = t.toBase64()
@@ -866,9 +900,27 @@ object DataBaseServices {
         dataBase.execSQL(q)
     }
 
+    fun updateExampleCollection(id: Int, t: String){
+        val name = t.toBase64()
+        val q = "UPDATE $T_examples_collection SET $A_example_col = '$name' WHERE $A_example_col_id = $id"
+        dataBase.execSQL(q)
+    }
+
     fun deleteTags(list: ArrayList<Int>){
         val l = list.intToListSql()
         dataBase.execSQL("DELETE FROM $T_tags WHERE rowId IN $l")
+    }
+
+    fun deleteExamplesCollection(list: ArrayList<Int>){
+        //DEFAULT_EXAMPLE_COLLECTION should not be deleted from T_examples_collection table
+        transaction {
+            if (DEFAULT_EXAMPLE_COLLECTION in list){
+                list.remove(DEFAULT_EXAMPLE_COLLECTION)
+                dataBase.execSQL("DELETE FROM $T_examples WHERE $A_example_col_id = '$DEFAULT_EXAMPLE_COLLECTION'")
+            }
+            val l = list.intToListSql()
+            dataBase.execSQL("DELETE FROM $T_examples_collection WHERE $A_example_col_id IN $l")
+        }
     }
 
     fun deleteWordTags(list: ArrayList<Int>){
@@ -1354,7 +1406,9 @@ object DataBaseServices {
                 if(data.size == colNumber){
                     val res = StringBuilder()
                     for(item in data)
+                    {
                         res.append("'$item',")
+                    }
                     val value = res.toString().replace(",$".toRegex(), "")
                     println(">>> ${"INSERT INTO $table VALUES($value)"}")
                     dataBase.execSQL("INSERT INTO $table VALUES($value)")

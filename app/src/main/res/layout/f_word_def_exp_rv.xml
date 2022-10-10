@@ -32,9 +32,23 @@
     <TextView
         android:id="@+id/exampleTitle"
         style="@style/EditWord_input_title"
+        android:layout_below="@+id/defRV"
         android:text="@string/examples"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:layout_width="200dp"
+        android:id="@+id/exampleCollectionSelect"
+        style="@style/EditWord_input_title"
+        android:layout_toEndOf="@+id/exampleTitle"
+        android:layout_marginStart="20dp"
         android:layout_below="@+id/defRV"
         android:textColor="@color/black"
+        android:textSize="13dp"
+        android:focusable="false"
+        android:clickable="false"
+        android:inputType="none"
+        android:hint="@string/example_collection_empty"
         />
 
     <ImageView

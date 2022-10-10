@@ -118,4 +118,9 @@
         android:name="com.example.englishbytext.Fragments.F_frequencies"
         android:label="f_frequencies"
         tools:layout="@layout/f_frequencies" />
+    <fragment
+        android:id="@+id/f_ExampleCollection"
+        android:name="com.example.englishbytext.Fragments.F_ExampleCollection"
+        android:label="f_example_collection"
+        tools:layout="@layout/f_example_collection" />
 </navigation>

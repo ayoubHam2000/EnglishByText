@@ -15,6 +15,7 @@ Text
 const val AllSet = "AllSets"
 const val PassedData = "PassedData"
 const val FgType = "FgType"
+const val Default = "Default"
 
 //settings
 const val MaxSetName = 30
@@ -72,6 +73,7 @@ const val OpenAllFoldersFrag = 11
 const val OpenCardsPractice = 12
 const val OpenStatisticFrag = 13
 const val OpenFrequencyFrag = 14
+const val OpenExamplesCollection = 15
 
 //arg
 const val ARG_CollectionName = "ARG_CollectionName"
@@ -97,3 +99,4 @@ const val SORT_MASTERED_DESC = 3
 val SORT_WORD_LIST_BY = arrayListOf(A_created_time, A_isKnown)
 
 const val EXAMPLES_MAX = 14
+const val DEFAULT_EXAMPLE_COLLECTION = 1

@@ -124,7 +124,7 @@ class D_WordInfo(context : Context, val wordName : String) : MyDialogBuilder(con
     private fun addExp(){
         var exampleDialog : D_editItem? = null
         exampleDialog = D_editItem(context){
-            DataBaseServices.insertExamples(wordName, it)
+            DataBaseServices.insertExamples(wordName, it, exampleAdapter.selectedCollection)
             exampleDialog!!.dismiss()
             exampleAdapter.changeList()
         }

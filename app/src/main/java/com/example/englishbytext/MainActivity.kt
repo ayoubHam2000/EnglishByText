@@ -110,6 +110,7 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
         openAllWords()
         openTagsWords()
         openFolders()
+        openExampleCollection()
     }
 
     //region open items
@@ -187,6 +188,15 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
 
         allFolders.setOnClickListener {
             navigateToFg(R.id.f_Folders)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+    }
+
+    private fun openExampleCollection(){
+        val examplesCollection = findViewById<LinearLayout>(R.id.examplesCollection)
+
+        examplesCollection.setOnClickListener {
+            navigateToFg(R.id.f_ExampleCollection)
             drawerLayout.closeDrawer(GravityCompat.START)
         }
     }
@@ -440,6 +450,7 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
             OpenFrequencyFrag -> openFrequenciesFrag()
             OpenWordList -> openWordList()
             OpenTagFg -> openTagFg()
+            OpenExamplesCollection -> openExampleCollectionFg()
             OpenAllFoldersFrag -> openFolderFg()
             OpenCardsPractice -> openCardsPractice()
             OnProcess -> {
@@ -510,6 +521,10 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
 
     private fun openTagFg(){
         initActionBarLayout(R.layout.action_tag)
+    }
+
+    private fun openExampleCollectionFg(){
+        initActionBarLayout(R.layout.action_example_collection)
     }
 
     private fun openFolderFg(){
