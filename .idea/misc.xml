@@ -55,6 +55,7 @@
         <entry key="app/src/main/res/layout/f_tags.xml" value="0.6197916666666666" />
         <entry key="app/src/main/res/layout/f_word_def_exp_rv.xml" value="0.6197916666666666" />
         <entry key="app/src/main/res/layout/f_word_edit.xml" value="0.41354166666666664" />
+        <entry key="app/src/main/res/layout/f_word_img_audio_rv.xml" value="0.375" />
         <entry key="app/src/main/res/menu/m_filter_mode.xml" value="0.41354166666666664" />
       </map>
     </option>

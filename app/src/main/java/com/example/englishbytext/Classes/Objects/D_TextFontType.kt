@@ -32,13 +32,13 @@ class D_TextFontType (context : Context, val event : () -> Unit) : MyDialogBuild
     }
 
     private fun checkedItem() : Int{
-        return MainSetting.selectedTextFontType
+        return MainSetting.selectedTextFontType.get()
     }
 
     private fun commit(){
         val id = listRadioButton.findViewById<RadioButton>(listRadioButton.checkedRadioButtonId)
         val selected = listRadioButton.indexOfChild(id)
-        MainSetting.setTextFont(selected.toString())
+        MainSetting.selectedTextFontType.set(selected)
         dismiss()
     }
 

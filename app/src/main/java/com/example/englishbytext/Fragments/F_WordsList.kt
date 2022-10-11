@@ -343,7 +343,7 @@ class F_WordsList : MyFragment() {
     private fun initPopUpMenu(){
 
 
-        regexActiveLabel.visibility = if(MainSetting.onRegexSearch) View.VISIBLE else View.GONE
+        regexActiveLabel.visibility = if(MainSetting.onRegexSearch.get()) View.VISIBLE else View.GONE
         filterView()
     }
 
@@ -355,7 +355,7 @@ class F_WordsList : MyFragment() {
         val selectedOrder = arrayListOf("Created Time DESC", "Created Time ASC", "Mastered DESC", "Mastered ASC")
         val defaultValue = arrayListOf(gContext.getString(R.string.created_time), gContext.getString(R.string.master_sort))
         val sortItemView = arrayListOf(createdTime, masterSort)
-        val sortType = MainSetting.sortTypeWordList
+        val sortType = MainSetting.sortTypeWordList.get()
 
         //reset items to default value
         for(i in 0..1){
@@ -374,15 +374,15 @@ class F_WordsList : MyFragment() {
     {
         val item = popupMenu.getItemById(R.id.isSortPractice)
         item.isChecked = !item.isChecked
-        MainSetting.setPracticeSort(item.isChecked.toString())
+        MainSetting.onSortPractice.set(item.isChecked.toString())
     }
     
     private fun onRegexFilterClick(){
         val item = popupMenu.getItemById(R.id.isOnRegex)
         item.isChecked = !item.isChecked
         filterData.onRegex = !filterData.onRegex
-        MainSetting.setRegexSearch(item.isChecked.toString())
-        regexActiveLabel.visibility = if(MainSetting.onRegexSearch) View.VISIBLE else View.GONE
+        MainSetting.onRegexSearch.set(item.isChecked.toString())
+        regexActiveLabel.visibility = if(MainSetting.onRegexSearch.get()) View.VISIBLE else View.GONE
         notifyList()
     }
 
@@ -397,11 +397,11 @@ class F_WordsList : MyFragment() {
 
     //---------------------------
     private fun onCreatedTimeFilterClick(clickedItem : Int){
-        val newSortType = if (clickedItem == MainSetting.sortTypeWordList)
-            (MainSetting.sortTypeWordList + 1) % 2 + clickedItem
+        val newSortType = if (clickedItem == MainSetting.sortTypeWordList.get())
+            (MainSetting.sortTypeWordList.get() + 1) % 2 + clickedItem
         else
             clickedItem
-        MainSetting.setSortTypeWordList(newSortType.toString())
+        MainSetting.sortTypeWordList.set(newSortType.toString())
         filterView()
         notifyList()
     }
@@ -456,8 +456,6 @@ class F_WordsList : MyFragment() {
     }
 
     private fun startSearch(s: String){
-        val regexOn = popupMenu.getItemById(R.id.isOnRegex)
-
         if(!isValidRegex(s)){
             Handler(gContext.mainLooper).post {
                 wordListSearch.error = "Invalid regex"
@@ -576,14 +574,22 @@ class F_WordsList : MyFragment() {
     }
 
     private fun getFileUri(){
-        if(Lib.isStoragePermissionGranted(gContext, this)){
-            val intent = Intent()
-            intent.type = "*/*"
-            intent.action = Intent.ACTION_GET_CONTENT
-            val mimetypes = arrayOf("text/plain", "application/pdf")
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes)
-            resultLauncher.launch(intent)
+        val examplesCollections = DataBaseServices.getExpCollection()
+        val exampleCollection = examplesCollections.find{it.id == MainSetting.selectedExamplesCollection.get()}
+        val exampleCollectionName = exampleCollection!!.value
+        val dialog = D_ask(gContext, "Examples will be save on $exampleCollectionName collection"){
+            if (it){
+                if(Lib.isStoragePermissionGranted(gContext, this)){
+                    val intent = Intent()
+                    intent.type = "*/*"
+                    intent.action = Intent.ACTION_GET_CONTENT
+                    val mimetypes = arrayOf("text/plain", "application/pdf")
+                    intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes)
+                    resultLauncher.launch(intent)
+                }
+            }
         }
+        dialog.buildAndDisplay()
     }
 
     private fun importFile(filePath: Uri){

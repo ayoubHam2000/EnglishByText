@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
     }
 
     private fun initDarkMode(){
-        if(MainSetting.isDarkMode){
+        if(MainSetting.isDarkMode.get()){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         }else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -239,7 +239,7 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
             openCloseCategoriesImg.setBackgroundResource(R.drawable.ic_keyboard_arrow_down_24)
             View.GONE
         }
-        MainSetting.setCategorySection(action.toString())
+        MainSetting.categorySection.set(action)
     }
 
     private fun collapseCollection(action: Boolean){
@@ -253,7 +253,7 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
             openCloseCollectionsImg.setBackgroundResource(R.drawable.ic_keyboard_arrow_down_24)
             View.GONE
         }
-        MainSetting.setCollectionSection(action.toString())
+        MainSetting.collectionSection.set(action)
     }
 
     private fun collapse(){
@@ -261,15 +261,15 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
         val openCloseCollection = findViewById<LinearLayout>(R.id.openCloseCollection)
 
         openCloseCategories.setOnClickListener {
-            collapseCategory(!MainSetting.categorySection)
+            collapseCategory(!MainSetting.categorySection.get())
         }
 
         openCloseCollection.setOnClickListener {
-            collapseCollection(!MainSetting.collectionSection)
+            collapseCollection(!MainSetting.collectionSection.get())
         }
 
-        collapseCategory(MainSetting.categorySection)
-        collapseCollection(MainSetting.collectionSection)
+        collapseCategory(MainSetting.categorySection.get())
+        collapseCollection(MainSetting.collectionSection.get())
     }
     //endregion
 
@@ -320,8 +320,7 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
     }
 
     private fun selectSetOnOpen(name: String){
-        SetManagement.setSelectedSet(name)
-        DataBaseServices.updateVar(V_SelectedSet, name)
+        MainSetting.selectedSet.set(name)
         setActionBarTitle(name)
     }
 

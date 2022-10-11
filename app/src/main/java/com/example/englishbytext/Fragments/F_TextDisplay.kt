@@ -224,7 +224,7 @@ class F_TextDisplay : MyFragment() {
 
     private fun textStyle(){
         val size = 16 * MainSetting.getTextSize()
-        val typeface = Typeface.create(MainSetting.getTextFont(), MainSetting.getFontsType())
+        val typeface = Typeface.create(MainSetting.getTextStyle(), MainSetting.getFontsType())
 
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size)
         textView.typeface = typeface

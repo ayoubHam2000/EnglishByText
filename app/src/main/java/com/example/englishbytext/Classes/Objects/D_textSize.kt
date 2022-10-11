@@ -32,13 +32,13 @@ class D_textSize(context : Context, val event : () -> Unit) : MyDialogBuilder(co
     }
 
     private fun checkedItem() : Int{
-        return MainSetting.selectedTextSize
+        return MainSetting.selectedTextSize.get()
     }
 
     private fun commit(){
         val id = listRadioButton.findViewById<RadioButton>(listRadioButton.checkedRadioButtonId)
         val selected = listRadioButton.indexOfChild(id)
-        MainSetting.setTextSize(selected.toString())
+        MainSetting.selectedTextSize.set(selected)
         dismiss()
     }
 

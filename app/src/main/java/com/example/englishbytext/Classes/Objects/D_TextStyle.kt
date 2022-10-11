@@ -12,7 +12,7 @@ import com.example.englishbytext.Dialogs.MyDialogBuilder
 import com.example.englishbytext.Objects.MainSetting
 import com.example.englishbytext.R
 
-class D_TextFont(context : Context, val event : () -> Unit) : MyDialogBuilder(context, R.layout.d_text_style_option) {
+class D_TextStyle(context : Context, val event : () -> Unit) : MyDialogBuilder(context, R.layout.d_text_style_option) {
 
     lateinit var listRadioButton : RadioGroup
 
@@ -34,13 +34,13 @@ class D_TextFont(context : Context, val event : () -> Unit) : MyDialogBuilder(co
     }
 
     private fun checkedItem() : Int{
-        return MainSetting.selectedTextFont
+        return MainSetting.selectedTextStyle.get()
     }
 
     private fun commit(){
         val id = listRadioButton.findViewById<RadioButton>(listRadioButton.checkedRadioButtonId)
         val selected = listRadioButton.indexOfChild(id)
-        MainSetting.setTextStyle(selected.toString())
+        MainSetting.selectedTextStyle.set(selected)
         dismiss()
     }
 

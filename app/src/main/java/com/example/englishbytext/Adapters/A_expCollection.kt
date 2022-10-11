@@ -79,9 +79,9 @@ class A_expCollection (context : Context, val event : (Int, Int) -> Unit)
             val selectedColor = R.color.newColor1
             val normalColor = R.color.wordListItem
 
-            println(">> ? ${list[position].id} ${MainSetting.selectedExamplesCollection}")
+            println(">> ? ${list[position].id} ${MainSetting.selectedExamplesCollection.get()}")
             Lib.changeBackgroundTint(context, normalColor, parentView)
-            if (list[position].id == MainSetting.selectedExamplesCollection){
+            if (list[position].id == MainSetting.selectedExamplesCollection.get()){
                 Lib.changeBackgroundTint(context, selectedColor, parentView)
             }
         }

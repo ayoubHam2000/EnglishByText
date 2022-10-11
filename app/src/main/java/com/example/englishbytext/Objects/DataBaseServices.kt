@@ -53,7 +53,7 @@ object DataBaseServices {
         dataBase.execSQL("CREATE TABLE IF NOT EXISTS $DT_folders")
         dataBase.execSQL("CREATE TABLE IF NOT EXISTS $DT_words_folder")
 
-        restoreValues()
+
         initInsert()
     }
 
@@ -385,40 +385,9 @@ object DataBaseServices {
 
     //region Vars
 
-    private fun restoreValues(){
-        val selectedSet = getVar(V_SelectedSet, AllSet)
-        SetManagement.setSelectedSet(selectedSet)
 
-        val categorySection = getVar(V_CategorySection, "true")
-        MainSetting.setCategorySection(categorySection, false)
 
-        val collectionSection = getVar(V_CollectionSection, "true")
-        MainSetting.setCollectionSection(collectionSection, false)
-
-        val isDarkMode = getVar(V_DarkMode, "true")
-        MainSetting.setIsDarkMode(isDarkMode, false)
-
-        val textSize = getVar(V_TextSize, 2.toString())
-        MainSetting.setTextSize(textSize, false)
-
-        val textStyle = getVar(V_TextStyle, 0.toString())
-        MainSetting.setTextStyle(textStyle, false)
-
-        val textFont = getVar(V_TextFont, 0.toString())
-        MainSetting.setTextFont(textFont, false)
-
-        val isPracticeSort = getVar(V_sortPractice, true.toString())
-        MainSetting.setPracticeSort(isPracticeSort, false)
-
-        val regexSearch = getVar(V_OnRegexSearch, false.toString())
-        MainSetting.setRegexSearch(regexSearch, false)
-
-        val sortTypeWordList = getVar(V_SortTypeWordList, SORT_CREATED_TIME_DESC.toString())
-        MainSetting.setSortTypeWordList(sortTypeWordList, false)
-
-    }
-
-    private fun getVar(varId: Int, defaultValue: String) : String{
+    fun getVar(varId: Int, defaultValue: String) : String{
         val isExist = "SELECT $A_varId FROM $T_infoVar WHERE $A_varId = $varId"
         if(tableCountByQuery(isExist) == 0){
             dataBase.execSQL("INSERT INTO $T_infoVar VALUES($varId, '${defaultValue.toBase64()}')")
@@ -456,7 +425,7 @@ object DataBaseServices {
     fun insertWordsFromDefinedText(list : ArrayList<WordFile>){
         transaction {
             //number of examples of an existing word should not excited EXAMPLES_MAX
-            val collectionExp = if (MainSetting.selectedExamplesCollection > 0) MainSetting.selectedExamplesCollection else DEFAULT_EXAMPLE_COLLECTION
+            val collectionExp = if (MainSetting.selectedExamplesCollection.get() > 0) MainSetting.selectedExamplesCollection.get() else DEFAULT_EXAMPLE_COLLECTION
             val wordExpNbrQuery = "select $A_word, COUNT(*) from $T_examples where $A_example_col_id = '$collectionExp' group by $A_word;"
             val wordExpNbrMap = getWordsDefExpNbr(wordExpNbrQuery)
 
@@ -1125,7 +1094,7 @@ object DataBaseServices {
 
     //region General
     private fun getInt(q: String) : Int?{
-        val cursor = dataBase.rawQuery(q, null);
+        val cursor = dataBase.rawQuery(q, null)
         val res = if(cursor.moveToFirst()) cursor.getInt(0) else null
         cursor.close()
         return res

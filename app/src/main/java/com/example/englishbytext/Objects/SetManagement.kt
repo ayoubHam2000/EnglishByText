@@ -9,7 +9,6 @@ object SetManagement {
 
     //region settings
     private var selectOn = false
-    private var selectedSet = AllSet
 
     fun getSelectOn() : Boolean{
         return selectOn
@@ -19,11 +18,9 @@ object SetManagement {
     }
 
     fun getSelectedSet() : String{
-        return selectedSet
+        return MainSetting.selectedSet.get()
     }
-    fun setSelectedSet(value : String){
-        selectedSet = value
-    }
+
     //endregion
 
     fun refreshSets(){
@@ -38,7 +35,7 @@ object SetManagement {
 
     fun getSet() : Sets?{
         for(item in sets){
-            if(item.name == selectedSet){
+            if(item.name == MainSetting.selectedSet.get()){
                 return item
             }
         }

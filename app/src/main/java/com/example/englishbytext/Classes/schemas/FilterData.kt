@@ -18,7 +18,7 @@ class FilterData {
     var hasTag = Options.ALL
     var hasText = Options.ALL
 
-    var onRegex = MainSetting.onRegexSearch
+    var onRegex = MainSetting.onRegexSearch.get()
     var searchWord = ""
 
     companion object{

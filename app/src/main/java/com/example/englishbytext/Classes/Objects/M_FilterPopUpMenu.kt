@@ -18,9 +18,9 @@ class M_FilterPopUpMenu(
         val random = getItemById(R.id.randomSort)
         val practiceSort = getItemById(R.id.isSortPractice)
 
-        regex.isChecked = MainSetting.onRegexSearch
+        regex.isChecked = MainSetting.onRegexSearch.get()
         random.isChecked = MainSetting.isRandomSortIsActive
-        practiceSort.isChecked = MainSetting.onSortPractice
+        practiceSort.isChecked = MainSetting.onSortPractice.get()
     }
 
 

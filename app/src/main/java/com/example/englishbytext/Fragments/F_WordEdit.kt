@@ -266,7 +266,7 @@ class F_WordEdit : MyFragment() {
     private fun initExampleCollection(){
         val list = DataBaseServices.getExpCollection()
         list.add(0, StringId(0, "All"))
-        val index = list.indexOf(list.find { it.id == MainSetting.selectedExamplesCollection })
+        val index = list.indexOf(list.find { it.id == MainSetting.selectedExamplesCollection.get() })
         examplesCollection.text = list[index].value
 
         popPupList = ListPopupWindow(gContext)
@@ -286,7 +286,7 @@ class F_WordEdit : MyFragment() {
 
     private fun initExampleRv(){
         exampleAdapter = A_def_exp(gContext, wordName, OpenExample)
-        exampleAdapter.selectedCollection = MainSetting.selectedExamplesCollection
+        exampleAdapter.selectedCollection = MainSetting.selectedExamplesCollection.get()
 
         val layout = LinearLayoutManager(context)
         exampleAdapter.changeList()

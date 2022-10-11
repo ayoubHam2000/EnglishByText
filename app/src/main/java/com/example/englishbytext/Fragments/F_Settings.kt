@@ -3,13 +3,17 @@ package com.example.englishbytext.Fragments
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
-import com.example.englishbytext.Classes.Objects.D_TextFont
+import com.example.englishbytext.Classes.Objects.D_TextStyle
 import com.example.englishbytext.Classes.Objects.D_TextFontType
 import com.example.englishbytext.Classes.Objects.D_textSize
 import com.example.englishbytext.Objects.DataBaseServices
@@ -29,8 +33,8 @@ class F_Settings : MyFragment() {
     //====================================
     //++++++++++++++++++++++  Vars
     //====================================
-    private val FILE_PATH_CODE = 100
-    private val FILE_SAVE_FOLDER = 101
+    private lateinit var resultLauncherSaver :  ActivityResultLauncher<Intent>
+    private lateinit var resultLauncherLoader :  ActivityResultLauncher<Intent>
 
     //====================================
     //++++++++++++++++++++++  View
@@ -49,6 +53,35 @@ class F_Settings : MyFragment() {
     //====================================
     //++++++++++++++++++++++  Init
     //====================================
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        resultLauncherSaver = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+            if (result.resultCode == Activity.RESULT_OK){
+                val data: Intent? = result.data
+                data?.data?.let {
+                    saveFile(it)
+                }
+            }
+            else {
+                println(">>>couldn't get path for save file")
+            }
+        }
+
+        resultLauncherLoader = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+            if (result.resultCode == Activity.RESULT_OK){
+                val data: Intent? = result.data
+                data?.data?.let {
+                    loadData(it)
+                }
+            }
+            else {
+                println(">>>couldn't get path")
+            }
+        }
+    }
+
     override fun getMainLayout(): Int {
         return R.layout.f__settings
     }
@@ -71,10 +104,10 @@ class F_Settings : MyFragment() {
     }
 
     override fun initFun(){
-        darkModeSwitch.isChecked = MainSetting.isDarkMode
-        textSizeSelected.text = MainSetting.getTextFountText()
+        darkModeSwitch.isChecked = MainSetting.isDarkMode.get()
+        textSizeSelected.text = MainSetting.getTextSizeText()
         textStyleSelected.text = MainSetting.getTextStyleText()
-        textFontSelected.text = MainSetting.fetTextFontText()
+        textFontSelected.text = MainSetting.getTextFontText()
 
         darkModeSwitch.setOnClickListener { setDarkMode() }
 
@@ -95,20 +128,19 @@ class F_Settings : MyFragment() {
     private fun setDarkMode(){
         if(darkModeSwitch.isChecked){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            MainSetting.setIsDarkMode("true")
+            MainSetting.isDarkMode.set(true)
         }else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            MainSetting.setIsDarkMode("false")
+            MainSetting.isDarkMode.set(false)
         }
     }
 
+
     private fun startSaveData(){
-        //if(Lib.isStorageWritePermissionGranted(gContext, this)) {
-            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-            intent.type = "*/*"
-            intent.putExtra(Intent.EXTRA_TITLE, "")
-            startActivityForResult(intent, FILE_SAVE_FOLDER)
-        //}
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+        intent.type = "*/*"
+        intent.putExtra(Intent.EXTRA_TITLE, "")
+        resultLauncherSaver.launch(intent)
     }
 
     private fun saveFile(uri : Uri){
@@ -125,8 +157,10 @@ class F_Settings : MyFragment() {
     private fun startLoadingData(){
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "*/*"
-        startActivityForResult(intent, FILE_PATH_CODE)
+        resultLauncherLoader.launch(intent)
     }
+
+
 
     private fun loadData(uri: Uri){
         listener?.notifyActivity(OnProcess, true)
@@ -142,13 +176,13 @@ class F_Settings : MyFragment() {
 
     private fun changeTextSize(){
         val dialog = D_textSize(gContext){
-            textSizeSelected.text = MainSetting.getTextFountText()
+            textSizeSelected.text = MainSetting.getTextSizeText()
         }
         dialog.buildAndDisplay()
     }
 
     private fun textStyle(){
-        val dialog = D_TextFont(gContext){
+        val dialog = D_TextStyle(gContext){
             textStyleSelected.text = MainSetting.getTextStyleText()
         }
         dialog.buildAndDisplay()
@@ -156,38 +190,10 @@ class F_Settings : MyFragment() {
 
     private fun textFont(){
         val dialog = D_TextFontType(gContext){
-            textFontSelected.text = MainSetting.fetTextFontText()
+            textFontSelected.text = MainSetting.getTextFontText()
         }
         dialog.buildAndDisplay()
     }
 
     //endregion
-
-    //region override
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when(requestCode){
-            FILE_PATH_CODE -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    data?.data?.let {
-                        loadData(it)
-                    }
-                } else {
-                    println(">>>couldn't get path")
-                }
-            }
-            FILE_SAVE_FOLDER -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    data?.data?.let {
-                        saveFile(it)
-                    }
-                } else {
-                    println(">>>couldn't get path for save file")
-                }
-            }
-        }
-    }
-
-    //endregion
-
 }

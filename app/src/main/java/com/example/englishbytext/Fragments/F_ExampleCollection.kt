@@ -85,8 +85,8 @@ class F_ExampleCollection : MyFragment() {
             if(it){
                 val list = expCollectionAdapter.getSelectedIds()
                 DataBaseServices.deleteExamplesCollection(list)
-                if (list.indexOf(MainSetting.selectedExamplesCollection) != -1)
-                    MainSetting.selectedExamplesCollection = DEFAULT_EXAMPLE_COLLECTION
+                if (list.indexOf(MainSetting.selectedExamplesCollection.get()) != -1)
+                    MainSetting.selectedExamplesCollection.set(DEFAULT_EXAMPLE_COLLECTION)
                 deaSelectItems()
             }
         }
@@ -137,9 +137,7 @@ class F_ExampleCollection : MyFragment() {
     }
 
     private fun openItemClick(selectedCollectionId : Int){
-        MainSetting.selectedExamplesCollection = selectedCollectionId
-        val size = expCollectionAdapter.list.size
-        println(">> ? ---")
+        MainSetting.selectedExamplesCollection.set(selectedCollectionId)
         expCollectionAdapter.notifyDataSetChanged()
     }
 
