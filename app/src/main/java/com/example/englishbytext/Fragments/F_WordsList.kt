@@ -561,14 +561,11 @@ class F_WordsList : MyFragment() {
     private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             // There are no request codes
-
-
             val filePath = result.data?.data?.path
             if(filePath != null){
                 importFile(result.data?.data!!)
             }else{
                 Lib.showMessage(gContext, "Something went wrong")
-                Log.d("ERROR", "filePath = NULL")
             }
         }
     }
@@ -596,10 +593,12 @@ class F_WordsList : MyFragment() {
         FileManagement.fgType = fgType
         FileManagement.passedData = passedData
 
+        listener?.notifyActivity(OnProcess, true)
         FileManagement.startWorking(gContext, filePath){
             val mainHandler =  Handler(gContext.mainLooper)
             val myRunnable =  Runnable {
                 Lib.showMessage(gContext, "Complete")
+                listener?.notifyActivity(OnProcess, false)
                 notifyList()
             }
             mainHandler.post(myRunnable)

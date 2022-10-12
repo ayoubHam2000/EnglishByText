@@ -25,6 +25,7 @@ object DataBaseServices {
     //region global vars
 
     private lateinit var dataBase : SQLiteDatabase
+    private lateinit var tables : Array<String>
     var mainPath : String? = null
 
     //endregion
@@ -53,7 +54,8 @@ object DataBaseServices {
         dataBase.execSQL("CREATE TABLE IF NOT EXISTS $DT_folders")
         dataBase.execSQL("CREATE TABLE IF NOT EXISTS $DT_words_folder")
 
-
+        tables = arrayOf(T_Sets, T_collections, T_texts, T_words, T_examples_collection, T_definitions, T_examples, T_images, T_audios,
+            T_wordsText, T_relatedWord, T_tags, T_wordTags, T_infoVar, T_folders, T_words_Folder)
         initInsert()
     }
 
@@ -1249,17 +1251,24 @@ object DataBaseServices {
     //region save Data
 
     fun saveData(context: Context, uri: Uri){
-        val masterPath = context.getExternalFilesDir("/")!!.absolutePath
-        val path = "$masterPath/$FILES_FOLDER"
-        val tables = arrayOf(T_Sets, T_collections, T_texts, T_words, T_definitions, T_examples, T_images, T_audios,
-                T_wordsText, T_relatedWord, T_tags, T_wordTags, T_infoVar, T_folders, T_words_Folder)
+        try {
+            val masterPath = context.getExternalFilesDir("/")!!.absolutePath
+            val path = "$masterPath/$FILES_FOLDER"
 
-        File(path).mkdir()
-        for(item in tables)
-            saveTable(path, item)
+            File(path).mkdir()
+            for(item in tables){
+                println(">>> Try to Save $item")
+                saveTable(path, item)
+            }
 
-        ZipManager.zipFolder(context, context.getExternalFilesDir("/")!!, uri)
-        deleteRecursive(File("$masterPath/$FILES_FOLDER"))
+            ZipManager.zipFolder(context, context.getExternalFilesDir("/")!!, uri)
+            deleteRecursive(File("$masterPath/$FILES_FOLDER"))
+        }catch (e : Exception){
+            Handler(context.mainLooper).post {
+                println(e.printStackTrace())
+                Lib.showMessage(context, "Error Save Failed")
+            }
+        }
     }
 
     private fun saveTable(path: String, table: String){
@@ -1290,8 +1299,6 @@ object DataBaseServices {
             val masterPath = context.getExternalFilesDir("/")!!.absolutePath
             val path = "$masterPath/$FILES_FOLDER"
             val stream = FileInputStream(context.contentResolver.openFileDescriptor(uri, "r")!!.fileDescriptor)
-            val tables = arrayOf(T_Sets, T_collections, T_texts, T_words, T_definitions, T_examples, T_images, T_audios,
-            T_wordsText, T_relatedWord, T_tags, T_wordTags, T_infoVar, T_folders, T_words_Folder)
 
 
             ZipManager.unzip(stream, File(masterPath))
@@ -1309,7 +1316,7 @@ object DataBaseServices {
             }else{
                 println(">>>Folders Not Valid")
                 Handler(context.mainLooper).post {
-                    Lib.showMessage(context, "Something Went Wrong")
+                    Lib.showMessage(context, "Load failed Something Went Wrong")
                 }
             }
 

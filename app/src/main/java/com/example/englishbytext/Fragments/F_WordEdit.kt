@@ -14,7 +14,8 @@ import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
 import android.view.View
 import android.widget.*
-import androidx.appcompat.widget.AppCompatEditText
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,6 +50,8 @@ class F_WordEdit : MyFragment() {
     //++++++++++++++++++++++  Vars
     //====================================
     private var wordName = ""
+    lateinit var galleryLauncher : ActivityResultLauncher<Intent>
+    lateinit var cropImageLauncherActivity : ActivityResultLauncher<Intent>
 
     //====================================
     //++++++++++++++++++++++  Views
@@ -668,14 +671,15 @@ class F_WordEdit : MyFragment() {
         val mimeType = arrayOf("image/jpeg", "image/png", "image/jpg")
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeType)
         intent.flags = Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
-        startActivityForResult(intent, GALLERY_REQUEST_CODE)
+
+        galleryLauncher.launch(intent)
     }
 
     private fun launchImageCrop(uri: Uri){
-        CropImage.activity(uri)
+        val r = CropImage.activity(uri)
                 .setGuidelines(CropImageView.Guidelines.ON)
-                .setCropShape(CropImageView.CropShape.RECTANGLE)
-                .start(gContext, this)
+                .setCropShape(CropImageView.CropShape.RECTANGLE).getIntent(gContext)
+        cropImageLauncherActivity.launch(r)
     }
 
     private fun getBitmapAsByteArray(bitmap: Bitmap) : ByteArray{
@@ -737,34 +741,12 @@ class F_WordEdit : MyFragment() {
         if (deaSelectAudioMode()) return true
         if (deaSelectRelated()) return true
         if (deaSelectTag()) return true
-        if (popPupList != null && popPupList!!.isShowing) return true
+        if (popPupList != null && popPupList!!.isShowing){
+            popPupList!!.dismiss()
+            return true
+        }
         deaAudioMedia()
         return false
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when(requestCode){
-            GALLERY_REQUEST_CODE -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    data?.data?.let {
-                        launchImageCrop(it)
-                    }
-                } else {
-                    println(">>>couldn't select image from the gallery")
-                }
-            }
-
-            CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
-                val result = CropImage.getActivityResult(data)
-                if (resultCode == Activity.RESULT_OK) {
-                    result.uri?.let {
-                        saveImageToDataBase(it)
-                    }
-                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    println(">>>CropError : ${result.error}")
-                }
-            }
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -774,6 +756,34 @@ class F_WordEdit : MyFragment() {
             wordName = bundle.getString("WORD_NAME")!!
             WordsManagement.selectedWordName = wordName
         }
+
+        galleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+            if (result.resultCode == Activity.RESULT_OK){
+                val data: Intent? = result.data
+                data?.data?.let {
+                    launchImageCrop(it)
+                }
+            }
+            else {
+                println(">>>couldn't select image from the gallery")
+            }
+        }
+
+        cropImageLauncherActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+            val data: Intent? = result.data
+            val resultIntent = CropImage.getActivityResult(data)
+            if (result.resultCode == Activity.RESULT_OK){
+                println(">>> Launch Cropper Uri")
+                resultIntent.uri?.let {
+                    println(">>> Save Launch Cropper")
+                    saveImageToDataBase(it)
+                }
+            }
+            else {
+                println(">>>CropError : ${resultIntent.error}")
+            }
+        }
+
     }
 
     //endregion

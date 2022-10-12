@@ -17,25 +17,26 @@ object ZipManager {
      * @param toZipFolder Folder to be zipped
      * @return the resulting ZipFile
      */
-    fun zipFolder(context : Context, toZipFolder: File, uri : Uri): Uri? {
+    fun zipFolder(context : Context, toZipFolder: File, uri : Uri): Uri {
         val zipFile = FileOutputStream(context.contentResolver.openFileDescriptor(uri, "w")!!.fileDescriptor)
-        return try {
+        //return try {
             val out = ZipOutputStream(zipFile)
             zipFile.write(FILE_CODE.toByteArray())
             zipSubFolder(out, toZipFolder, toZipFolder.path.length)
             out.close()
-            uri
-        } catch (ex: Exception) {
+            return uri
+        /*} catch (ex: Exception) {
             ex.printStackTrace()
+            println(">>> Error To Zip File")
             null
-        }
+        }*/
     }
 
 
     private fun zipSubFolder(out: ZipOutputStream, folder: File, basePathLength: Int) {
         val BUFFER = 2048
         val fileList: Array<File> = folder.listFiles()!!
-        var origin: BufferedInputStream? = null
+        var origin: BufferedInputStream?
         for (file in fileList) {
             if (file.isDirectory) {
                 zipSubFolder(out, file, basePathLength)

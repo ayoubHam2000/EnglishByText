@@ -98,5 +98,5 @@ const val SORT_MASTERED_DESC = 3
 
 val SORT_WORD_LIST_BY = arrayListOf(A_created_time, A_isKnown)
 
-const val EXAMPLES_MAX = 14
+const val EXAMPLES_MAX = 17
 const val DEFAULT_EXAMPLE_COLLECTION = 1
