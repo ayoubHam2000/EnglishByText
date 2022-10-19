@@ -85,48 +85,33 @@ object FileManagement {
     }
 
     private fun getListOfWords(text : String) : ArrayList<WordFile>{
-        val data = text.replace("\r?\n|\r".toRegex(), "||")
-        val units = "\\+.*?\\+".toRegex().findAll(data)
+        val unitRegex = Regex("^[+][\\s\\S]*?^[+]", RegexOption.MULTILINE)
+        val data = unitRegex.findAll(text)
         val words = ArrayList<WordFile>()
-        println(">>>- ${units.count()}")
-        for(unit in units){
-            //println("-->${unit.value}")
-            val items = unit.value.replace("(^[+]|[+]$)".toRegex(), "") .split("||")
-            val word = WordFile()
-            var case = 0
-            for(i in items){
-                val item = i.trim()
-                if(item.isNotEmpty()){
-                    when {
-                        case == 0 -> {
-                            word.word = item
-                            case++
-                        }
-                        item.matches("^-[^-].*".toRegex()) -> {
-                            word.definitions.add(item.replace("^-".toRegex(), ""))
-                        }
-                        item.matches("^--[^-].*".toRegex()) -> {
-                            word.examples.add(item.replace("^--".toRegex(), ""))
-                            case++
-                        }
-                        case == 1 -> {
-                            val last = word.definitions.count() - 1
-                            if (last >= 0)
-                                word.definitions[last] =  word.definitions[last] + " $item"
-                        }
-                        case > 1 -> {
-                            val last = word.examples.count() - 1
-                            if (last >= 0)
-                                word.examples[last] =  word.examples[last] + " $item"
-                        }
+        println(">>> matches ${data.count()}")
+        data.forEach {unit->
+            val defAndExpRegex = Regex("^--?[\\S\\s]*?(?=^--?|^\\+)", RegexOption.MULTILINE)
+            val wordRegex = Regex("^[+][\\s]*\\w+", RegexOption.MULTILINE)
+            val wordName = wordRegex.find(unit.value)?.value?.replace("^[+][\\s]*".toRegex(), "")
+            if (wordName != null && wordName.length > 1){
+                val word = WordFile()
+                word.word = wordName
+                val defAndExp = defAndExpRegex.findAll(unit.value)
+                defAndExp.forEach { unitDefExp ->
+                    val formatUnitDefExp = unitDefExp.value.replace("\\s".toRegex(), " ")
+                    if (formatUnitDefExp.matches("--.*".toRegex())) {
+                        val expUnit = formatUnitDefExp.replace("^--".toRegex(), "")
+                        word.examples.add(expUnit)
+                    }
+                    else {
+                        val defUnit = formatUnitDefExp.replace("^-".toRegex(), "")
+                        word.definitions.add(defUnit)
                     }
                 }
-                //println("--> item $items")
-            }
-            if(word.word.isNotEmpty() && word.word.length > 1){
                 words.add(word)
             }
         }
+        println(">>> inserted ${words.count()}")
         return words
     }
 
