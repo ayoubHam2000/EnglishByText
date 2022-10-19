@@ -96,7 +96,8 @@ class A_WordList(
     private fun regexSearch(filterData: FilterData){
         val s = filterData.searchWord
         val regex = s.toRegex()
-        for(item in list){
+        val tmpList = ArrayList<Word>(list)
+        for(item in tmpList){
             if(regex.matches(item.name) && isOnCategory(item, filterData))
                 filterList.add(item)
         }
@@ -104,7 +105,8 @@ class A_WordList(
 
     private fun containsSearch(filterData: FilterData){
         val s = filterData.searchWord
-        for(item in list){
+        val tmpList = ArrayList<Word>(list)
+        for(item in tmpList){
             if(item.name.contains(s) && isOnCategory(item, filterData))
                 filterList.add(item)
         }
@@ -115,8 +117,14 @@ class A_WordList(
             (filterData.isFavorite == FilterData.Options.ON && !item.isFavorite) ||
             (filterData.isFavorite == FilterData.Options.OFF && item.isFavorite) ||
 
-            (filterData.isMastered == FilterData.Options.ON && !item.isKnown) ||
-            (filterData.isMastered == FilterData.Options.OFF && item.isKnown) ||
+            (filterData.isMastered == FilterData.Options.ON && item.isKnown != 4) ||
+            (filterData.isMastered == FilterData.Options.OFF && item.isKnown == 4) ||
+
+            (filterData.isArchived == FilterData.Options.ON && item.isKnown != 1) ||
+            (filterData.isArchived == FilterData.Options.OFF && item.isKnown == 1) ||
+
+            (filterData.isVisited == FilterData.Options.ON && item.isKnown != 2) ||
+            (filterData.isVisited == FilterData.Options.OFF && item.isKnown == 2) ||
 
             (filterData.hasDefinition == FilterData.Options.ON && hasDefinitionMap[item.name] != true) ||
             (filterData.hasDefinition == FilterData.Options.OFF && hasDefinitionMap[item.name] == true) ||
@@ -172,6 +180,7 @@ class A_WordList(
 
             setFavoriteView(position)
             setHasMedia(position)
+            masteredView(position)
             setSelectedView(position)
             favoriteBtn.setOnClickListener {makeFavorite(position) }
             mainLayout.setOnClickListener { itemClick(position) }
@@ -191,7 +200,16 @@ class A_WordList(
             hasRelated.visibility = if(hasRelatedMap[filterList[position].name] != null) View.VISIBLE else View.GONE
             hasDefinition.visibility = if(hasDefinitionMap[filterList[position].name] != null) View.VISIBLE else View.GONE
             hasExample.visibility = if(hasExampleMap[filterList[position].name] != null) View.VISIBLE else View.GONE
-            isMastered.visibility = if(filterList[position].isKnown) View.VISIBLE else View.GONE
+            isMastered.visibility = if(filterList[position].isKnown != 0) View.VISIBLE else View.GONE
+        }
+
+        private fun masteredView(position: Int){
+            when (filterList[position].isKnown) {
+                4 -> Lib.changeBackgroundTint(context.getColor(R.color.master_word_active), isMastered)
+                1 -> Lib.changeBackgroundTint(context.getColor(R.color.archived_word), isMastered)
+                0 -> Lib.changeBackgroundTint(context.getColor(R.color.master_word), isMastered)
+                else -> Lib.changeBackgroundTint(context.getColor(R.color.visited_word), isMastered)
+            }
         }
 
         private fun setFavoriteView(position: Int){

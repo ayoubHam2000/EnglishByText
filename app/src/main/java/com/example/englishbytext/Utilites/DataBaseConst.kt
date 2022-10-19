@@ -120,8 +120,15 @@ create table example_tmp (word VARCHAR NOT NULL, example VARCHAR NOT NULL, examp
  FOREIGN KEY(example_collection_id) REFERENCES examples_collection (example_collection_id) ON DELETE CASCADE);
 */
 
+/*
+isKnown -> 000 three bits used
+mastered is 100=4 or 110=6
+visited is 010=2 or 110=6
+archived is 001=1
+mastered - visited - archived
+*/
 const val DT_words = "$T_words ($A_word varchar not null,  $A_favorite BIT DEFAULT 0," +
-        " $A_created_time BIGINT default 0, $A_isKnown bit default 0," +
+        " $A_created_time BIGINT default 0, $A_isKnown INT default 0," +
         " PRIMARY KEY($A_word));"
 
 //definitions(#word, definition)

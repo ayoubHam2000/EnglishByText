@@ -17,6 +17,8 @@ class FilterData {
     var hasFolder = Options.ALL
     var hasTag = Options.ALL
     var hasText = Options.ALL
+    var isArchived = Options.OFF
+    var isVisited = Options.ALL
 
     var onRegex = MainSetting.onRegexSearch.get()
     var searchWord = ""

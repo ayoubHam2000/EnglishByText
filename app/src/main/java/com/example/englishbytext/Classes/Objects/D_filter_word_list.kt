@@ -63,6 +63,8 @@ class D_filter_word_list(
             if(getItemAt(6, i).isChecked) filterData.hasTag = FilterData.getOptionType(i)
             if(getItemAt(7, i).isChecked) filterData.hasFolder = FilterData.getOptionType(i)
             if(getItemAt(8, i).isChecked) filterData.hasText = FilterData.getOptionType(i)
+            if(getItemAt(9, i).isChecked) filterData.isVisited = FilterData.getOptionType(i)
+            if(getItemAt(10, i).isChecked) filterData.isArchived = FilterData.getOptionType(i)
         }
 
 
@@ -79,6 +81,8 @@ class D_filter_word_list(
             if(filterData.hasTag == FilterData.getOptionType(i)) getItemAt(6, i).isChecked = true
             if(filterData.hasFolder == FilterData.getOptionType(i)) getItemAt(7, i).isChecked = true
             if(filterData.hasText == FilterData.getOptionType(i)) getItemAt(8, i).isChecked = true
+            if(filterData.isVisited == FilterData.getOptionType(i)) getItemAt(9, i).isChecked = true
+            if(filterData.isArchived == FilterData.getOptionType(i)) getItemAt(10, i).isChecked = true
         }
 
     }

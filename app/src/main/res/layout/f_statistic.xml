@@ -8,6 +8,10 @@
     <TextView
         android:id="@+id/statisticTextView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:fontFamily="sans-serif"
+        android:textSize="14sp"
+        android:layout_margin="10dp"
+        />
 
 </FrameLayout>

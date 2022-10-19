@@ -23,4 +23,9 @@
 
     <color name="folder_item_background">#B34F43</color>
 
+    <color name="master_word_active">#FFC100</color>
+    <color name="master_word">#FFFFFF</color>
+    <color name="visited_word">#B3FF00</color>
+    <color name="archived_word">#6A6A6A</color>
+
 </resources>

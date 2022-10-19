@@ -62,6 +62,8 @@ class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : Pa
         private val theWordName : TextView = view.findViewById(R.id.theWord)
         private val wordFrequencyView : TextView = view.findViewById(R.id.wordFrequencyView)
         private val wordMaster : ImageView = view.findViewById(R.id.masterWord)
+        private val skipLeft : ImageView = view.findViewById(R.id.skipLeft)
+        private val skipRight : ImageView = view.findViewById(R.id.skipRight)
 
         fun bindView(position: Int){
             theWordName.text = list[position].name
@@ -76,7 +78,12 @@ class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : Pa
             favoriteWord.setOnClickListener { favoriteClick(position) }
             editWord.setOnClickListener {editWordClick(position)}
             wordMaster.setOnClickListener { masterWordClick(position) }
-
+            wordMaster.setOnLongClickListener {
+                masterWordLongClick(position)
+                true
+            }
+            skipLeft.setOnClickListener { skipLeftClick(position) }
+            skipRight.setOnClickListener { skipRightClick(position) }
             //fun
             onSweep(position)
         }
@@ -88,6 +95,10 @@ class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : Pa
                     object : MyOnSwipeTouchListener(context) {
                         override fun onSwipeLeft() {
                             super.onSwipeLeft()
+                            DataBaseServices.updateSetVisited(list[position].name)
+                            if (list[position].isKnown == 0)
+                                list[position].isKnown = 2
+                            masterWordView(position)
                             event(NextPage, position + 1)
                         }
 
@@ -122,11 +133,11 @@ class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : Pa
         }
 
         private fun masterWordView(position: Int){
-            val isKnown = list[position].isKnown
-            if(isKnown){
-                Lib.changeBackgroundTint(context.getColor(R.color.master_word_active), wordMaster)
-            }else{
-                Lib.changeBackgroundTint(context.getColor(R.color.master_word), wordMaster)
+            when (list[position].isKnown) {
+                4 -> Lib.changeBackgroundTint(context.getColor(R.color.master_word_active), wordMaster)
+                1 -> Lib.changeBackgroundTint(context.getColor(R.color.archived_word), wordMaster)
+                0 -> Lib.changeBackgroundTint(context.getColor(R.color.master_word), wordMaster)
+                else -> Lib.changeBackgroundTint(context.getColor(R.color.visited_word), wordMaster)
             }
         }
 
@@ -155,12 +166,34 @@ class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : Pa
         private fun masterWordClick(position: Int){
             val theWord = list[position]
 
-            println("==> ${theWord.isKnown}")
-            theWord.isKnown = !theWord.isKnown
+            if (theWord.isKnown == 4)
+                theWord.isKnown = 0
+            else
+                theWord.isKnown = 4
             DataBaseServices.updateIsWordKnown(arrayListOf(theWord.name))
             masterWordView(position)
-            if (theWord.isKnown)
+            if (theWord.isKnown == 4)
                 event(NextPage, position + 1)
+        }
+
+        private fun masterWordLongClick(position: Int){
+            val theWord = list[position]
+            theWord.isKnown = 1
+            DataBaseServices.updateSetArchived(theWord.name)
+            masterWordView(position)
+            event(NextPage, position + 1)
+        }
+
+        private fun skipRightClick(position: Int){
+            var nextPos = 0
+            while (position + nextPos < list.size && list[position + nextPos].isKnown != 0)
+                nextPos++
+            event(NextPage, position + nextPos)
+        }
+
+        private fun skipLeftClick(position: Int){
+            if (position != 0)
+                event(NextPage, 0)
         }
 
     }

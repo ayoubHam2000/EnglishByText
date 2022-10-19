@@ -19,6 +19,32 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
+    <ImageView
+        android:id="@+id/skipRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="19dp"
+        android:background="@drawable/skip_right"
+        android:scaleY="2"
+        android:scaleX="1.5"
+        android:backgroundTint="@color/abs_white"
+        />
+
+    <ImageView
+        android:id="@+id/skipLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="19dp"
+        android:layout_marginStart="19dp"
+        android:scaleY="2"
+        android:scaleX="-1.5"
+        android:background="@drawable/skip_right"
+        android:backgroundTint="@color/abs_white"
+        />
+
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
@@ -97,8 +123,8 @@
             android:id="@+id/masterWord"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_marginStart="10dp"
             android:background="@drawable/ic_master_word"
             android:backgroundTint="@color/master_word_active" />

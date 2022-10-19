@@ -27,12 +27,13 @@ object WordsManagement {
     private fun sortPracticeList()
     {
         practiceList.sortByDescending { getWordFrequency(it.name) }
-        practiceList.sortBy { it.isKnown }
+        practiceList.sortBy { it.isKnown == 4 }
     }
 
     fun setPracticeWordList(listWord: ArrayList<Word>)
     {
         practiceList = listWord
+        //practiceList.removeIf { it.isKnown == 1 }
         if (MainSetting.onSortPractice.get())
             sortPracticeList()
     }
@@ -48,12 +49,13 @@ object WordsManagement {
             else ->
             {
                 wordList.addAll(DataBaseServices.getWords(query))
+                //wordList.removeIf { it.isKnown == 1 }
                 if (MainSetting.sortTypeWordList.get() / 2 == SORT_MASTERED_ASC / 2) {
                     wordList.sortByDescending { getWordFrequency(it.name) }
                     if (MainSetting.sortTypeWordList.get() % 2 == 1)
-                        wordList.sortBy { it.isKnown }
+                        wordList.sortBy { it.isKnown == 4 }
                     else
-                        wordList.sortBy { !it.isKnown }
+                        wordList.sortBy { it.isKnown != 4 }
                 }
                 else if (MainSetting.sortTypeWordList.get() / 2 == SORT_CREATED_TIME_ASC / 2 && MainSetting.sortTypeWordList.get() % 2 == 1)
                     wordList.reverse()

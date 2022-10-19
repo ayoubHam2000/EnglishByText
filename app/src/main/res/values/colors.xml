@@ -78,7 +78,9 @@
     <color name="green1">#FF018786</color>
     <color name="abs_white">#FFFFFF</color>
     <color name="master_word_active">#FFC100</color>
-    <color name="master_word">#FFFFFF</color>
+    <color name="master_word">#292828</color>
+    <color name="visited_word">#B3FF00</color>
+    <color name="archived_word">#6A6A6A</color>
 
     <color name="transparentForWordInfo">#74000000</color>
 

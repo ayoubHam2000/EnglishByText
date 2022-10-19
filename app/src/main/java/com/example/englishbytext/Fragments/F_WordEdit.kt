@@ -158,6 +158,10 @@ class F_WordEdit : MyFragment() {
 
         favoriteBtn.setOnClickListener { setWordFavorite() }
         masteredWordBtn.setOnClickListener { setMasteredWordBtn() }
+        masteredWordBtn.setOnLongClickListener {
+            setMasteredWordLongBtn()
+            true
+        }
     }
 
     //endregion
@@ -171,11 +175,12 @@ class F_WordEdit : MyFragment() {
     }
 
     private fun setMasterIcon(){
-        val isKnown = DataBaseServices.getWordIsKnown(wordName)
-        if(isKnown)
-            Lib.changeBackgroundTint(gContext.getColor(R.color.master_word_active), masteredWordBtn)
-        else
-            Lib.changeBackgroundTint(gContext.getColor(R.color.master_word), masteredWordBtn)
+        when (DataBaseServices.getWordIsKnown(wordName)) {
+            4 -> Lib.changeBackgroundTint(gContext.getColor(R.color.master_word_active), masteredWordBtn)
+            1 -> Lib.changeBackgroundTint(gContext.getColor(R.color.archived_word), masteredWordBtn)
+            0 -> Lib.changeBackgroundTint(gContext.getColor(R.color.master_word), masteredWordBtn)
+            else -> Lib.changeBackgroundTint(gContext.getColor(R.color.visited_word), masteredWordBtn)
+        }
     }
 
     private fun setWordFavorite(){
@@ -187,6 +192,11 @@ class F_WordEdit : MyFragment() {
 
     private fun setMasteredWordBtn(){
         DataBaseServices.updateIsWordKnown(arrayListOf(wordName))
+        setMasterIcon()
+    }
+
+    private fun setMasteredWordLongBtn(){
+        DataBaseServices.updateSetArchived(wordName)
         setMasterIcon()
     }
 

@@ -479,7 +479,7 @@ object DataBaseServices {
             do{
                 val name = cursor.getString(0).fromBase64ToString()
                 val isFavorite = cursor.getInt(1) == 1
-                val isKnown = cursor.getInt(2) == 1
+                val isKnown = cursor.getInt(2)
                 res.add(Word(name, isFavorite, isKnown))
             }while (cursor.moveToNext())
         }
@@ -580,11 +580,11 @@ object DataBaseServices {
         return isFavorite
     }
 
-    fun getWordIsKnown(n: String) : Boolean{
+    fun getWordIsKnown(n: String) : Int{
         val name = n.toBase64()
         val q = "SELECT $A_isKnown FROM $T_words WHERE $A_word = '$name'"
         val cursor = dataBase.rawQuery(q, null)
-        val isKnown = if(cursor.moveToFirst()) cursor.getInt(0) == 1 else false
+        val isKnown = if(cursor.moveToFirst()) cursor.getInt(0) else 0
         cursor.close()
         return isKnown
     }
@@ -720,13 +720,25 @@ object DataBaseServices {
 
     fun updateIsWordKnown(l : ArrayList<String>){
         val list = l.toBase64()
-        val q = "SELECT $A_word FROM $T_words WHERE $A_word IN $list AND $A_isKnown = 1"
+        val q = "SELECT $A_word FROM $T_words WHERE $A_word IN $list AND $A_isKnown = 4"
         val alreadyKnown = getListString(q).toBase64()
 
         //println("UPDATE $T_words SET $A_isKnown = 1 WHERE $A_word IN $list")
         //println("UPDATE $T_words SET $A_isKnown = 0 WHERE $A_word IN $alreadyKnown")
-        dataBase.execSQL("UPDATE $T_words SET $A_isKnown = 1 WHERE $A_word IN $list")
+        dataBase.execSQL("UPDATE $T_words SET $A_isKnown = 4 WHERE $A_word IN $list")
         dataBase.execSQL("UPDATE $T_words SET $A_isKnown = 0 WHERE $A_word IN $alreadyKnown")
+    }
+
+    fun updateSetVisited(w: String){
+        val word = w.toBase64()
+        val q = "Update $T_words set $A_isKnown = 2 where $A_word = '$word' and $A_isKnown = 0"
+        dataBase.execSQL(q)
+    }
+
+    fun updateSetArchived(w : String){
+        val word = w.toBase64()
+        val q = "Update $T_words set $A_isKnown = 1 where $A_word = '$word'"
+        dataBase.execSQL(q)
     }
 
     fun updateIsFavoriteWords(w: ArrayList<String>){

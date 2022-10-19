@@ -62,7 +62,9 @@ class F_Statistic : MyFragment() {
             val imageWordsNbr = DataBaseServices.tableCountByQuery("SELECT distinct $A_word FROM $T_images")
             val audioWordsNbr = DataBaseServices.tableCountByQuery("SELECT distinct $A_word FROM $T_audios")
             val relatedWordsNbr = DataBaseServices.tableCountByQuery("select $A_word from $T_relatedWord union select $A_related from $T_relatedWord")
-            val masteredWords = DataBaseServices.tableCountByQuery("select $A_word from $T_words where $A_isKnown = 1")
+            val masteredWords = DataBaseServices.tableCountByQuery("select $A_word from $T_words where $A_isKnown = 4")
+            val archivedWords = DataBaseServices.tableCountByQuery("select $A_word from $T_words where $A_isKnown = 1")
+            val visitedWords = DataBaseServices.tableCountByQuery("select $A_word from $T_words where $A_isKnown != 0")
 
             theValues["Total Words"] = totalWords
             theValues["Total Tags"] = tagsNbr
@@ -76,6 +78,8 @@ class F_Statistic : MyFragment() {
             theValues["Total Words With Audios"] = audioWordsNbr
             theValues["Total Related Word"] = relatedWordsNbr
             theValues["Total Mastered Words"] = masteredWords
+            theValues["Total Archived Words"] = archivedWords
+            theValues["Total Visited Words"] = visitedWords
 
 
             Handler(gContext.mainLooper).post{
