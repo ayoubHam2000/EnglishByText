@@ -50,6 +50,7 @@ class F_WordEdit : MyFragment() {
     //++++++++++++++++++++++  Vars
     //====================================
     private var wordName = ""
+    private var exampleCollectionTmpIndex = -1
     lateinit var galleryLauncher : ActivityResultLauncher<Intent>
     lateinit var cropImageLauncherActivity : ActivityResultLauncher<Intent>
 
@@ -289,11 +290,17 @@ class F_WordEdit : MyFragment() {
         popPupList?.setOnItemClickListener { _, _, i, _ ->
             exampleAdapter.selectedCollection = list[i].id
             examplesCollection.text = list[i].value
+            exampleCollectionTmpIndex = i
             exampleAdapter.changeList()
             popPupList?.dismiss()
         }
         examplesCollection.setOnClickListener {
             popPupList?.show()
+        }
+        if (exampleCollectionTmpIndex != -1){
+            exampleAdapter.selectedCollection = list[exampleCollectionTmpIndex].id
+            examplesCollection.text = list[exampleCollectionTmpIndex].value
+            exampleAdapter.changeList()
         }
     }
 

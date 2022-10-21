@@ -14,6 +14,7 @@ import com.example.englishbytext.Classes.schemas.StringId
 import com.example.englishbytext.Classes.schemas.WordInfoId
 import com.example.englishbytext.Dialogs.D_editItem
 import com.example.englishbytext.Objects.DataBaseServices
+import com.example.englishbytext.Objects.Lib
 import com.example.englishbytext.R
 import com.example.englishbytext.Utilites.OpenDefinition
 import com.example.englishbytext.Utilites.OpenExample
@@ -48,7 +49,7 @@ class A_def_exp(val context : Context, val wordName : String, val type : Int) :
         fun bindView(position : Int){
             val relatedWord = list[position].word
             val theSpanRelated = ForegroundColorSpan(context.getColor(R.color.relatedWord))
-            val theSpanExample = ForegroundColorSpan(context.getColor(R.color.exampleWord))
+
 
             if(list[position].word != wordName){
                 item.movementMethod = LinkMovementMethod.getInstance()
@@ -67,6 +68,7 @@ class A_def_exp(val context : Context, val wordName : String, val type : Int) :
                 var pos = item.text.indexOf(theWord, ignoreCase=true)
                 while (pos != -1)
                 {
+                    val theSpanExample = ForegroundColorSpan(context.getColor(R.color.exampleWord))
                     spans.setSpan(theSpanExample, pos, pos + theWord.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     pos = item.text.indexOf(theWord, pos + theWord.length, ignoreCase=true)
                 }
@@ -77,6 +79,11 @@ class A_def_exp(val context : Context, val wordName : String, val type : Int) :
                     OpenExample -> editExample(position)
                     OpenDefinition -> editDefinition(position)
                 }
+            }
+            item?.setOnLongClickListener {
+                Lib.copyContent(context, "ExpDef", list[position].value)
+                Lib.showMessage(context, "Copied")
+                true
             }
         }
 
