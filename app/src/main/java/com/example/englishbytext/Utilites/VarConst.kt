@@ -12,3 +12,4 @@ const val V_OnRegexSearch = 7
 const val V_SortTypeWordList = 8
 const val V_sortPractice = 9
 const val V_examplesCollection = 10
+const val V_folderPath = 11

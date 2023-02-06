@@ -31,16 +31,29 @@ class A_def_exp(val context : Context, val wordName : String, val type : Int) :
         when(type){
             OpenDefinition->{
                 val l = DataBaseServices.getWordDefinitions(wordName)
-                l.sortBy{it.value}
+                l.sortBy{sortItemsByNb(it)}
                 list.addAll(l)
             }
             OpenExample->{
                 val l = DataBaseServices.getWordExamples(wordName, selectedCollection)
-                l.sortBy{it.value}
+                l.sortBy{sortItemsByNb(it)}
                 list.addAll(l)
             }
         }
         notifyDataSetChanged()
+    }
+
+    fun sortItemsByNb(value : WordInfoId) : Int{
+        val tmp = value.value.split(".")
+        var result = 9999
+        if (tmp.isNotEmpty()){
+            result = try {
+                tmp[0].toInt()
+            }catch (e : Exception){
+                9999
+            }
+        }
+        return result
     }
 
     inner class ViewHolder(itemView : View?) : RecyclerView.ViewHolder(itemView!!){

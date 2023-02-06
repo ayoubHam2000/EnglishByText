@@ -92,7 +92,7 @@ object FileManagement {
         data.forEach {unit->
             val defAndExpRegex = Regex("^--?[\\S\\s]*?(?=^--?|^\\+)", RegexOption.MULTILINE)
             val wordRegex = Regex("^[+][\\s]*\\w+", RegexOption.MULTILINE)
-            val wordName = wordRegex.find(unit.value)?.value?.replace("^[+][\\s]*".toRegex(), "")
+            val wordName = wordRegex.find(unit.value)?.value?.replace("^[+][\\s]*".toRegex(), "")?.trim()
             if (wordName != null && wordName.length > 1){
                 val word = WordFile()
                 word.word = wordName
@@ -100,18 +100,21 @@ object FileManagement {
                 defAndExp.forEach { unitDefExp ->
                     val formatUnitDefExp = unitDefExp.value.replace("\\s".toRegex(), " ")
                     if (formatUnitDefExp.matches("--.*".toRegex())) {
-                        val expUnit = formatUnitDefExp.replace("^--".toRegex(), "")
-                        word.examples.add(expUnit)
+                        val expUnit = formatUnitDefExp.replace("^--".toRegex(), "").trim()
+                        if (expUnit.count() > 1)
+                            word.examples.add(expUnit)
                     }
                     else {
-                        val defUnit = formatUnitDefExp.replace("^-".toRegex(), "")
-                        word.definitions.add(defUnit)
+                        val defUnit = formatUnitDefExp.replace("^-".toRegex(), "").trim()
+                        if (defUnit.count() > 1)
+                            word.definitions.add(defUnit)
                     }
                 }
+                println(">>> insert word:${word.word} nbDef: ${word.definitions.count()} nbExp: ${word.examples.count()}")
                 words.add(word)
             }
         }
-        println(">>> inserted ${words.count()}")
+        println(">>> number of words inserted ${words.count()}")
         return words
     }
 

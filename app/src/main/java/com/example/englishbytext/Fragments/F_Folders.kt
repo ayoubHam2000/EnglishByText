@@ -60,6 +60,8 @@ class F_Folders : MyFragment() {
     }
 
     override fun initFun(){
+        //restore the saved path from dataBase
+        FoldersManagement.restorePath()
         initRecyclerView()
 
         pathView.text = FoldersManagement.getPath()

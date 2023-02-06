@@ -141,6 +141,9 @@ class F_WordsList : MyFragment() {
                 "Tags" -> addWordInTag(it)
                 "Folders" -> addWordInFolder(it)
             }
+            if (dialogEditItem.isLongPressed){
+                openItem(it)
+            }
         }
         dialogEditItem.textHint = gContext.getString(R.string.addWord)
         dialogEditItem.buildAndDisplay()

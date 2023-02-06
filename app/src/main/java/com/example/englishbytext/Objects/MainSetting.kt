@@ -9,6 +9,7 @@ import com.example.englishbytext.Utilites.*
 object MainSetting {
 
     val selectedSet = StringVarBase(AllSet, V_SelectedSet)
+    val folderPath = StringVarBase("", V_folderPath)
     val categorySection = BoolVarBase(true, V_CategorySection)
     val collectionSection = BoolVarBase(true, V_CollectionSection)
     val isDarkMode = BoolVarBase(false, V_DarkMode)

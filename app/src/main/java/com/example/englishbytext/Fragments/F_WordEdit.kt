@@ -219,16 +219,21 @@ class F_WordEdit : MyFragment() {
     }
 
     private fun deleteWordClick(){
-        val mainPath = gContext.getExternalFilesDir("/")!!.absolutePath
-        DataBaseServices.deleteWords(mainPath, arrayListOf(wordName))
-        navController.popBackStack()
-        Lib.showMessage(gContext, R.string.word_deleted)
-        for(item in WordsManagement.wordList){
-            if(item.name == wordName){
-                WordsManagement.wordList.remove(item)
-                break
+        val ask = D_ask(gContext, "ARE YOU SURE ?"){
+            if (it){
+                val mainPath = gContext.getExternalFilesDir("/")!!.absolutePath
+                DataBaseServices.deleteWords(mainPath, arrayListOf(wordName))
+                navController.popBackStack()
+                Lib.showMessage(gContext, R.string.word_deleted)
+                for(item in WordsManagement.wordList){
+                    if(item.name == wordName){
+                        WordsManagement.wordList.remove(item)
+                        break
+                    }
+                }
             }
         }
+        ask.buildAndDisplay()
     }
 
     //endregion
@@ -797,7 +802,7 @@ class F_WordEdit : MyFragment() {
                 }
             }
             else {
-                println(">>>CropError : ${resultIntent.error}")
+                println(">>>CropError")
             }
         }
 

@@ -661,13 +661,13 @@ object DataBaseServices {
 
     fun insertExamples(w: String, e: String, selectedCollection: Int){
         val word = w.toBase64()
-        val example = e.toBase64()
+        val example = e.trim().toBase64()
         dataBase.execSQL("INSERT OR IGNORE INTO $T_examples ($A_word, $A_example, $A_example_col_id) VALUES ('$word', '$example', '$selectedCollection')")
     }
 
     fun insertDefinition(w: String, d: String){
         val word = w.toBase64()
-        val definition = d.toBase64()
+        val definition = d.trim().toBase64()
 
         dataBase.execSQL("INSERT OR IGNORE INTO $T_definitions ($A_word, $A_definition) VALUES ('$word', '$definition')")
     }

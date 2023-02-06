@@ -23,6 +23,7 @@ class D_editItem(context: Context, val event: (String) -> Unit) :
     var textHint = ""
     var maxChar = -1
     var listSuggestion = ArrayList<String>()
+    var isLongPressed = false
     private val message1 = "input is empty"
 
 
@@ -34,6 +35,11 @@ class D_editItem(context: Context, val event: (String) -> Unit) :
         dialog.setOnShowListener {
             setView()
             add.setOnClickListener { addItem(inputName) }
+            add.setOnLongClickListener {
+                isLongPressed = true
+                addItem(inputName)
+                true
+            }
             //Lib.dialogMotivateKeyboard(context, 100)
         }
         dialog.window?.setLayout(
