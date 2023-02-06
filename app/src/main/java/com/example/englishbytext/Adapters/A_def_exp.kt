@@ -15,6 +15,7 @@ import com.example.englishbytext.Classes.schemas.WordInfoId
 import com.example.englishbytext.Dialogs.D_editItem
 import com.example.englishbytext.Objects.DataBaseServices
 import com.example.englishbytext.Objects.Lib
+import com.example.englishbytext.Objects.WordsManagement
 import com.example.englishbytext.R
 import com.example.englishbytext.Utilites.OpenDefinition
 import com.example.englishbytext.Utilites.OpenExample
@@ -63,29 +64,28 @@ class A_def_exp(val context : Context, val wordName : String, val type : Int) :
             val relatedWord = list[position].word
             val theSpanRelated = ForegroundColorSpan(context.getColor(R.color.relatedWord))
 
-
             if(list[position].word != wordName){
-                item.movementMethod = LinkMovementMethod.getInstance()
-
                 val text = list[position].word + ": " + list[position].value
                 item.setText(text, TextView.BufferType.SPANNABLE)
-                val spans = item.text as Spannable
-
-
-                spans.setSpan(theSpanRelated, 0, relatedWord.length + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             } else{
                 item.setText(list[position].value, TextView.BufferType.SPANNABLE)
-                val spans = item.text as Spannable
-
-                val theWord = list[position].word
-                var pos = item.text.indexOf(theWord, ignoreCase=true)
-                while (pos != -1)
-                {
+            }
+            //color all related words
+            val spans = item.text as Spannable
+            val theWord = list[position].word
+            val relatedWords = WordsManagement.getWordRelated(theWord)
+            relatedWords.forEach { related ->
+                val pattern = "(?i)\\b$related\\b".toRegex()
+                val indices = pattern.findAll(item.text)
+                indices.forEach {
                     val theSpanExample = ForegroundColorSpan(context.getColor(R.color.exampleWord))
-                    spans.setSpan(theSpanExample, pos, pos + theWord.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    pos = item.text.indexOf(theWord, pos + theWord.length, ignoreCase=true)
+                    spans.setSpan(theSpanExample, it.range.first, it.range.last + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             }
+            //user related
+            if(list[position].word != wordName)
+                spans.setSpan(theSpanRelated, 0, relatedWord.length + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
 
             item?.setOnClickListener {
                 when(type){

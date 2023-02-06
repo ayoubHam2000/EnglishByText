@@ -7,8 +7,7 @@ import com.example.englishbytext.Objects.TextManagement
 import com.example.englishbytext.R
 
 /*
-
-
+Last Push Mac
 
 
 

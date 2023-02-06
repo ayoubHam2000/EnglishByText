@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity(), NotifyActivity {
     private fun initApp(){
         DataBaseServices.initDataBase(this)
         WordsManagement.addWordFrequency(this)
+        WordsManagement.loadWordRelatedFromFile(this)
         initSlideBar()
         initDarkMode()
     }

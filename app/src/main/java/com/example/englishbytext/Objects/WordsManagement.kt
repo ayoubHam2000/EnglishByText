@@ -6,6 +6,8 @@ import com.example.englishbytext.Classes.schemas.Word
 import com.example.englishbytext.Classes.schemas.WordFrequency
 import com.example.englishbytext.Objects.DataBaseServices.toBase64
 import com.example.englishbytext.Utilites.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import kotlin.concurrent.thread
@@ -17,7 +19,7 @@ object WordsManagement {
     var practiceList = ArrayList<Word>()
     var selectedWordName : String = ""
     val wordsFrequency = HashMap<String, Int>(25285)
-
+    val wordsRelated = HashMap<String, ArrayList<String>>(10000)
 
 
     object Setting{
@@ -96,6 +98,19 @@ object WordsManagement {
         return wordsFrequency[word] ?: 0
     }
 
+    fun getWordRelated(word : String) : ArrayList<String>{
+        val res = ArrayList(DataBaseServices.getRelatedWord(word).map { it.value })
+        res.add(word)
+        val related = arrayListOf<String>()
+        res.forEach {
+            if (wordsRelated.contains(it)){
+                related.addAll(wordsRelated[it]!!)
+            }
+        }
+        res.addAll(related)
+        return (res)
+    }
+
     fun addWordFrequency(context: Context){
         println(">>> Start Load Word Frequency")
         if(wordsFrequency.isNotEmpty()) return
@@ -112,6 +127,41 @@ object WordsManagement {
             println(">>> Done Load Word Frequency")
         }
 
+    }
+
+    fun loadWordRelatedFromFile(context: Context){
+        println(">>> Start Load Word Related")
+        if(wordsRelated.isNotEmpty()) return
+        thread {
+            val file = context.assets.open("related.txt")
+            val bufferReader = BufferedReader(InputStreamReader(file))
+            while (bufferReader.ready()){
+                val line = bufferReader.readLine()
+                try{
+                    val jsonObject = JSONObject(line)
+                    val keys = jsonObject.keys()
+                    while (keys.hasNext()){
+                        val key = keys.next()
+                        val res = ArrayList<String>()
+                        val array = jsonObject.getJSONArray(key)
+                        var i = 0;
+                        while (i < array.length()){
+                            val related = array.getString(i).trim()
+                            if (related != key)
+                                res.add(related)
+                            i++
+                        }
+                        if (res.isNotEmpty()){
+                            wordsRelated[key] = res
+                            println("d>> $key => $res")
+                        }
+                    }
+                }catch (e : JSONException){
+                    println("Error While Parsing JSON input: '$line'")
+                }
+            }
+            println(">>> Done Load Word Related")
+        }
     }
 
     //endregion
