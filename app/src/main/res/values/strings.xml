@@ -61,6 +61,8 @@
     <string name="elements_found">Elements Found</string>
     <string name="invalid_regex">Invalid Regex</string>
     <string name="text_color">Text Color</string>
+    <string name="classic_practice">Classic</string>
+    <string name="voice_practice">Voice</string>
     <string name="background_color">Background Color</string>
     <string name="word_name">Word Name</string>
     <string name="examples">Examples</string>

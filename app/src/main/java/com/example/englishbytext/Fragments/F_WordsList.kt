@@ -115,7 +115,6 @@ class F_WordsList : MyFragment() {
         if(oldSearch.isNotEmpty()) wordListSearch.setText(oldSearch)
 
         addWordList.setOnClickListener { addWordList() }
-        practiceBtn.setOnClickListener { practiceBtnClick() }
         deleteWords.setOnClickListener { deleteWords() }
         makeFavorite.setOnClickListener { makeItFavorite() }
         copyToFolder.setOnClickListener { copyToFolderClick() }
@@ -125,10 +124,17 @@ class F_WordsList : MyFragment() {
             getFileUri()
             true
         }
-        practiceBtn.setOnLongClickListener {
-            practiceBtnLongClick()
+
+        val popUpMenu = Lib.initPopupMenu(gContext, practiceBtn, R.menu.m_practice_type)
+
+        popUpMenu.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.classic_practice -> practiceBtnClick(ClassicPractice)
+                R.id.voice_practice -> practiceBtnClick(VoicePractice)
+            }
             true
         }
+
     }
 
     //region addWord
@@ -289,17 +295,20 @@ class F_WordsList : MyFragment() {
     //endregion
 
     //region buttons
-    private fun practiceBtnClick(){
+    private fun practiceBtnClick(type : Int){
         WordsManagement.setPracticeWordList(wordListAdapter.filterList)
         if (wordListAdapter.filterList.size == 0)
             Lib.showMessage(gContext, R.string.practice_list_empty)
-        else
-            navController.navigate(R.id.action_f_WordsList_to_f_CardsPractice)
+        else {
+            val bundle = Bundle()
+            bundle.putInt(PracticeType, type)
+            navController.navigate(R.id.action_f_WordsList_to_f_CardsPractice, bundle)
+        }
     }
-    private fun practiceBtnLongClick(){
-        WordsManagement.setPracticeWordList(WordsManagement.wordList)
-        navController.navigate(R.id.action_f_WordsList_to_f_CardsPractice)
-    }
+//    private fun practiceBtnLongClick(){
+//        WordsManagement.setPracticeWordList(WordsManagement.wordList)
+//        navigateToPracticeList()
+//    }
 
     private fun makeItFavorite(){
         println(">>>Favorite Words")
@@ -543,7 +552,7 @@ class F_WordsList : MyFragment() {
 
     private fun onListSearchEnd(){
         if(saveStatesMap["View1"] != null)
-        wordListRV.layoutManager?.onRestoreInstanceState(saveStatesMap["View1"])
+            wordListRV.layoutManager?.onRestoreInstanceState(saveStatesMap["View1"])
     }
 
     //endregion

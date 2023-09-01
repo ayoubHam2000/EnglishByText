@@ -8,8 +8,11 @@ import com.example.englishbytext.Objects.DataBaseServices
 import com.example.englishbytext.Objects.Lib
 import com.example.englishbytext.R
 import com.example.englishbytext.Utilites.Edit
+import com.example.englishbytext.Utilites.FgType
 import com.example.englishbytext.Utilites.NextPage
 import com.example.englishbytext.Utilites.OpenCardsPractice
+import com.example.englishbytext.Utilites.PassedData
+import com.example.englishbytext.Utilites.PracticeType
 
 class F_CardsPractice : MyFragment() {
 
@@ -19,6 +22,7 @@ class F_CardsPractice : MyFragment() {
     //====================================
     lateinit var cardsAdapter : A_Cards_Practice
     var wordNameEditIndex = -1
+    var practiceType = -1
 
     //====================================
     //++++++++++++++++++++++  Views
@@ -50,7 +54,7 @@ class F_CardsPractice : MyFragment() {
     //region pageViewer
 
     private fun initPageViewer(){
-        cardsAdapter = A_Cards_Practice(gContext){ eventName, pos->
+        cardsAdapter = A_Cards_Practice(gContext, practiceType){ eventName, pos->
             pageViewerAdapterEvent(eventName, pos)
         }
         //cardsAdapter.changeList()
@@ -114,6 +118,14 @@ class F_CardsPractice : MyFragment() {
             //println(">>> onResume $wordName")
         }
         practiceViewPage.onRestoreInstanceState(saveStatesMap["Pager"])
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val bundle = arguments
+        if(bundle != null){
+            practiceType = bundle.getInt(PracticeType)
+        }
     }
 
     //endregion

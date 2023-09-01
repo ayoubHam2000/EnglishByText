@@ -71,8 +71,7 @@
         android:id="@+id/f_WordEdit"
         android:name="com.example.englishbytext.Fragments.F_WordEdit"
         android:label="F_WordEdit" >
-        <argument android:name="WORD_NAME"
-            app:argType="string" />
+
         <action
             android:id="@+id/action_f_WordEdit_self"
             app:destination="@id/f_WordEdit" />
@@ -107,6 +106,7 @@
         <action
             android:id="@+id/action_f_CardsPractice_to_f_WordEdit"
             app:destination="@id/f_WordEdit" />
+
     </fragment>
     <fragment
         android:id="@+id/f_Statistic"

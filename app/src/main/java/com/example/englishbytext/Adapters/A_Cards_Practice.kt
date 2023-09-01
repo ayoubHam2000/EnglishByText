@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.speech.tts.TextToSpeech
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -13,15 +15,18 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.viewpager.widget.PagerAdapter
 import com.example.englishbytext.Classes.Custom.MyOnSwipeTouchListener
+import com.example.englishbytext.Dialogs.D_editItem
 import com.example.englishbytext.Objects.DataBaseServices
 import com.example.englishbytext.Objects.Lib
 import com.example.englishbytext.Objects.WordsManagement
 import com.example.englishbytext.R
 import com.example.englishbytext.Utilites.Edit
 import com.example.englishbytext.Utilites.NextPage
+import com.example.englishbytext.Utilites.VoicePractice
+import java.util.Locale
 
 
-class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : PagerAdapter(){
+class A_Cards_Practice(val context: Context, val practiceType: Int, val event: (Int, Int) -> Unit) : PagerAdapter(){
 
     //region init
 
@@ -31,6 +36,7 @@ class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : Pa
     var list = WordsManagement.practiceList
     private val layout = R.layout.a_cards_practice_item
     private val theColors = getColorsFromResources()
+    private val checkedWords = hashMapOf<String, Boolean>()
 
     //====================================
     //++++++++++++++++++++++  Views
@@ -60,13 +66,16 @@ class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : Pa
         private val favoriteWord : ImageView = view.findViewById(R.id.favoriteWord)
         private val editWord : ImageView = view.findViewById(R.id.editWord)
         private val theWordName : TextView = view.findViewById(R.id.theWord)
+        private val voiceTextClickView : TextView = view.findViewById(R.id.voiceTextClickView)
         private val wordFrequencyView : TextView = view.findViewById(R.id.wordFrequencyView)
         private val wordMaster : ImageView = view.findViewById(R.id.masterWord)
         private val skipLeft : ImageView = view.findViewById(R.id.skipLeft)
         private val skipRight : ImageView = view.findViewById(R.id.skipRight)
 
         fun bindView(position: Int){
-            theWordName.text = list[position].name
+            setWordName(position)
+            // theWordName.text = list[position].name
+
             wordFrequencyView.text = WordsManagement.getWordFrequency(list[position].name).toString()
 
             backgroundView(position)
@@ -75,6 +84,8 @@ class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : Pa
             masterWordView(position)
 
             //buttons
+            if (theWordName.text == "?" && practiceType == VoicePractice)
+                voiceTextClickView.setOnClickListener { wordVoicePracticeClick(position) }
             favoriteWord.setOnClickListener { favoriteClick(position) }
             editWord.setOnClickListener {editWordClick(position)}
             wordMaster.setOnClickListener { masterWordClick(position) }
@@ -141,6 +152,15 @@ class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : Pa
             }
         }
 
+        private fun setWordName(position: Int) {
+            val wordName = list[position].name
+
+            if (practiceType != VoicePractice || checkedWords[wordName] == true) {
+                theWordName.text = wordName
+            } else {
+                theWordName.text = "?"
+            }
+        }
         private fun backgroundView(position: Int){
             val theColor = theColors[position % theColors.count()]
 
@@ -150,6 +170,38 @@ class A_Cards_Practice(val context: Context, val event: (Int, Int) -> Unit) : Pa
         }
 
         //Btn
+        private fun wordVoicePracticeClick(position: Int){
+            val wordName = list[position].name
+
+            var defDialog : D_editItem? = null
+            defDialog = D_editItem(context){
+                val theValue = it.trim().lowercase()
+                if (wordName.lowercase() == theValue) {
+                    theWordName.text = wordName
+                    checkedWords[wordName] = true
+                    voiceTextClickView.setOnClickListener(null)
+                    voiceTextClickView.isClickable = false
+                    defDialog!!.dismiss()
+                } else {
+                    defDialog!!.inputName.error = "Try again"
+                }
+
+            }
+
+            defDialog.textHint = "write... "
+            defDialog.buildAndDisplay()
+
+            var textToSpeech: TextToSpeech? = null
+            textToSpeech = TextToSpeech(context) { status ->
+                if (status == TextToSpeech.SUCCESS) {
+                    textToSpeech?.language = Locale.US
+                    textToSpeech?.speak(wordName, TextToSpeech.QUEUE_ADD, null, "SAY_IT")
+                }
+            }
+        }
+
+
+
         private fun favoriteClick(position: Int){
             val theWord = list[position]
 
